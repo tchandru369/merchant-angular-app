@@ -1,0 +1,40 @@
+.container{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+.user{
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 5px;
+    img{
+      width: 150px;  /* Set a width for the image */
+    height: 150px; /* Set a height for the image */
+    border-radius: 50%; /* This makes the image circular */
+    object-fit: cover; 
+    }
+   }
+
+
+mat-card{
+    mat-card-title{
+        text-align: center;
+    }
+    mat-card-content{
+        form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width:900px;
+        }
+       
+    }
+}
+
+
+.selected-image{
+    width: 150px;
+    height:150px;
+}

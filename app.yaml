@@ -1,0 +1,18 @@
+runtime: static
+threadsafe: true
+handlers:
+  - url: /
+    static_files: dist/shop-management/index.html
+    upload: dist/shop-management/index.html
+  - url: /
+    static_dir: dist/shop-management
+skip_files:
+  - e2e/
+  - node_modules/
+  - src/
+  - coverage
+  - ^(.*/)?\..*$
+  - ^(.*/)?.*\.json$
+  - ^(.*/)?.*\.md$
+  - ^(.*/)?.*\.yaml$
+  - ^LICENSE

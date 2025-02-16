@@ -1,0 +1,43 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Side Navigation -->
+  <mat-sidenav #sidenav mode="side" opened class="sidenav" [ngClass]="{'collapsed': isCollapsed}">
+    <div class="d-flex flex-column p-3 text-white bg-dark" style="height: 100vh;">
+      <div *ngIf="!isCollapsed" class="user">
+        <img *ngIf="userProfileImg" [src]="userProfileImg" alt="ProfileImg">
+        <h4 class="name">{{userName}}</h4>
+        <p class="mailId">{{userEmail}}</p>
+      </div>
+      <mat-nav-list>
+        <a mat-list-item (click)="moveToUserDashboardPage()">
+          <mat-icon>home</mat-icon>Home</a>
+        <a mat-list-item (click)="moveToBillingPage()"><mat-icon>payment</mat-icon>Billing</a>
+        <a mat-list-item (click)="moveToAddProductPage()"><mat-icon>add_shopping_cart</mat-icon>Add Products</a>
+        <a mat-list-item (click)="moveToHistoryPage()" ><mat-icon>history</mat-icon>History</a>
+        <a mat-list-item (click)="moveToUserSettings()"><mat-icon>settings</mat-icon>Settings</a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <!-- Navbar at the top -->
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <!-- Right-side search and logout buttons -->
+      <span class="spacer"></span>
+      <div class="form-inline">
+        <input matInput class="form-control mr-sm-2" type="search" placeholder="Search">
+        <button mat-button type="submit">Search</button>
+        <button mat-button (click)="userLogout()">Log out</button>
+      </div>
+    </mat-toolbar>
+
+    <!-- Main Content Here -->
+    <div class="content">
+      <!-- Your page content goes here -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

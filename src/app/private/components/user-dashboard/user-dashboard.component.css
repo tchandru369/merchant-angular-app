@@ -1,0 +1,25 @@
+.restockContainer {
+    position: absolute;
+    top: 10%;
+    width: 50%; /* adjust as needed */
+    max-width: 600px; /* adjust as needed */
+  }
+
+  mat-card {
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  mat-list {
+    display: flex;
+    flex-direction: row; /* Ensure items are aligned vertically */
+    padding: 0;
+    justify-content: space-evenly;
+  }
+  
+  mat-list-item{
+    margin-right: 10px;
+  }

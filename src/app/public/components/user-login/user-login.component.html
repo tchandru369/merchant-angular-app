@@ -1,0 +1,37 @@
+<div class="container">
+     
+    
+    <div class="formContainer">
+      <mat-card>
+        <mat-card-title>Login</mat-card-title>
+             <mat-card-content>
+              <form [formGroup]="loginForm" (ngSubmit)="merchantUserLogin()" >
+                <mat-form-field>
+                <input matInput type="email" placeholder="Enter your email" formControlName="merchantEmail">
+                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('email')">Email must be valid</mat-error>
+              </mat-form-field>
+               <mat-form-field>
+                <input matInput type="password" placeholder="Enter Password" formControlName="merchantPassword">
+                <mat-error *ngIf="merchantPassword.touched && merchantPassword.hasError('required')">Password is required</mat-error>
+              </mat-form-field>
+               <mat-hint *ngIf="!loginForm.valid"><small>please Enter Email and Password</small></mat-hint> 
+              <div class="buttons">
+                <div class="signup-button">
+                    <button mat-button [routerLink]="['../app-user-register']">Sign Up</button>
+                    </div>
+                <div class="login-button">
+                 <button mat-button type="submit" [disabled]="!loginForm.valid" (click)="merchantUserLogin()">Login</button>
+                </div>
+              </div>
+                
+            </form>
+
+             </mat-card-content>
+      </mat-card>
+      
+      
+
+    </div>
+    
+</div>

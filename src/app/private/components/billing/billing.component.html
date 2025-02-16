@@ -1,0 +1,148 @@
+<div class="mainContainer">
+
+    <div class="billingContainer">
+      <mat-card>
+        <mat-card-content>
+        <mat-card-title>Billing</mat-card-title>
+          <mat-stepper  #stepper>
+            <mat-step [stepControl]="firstFormGroup">
+              <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Add Products</ng-template>
+                <mat-form-field>
+                  <mat-label>Product Details</mat-label>
+                  
+                  <mat-select formControlName="billingProductName"  class="form-control" (valueChange)="onchangeOfProductName(billingProductName.value)">
+                    <input matInput formControlName="billingsearchProduct"  placeholder="Type to search" />
+                    <mat-option *ngFor="let product of filteredAndSortedProducts" [value]="product">
+                      {{ product.productName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> 
+                <mat-form-field>
+                  <input matInput type="text" placeholder="Enter Product Quantity" formControlName="billingProductQuantity">
+                  <mat-error *ngIf="billingProductQuantity.touched && billingProductQuantity.hasError('required')">Product Quantity is required</mat-error>
+  
+                  </mat-form-field>
+                  
+                <button mat-button (click)="addProductForBilling()" class="add_button">Add</button>
+                <div class="col-md-8 mt-4 mb-4">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Quantity</th>
+                          <th>Price Per Item</th>
+                          <th>Total Price</th>
+                          <th>Option</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let product of billingList">
+                          <td>{{product.productName}}</td>
+                          <td>{{product.productType}}</td>
+                          <td>{{product.productQuantity}}</td>
+                          <td>{{product.productCustomerPrice}}</td>
+                          <td>{{product.productPrice}}</td>
+                          <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+                <div>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+              </form>
+            </mat-step>
+            <!-- #docregion label -->
+            <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+            <!-- #enddocregion label -->
+              <form [formGroup]="secondFormGroup">
+                <div class="validate-customer-phno">
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Enter Customer PhoneNo" formControlName="billingCustomerPhNoToV">
+                    <mat-error *ngIf="billingCustomerPhNoToV.touched && billingCustomerPhNoToV.hasError('required')">Enter Customer Phone No</mat-error>
+                    </mat-form-field>
+                  <button mat-button (click)="validateCustomerByPhNo()" >Validate</button>
+                  
+                </div>
+                <div class="customer-register-view">
+                  <mat-hint *ngIf="validateCusFalse">please fill all the information to register the customer</mat-hint>
+                </div>
+                <mat-form-field>
+                  <input matInput type="text" placeholder="Enter Customer Name" formControlName="billingCustomerName">
+                  <mat-error *ngIf="billingCustomerName.touched && billingCustomerName.hasError('required')">Customer Name is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Customer Unique Number" formControlName="billingCustomerUNo" readonly>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <input matInput type="email" placeholder="Enter Customer Email" formControlName="billingCustomerEmail">
+                      <mat-error *ngIf="billingCustomerEmail.touched && billingCustomerEmail.hasError('required')">Customer Email is required</mat-error>
+                      </mat-form-field>
+                      <mat-form-field>
+                        <input matInput type="number" placeholder="Enter Customer PhoneNo" formControlName="billingCustomerPhNo">
+                        <mat-error *ngIf="billingCustomerPhNo.touched && billingCustomerPhNo.hasError('required')">Customer PhoneNo is required</mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput type="text" placeholder="Enter Customer Address" formControlName="billingCustomerAddrs">
+                          <mat-error *ngIf="billingCustomerAddrs.touched && billingCustomerAddrs.hasError('required')">Customer Address is required</mat-error>
+                          </mat-form-field>
+                          <mat-form-field>
+                            <input matInput type="text" placeholder="Customer Type" formControlName="billingCustomerType" readonly>
+                           
+                            </mat-form-field>
+                            <button mat-button type="button" [disabled]="!validateCusFalse" (click)="registerCustomer()">Register</button>
+                <div>
+                  <div class="col-md-8 mt-4 mb-4">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Quantity</th>
+                          <th>Price Per Item</th>
+                          <th>Total Price</th>
+                          <th>Option</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let product of billingList">
+                          <td>{{product.productName}}</td>
+                          <td>{{product.productType}}</td>
+                          <td>{{product.productQuantity}}</td>
+                          <td>{{product.productCustomerPrice}}</td>
+                          <td>{{product.productPrice}}</td>
+                          <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="3" class="text-right"><strong>{{ getTotalProduct() }}</strong></td>
+                          <td class="text-right"><strong>Total Price</strong></td>
+                          <td><strong>{{ getTotalPrice() }}</strong></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                </div>
+                
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext (click)="payForAddedProducts()">Pay</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Done</ng-template>
+              <p>You are now done.</p>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+              </div>
+            </mat-step>
+          </mat-stepper>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+</div>

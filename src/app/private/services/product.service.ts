@@ -1,0 +1,63 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  
+
+  private baseURL:string =  "https://crypto-moon-450715-c2.el.r.appspot.com/services/v1/products"
+
+  constructor(private httpClient:HttpClient) { }
+
+  addProduct(arrayData:any[]):Observable<any>{
+
+    const token = sessionStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Bearer token
+      'Content-Type': 'application/json'   // Set the content type to application/json
+    });
+    console.log(token);
+    console.log(arrayData);
+    return this.httpClient.post<any>(`${this.baseURL}/addProduct`,arrayData,{headers});
+  }
+
+  viewProduct(ownerEmail:string):Observable<any>{
+    const token = sessionStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Bearer token
+      'Content-Type': 'application/json'   // Set the content type to application/json
+    });
+
+    const params = new HttpParams()
+      .set('name', ownerEmail);        // Add productId parameter
+    return this.httpClient.get<any>(`${this.baseURL}/viewProducts`,{headers,params});
+  }
+
+  
+  viewDemandProduct(ownerEmail:string):Observable<any>{
+    const token = sessionStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Bearer token
+      'Content-Type': 'application/json'   // Set the content type to application/json
+    });
+
+    const params = new HttpParams()
+      .set('name', ownerEmail);        // Add productId parameter
+    return this.httpClient.get<any>(`${this.baseURL}/demandProducts`,{headers,params});
+  }
+
+  updateProduct(data:any):Observable<any>{
+    const token = sessionStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Bearer token
+      'Content-Type': 'application/json'   // Set the content type to application/json
+    });
+
+    const params = new HttpParams()
+      .set('name', data);        // Add productId parameter
+    return this.httpClient.post<any>(`${this.baseURL}/updateProduct`,data,{headers});
+  }
+}

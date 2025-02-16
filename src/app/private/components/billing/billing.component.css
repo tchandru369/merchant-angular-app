@@ -1,0 +1,23 @@
+mat-input{
+    padding: 3px;
+}
+
+.mat-form-field{
+    padding: 15px;
+   }
+
+   table {
+    width: 100%;
+  }
+
+.validate-customer-phno{
+    text-align: center;
+}
+mat-hint{
+    text-align: center;
+}
+
+tfoot td {
+    font-weight: bold;
+    font-size: 1.1em;
+  }

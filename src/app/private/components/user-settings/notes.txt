@@ -1,0 +1,168 @@
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-upload',
+  templateUrl: './upload.component.html',
+  styleUrls: ['./upload.component.css']
+})
+export class UploadComponent {
+  merchantImageEmail: string = '';
+  merchantModule: string = '';
+  merchantImg: File | null = null;
+
+  constructor(private http: HttpClient) {}
+
+  // Event handler for file input change
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.merchantImg = file;
+    }
+  }
+
+  // Method to send the form data
+  onSubmit(): void {
+    if (!this.merchantImg) {
+      alert('Please select an image.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('merchantImg', this.merchantImg);
+    formData.append('merchantImageEmail', this.merchantImageEmail);
+    formData.append('merchantModule', this.merchantModule);
+
+    this.uploadImage(formData).subscribe(
+      (response) => {
+        console.log('Image uploaded successfully', response);
+      },
+      (error) => {
+        console.error('Error uploading image', error);
+      }
+    );
+  }
+
+  // Service method to handle the HTTP request
+  uploadImage(formData: FormData): Observable<any> {
+    const url = 'http://localhost:8080/services/v1/products/saveImage'; // Adjust URL as needed
+    return this.http.post(url, formData);
+  }
+}
+
+
+
+
+ <!-- Profile Picture -->
+  <div>
+    <label for="merchantImg">Upload Profile Picture:</label>
+    <input id="merchantImg" type="file" (change)="onFileChange($event)" />
+    <div *ngIf="!merchantImgClass?.merchantImg">
+      <span>Please select an image.</span>
+    </div>
+  </div>
+
+
+  --------------------------------------GET IMAGE---------------------------------
+
+  Service 
+
+  getImage(): Observable<string> {
+  const token = sessionStorage.getItem('jwtToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+  });
+  return this.httpClient.get<string>(`${this.merchantURL}/getProfileImage`, { headers });
+}
+
+component.ts 
+
+export class ProfileComponent implements OnInit {
+  imageUrl: string = '';  // Store the URL of the image
+
+  constructor(private settingService: MerchantService) {}
+
+  ngOnInit(): void {
+    this.loadImage();
+  }
+
+  loadImage(): void {
+    this.settingService.getImage().subscribe(
+      (url) => {
+        this.imageUrl = url;  // Store the URL from the response
+      },
+      (error) => {
+        console.error('Error fetching image', error);
+      }
+    );
+  }
+}
+
+
+export class ProfileComponent implements OnInit {
+  imageUrl: string = '';  // Store the Blob URL
+
+  constructor(private settingService: MerchantService) {}
+
+  ngOnInit(): void {
+    this.loadImage();
+  }
+
+  loadImage(): void {
+    this.settingService.getImage().subscribe(
+      (blob) => {
+        this.imageUrl = URL.createObjectURL(blob);  // Convert Blob to Object URL
+      },
+      (error) => {
+        console.error('Error fetching image', error);
+      }
+    );
+  }
+}
+
+
+<div>
+  <!-- Image Display -->
+  <img *ngIf="imageUrl" [src]="imageUrl" alt="Profile Image" width="200" height="200" />
+  <div *ngIf="!imageUrl">
+    <p>No image available.</p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+ getImage(imageName: string): Observable<Blob> {
+    const token = sessionStorage.getItem('jwtToken'); // if you're using JWT
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Add the token if needed
+    });
+
+    return this.http.get(`${this.baseUrl}/getImage/${imageName}`, {
+      headers: headers,
+      responseType: 'blob',  // Important: Specify responseType as 'blob'
+    });
+  }
+
+
+
+
+
+
+
+
+  ------------------------------------------------BACKUP--------------------------------------
+
+
+  <div class="user">
+                    <img  [src]="imageUrl" alt="ProfileImg">
+                    <input id="merchantImg" type="file" (change)="onFileChangeEvent($event)" value="selectedFile"/>
+                    <mat-icon class="add_circle_icon">add_circle</mat-icon>
+                    <button (click)="onUpdateImg()">Update</button>
+                </div>

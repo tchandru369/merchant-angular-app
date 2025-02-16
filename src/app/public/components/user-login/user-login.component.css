@@ -1,0 +1,32 @@
+.container{
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+
+
+
+mat-card{
+    mat-card-content{
+        form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width:500px;
+        }
+       
+    }
+}
+
+
+.buttons{
+    display: flex;
+    flex-direction: row;
+    
+}
+.login-button{
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 350px;
+}

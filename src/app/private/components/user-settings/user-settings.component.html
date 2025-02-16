@@ -1,0 +1,54 @@
+<div class="container">
+     
+    
+    <div class="formContainer">
+      <mat-card>
+        <mat-card-title class="setting_title">My Details</mat-card-title>
+
+             <mat-card-content>
+
+                <div class="user">
+                    <img  [src]="imageUrl" alt="ProfileImg">
+                    <input  id="merchantImg" type="file" (change)="onFileChangeEvent($event)" value="selectedFile"/>
+                    <mat-icon class="add_circle_icon">add_circle</mat-icon>
+                    <button (click)="onUpdateImg()">Update</button>
+                </div>
+
+              <form [formGroup]="settingForm" (ngSubmit)="merchantUserUpdate()" >
+        
+                <mat-form-field>
+                <input matInput type="text" placeholder="Enter your name" formControlName="merchantUserName">
+                <mat-error *ngIf="merchantUserName.touched && merchantUserName.hasError('required')">UserName is required</mat-error>
+
+                </mat-form-field>  
+                <mat-form-field>
+                <input matInput type="email" placeholder="Enter your email" formControlName="merchantEmail">
+                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('email')">Email must be valid</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="text" placeholder="Enter your Address" formControlName="merchantAddress">
+                <mat-error *ngIf="merchantAddress.touched && merchantAddress.hasError('required')">Address is required</mat-error>
+
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Enter your phone number" formControlName="merchantPhoneNumber">
+                <mat-error *ngIf="merchantPhoneNumber.touched && merchantPhoneNumber.hasError('required')">PhoneNumber is required</mat-error>
+          
+              </mat-form-field>
+              <div class="buttons">
+                <div class="save-button">
+                 <button mat-button type="submit" [disabled]="!settingForm.valid">Update</button>
+                </div>
+              </div>
+                
+            </form>
+
+             </mat-card-content>
+      </mat-card>
+      
+      
+
+    </div>
+    
+</div>
