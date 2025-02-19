@@ -10,7 +10,7 @@ import { Observable, throwError } from 'rxjs';
 })
 export class UserService {
 
-  private baseURL:string =  "https://crypto-moon-450715-c2.el.r.appspot.com/api/v1/auth"
+  private baseURL:string =  "https://shop-management-983146727685.asia-south1.run.app/api/v1/auth"
 
   constructor(private httpClient:HttpClient, private snackbar:MatSnackBar) { 
 
