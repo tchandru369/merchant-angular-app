@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ProductService {
   
 
-  private baseURL:string =  "http://localhost:8083/services/v1/products"
+  private baseURL:string =  "https://shop-management-983146727685.asia-south1.run.app/services/v1/products"
 
   constructor(private httpClient:HttpClient) { }
 
