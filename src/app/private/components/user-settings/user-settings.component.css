@@ -38,3 +38,13 @@ mat-card{
     width: 150px;
     height:150px;
 }
+
+.profile-image{
+    position: relative;
+}
+
+.green-button {
+    background-color: #673ab7;
+    color: white; 
+    margin-left: 10px; /* Ensures text is white on the green background */
+  }

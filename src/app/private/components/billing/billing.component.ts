@@ -53,6 +53,8 @@ export class BillingComponent implements OnInit {
       billingTotalProductQty: '',
       billingTotalPrice: '',
       billingTotalPriceTax: '',
+      billingAmtPaid:'',
+      billingDuePrice:'',
       productDetails: []
     };
 
@@ -115,11 +117,15 @@ export class BillingComponent implements OnInit {
     billingCustomerPhNo : new FormControl(null,[Validators.required]),
     billingCustomerPhNoToV: new FormControl(null,[Validators.required]),
     billingCustomerAddrs : new FormControl(null,[Validators.required]),
-    billingCustomerType :new FormControl(null,[Validators.required])
+    billingCustomerType :new FormControl(null,[Validators.required]),
+    billingFinalAmtPaid : new FormControl(null,[Validators.required])
   });
 
   get billingCustomerName():FormControl{
     return this.secondFormGroup.get('billingCustomerName') as FormControl;
+  }
+  get billingFinalAmtPaid():FormControl{
+    return this.secondFormGroup.get('billingFinalAmtPaid') as FormControl;
   }
   get billingCustomerUNo():FormControl{
     return this.secondFormGroup.get('billingCustomerUNo') as FormControl;
@@ -361,11 +367,14 @@ export class BillingComponent implements OnInit {
        this.billingInterface.billingCustomerEmail = this.billingCustomerEmail.value;
        this.billingInterface.billingCustomerPhNo = this.billingCustomerPhNo.value;
        this.billingInterface.billingCustomerAddress = this.billingCustomerAddrs.value;
+       this.billingInterface.billingAmtPaid = this.billingFinalAmtPaid.value;
+       this.billingInterface.billingDuePrice = String(this.PayTotalPrice - Number(this.billingFinalAmtPaid.value));
        const currentDate = new Date();
       const curD = this.dataPipe.transform(new Date(), 'dd-MM-yyyy')!;
        this.billingInterface.billingDate = String(curD);
        this.billingInterface.billingTotalPrice = String(this.PayTotalPrice);
        this.billingInterface.billingTotalPriceTax = String(this.PayTotalPriceDis);
+
        this.billingInterface.billingTotalProductQty = String(this.getTotalProduct());
         this.billingInterface.productDetails = this.billingList;
         console.log(this.billingInterface);

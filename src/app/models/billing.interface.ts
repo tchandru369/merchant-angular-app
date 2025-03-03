@@ -9,5 +9,7 @@ export interface billingInterface {
     billingTotalProductQty: string;
     billingTotalPrice: string;
     billingTotalPriceTax: string;
+    billingDuePrice:string;
+    billingAmtPaid:string;
     productDetails: productInterface[];
   }

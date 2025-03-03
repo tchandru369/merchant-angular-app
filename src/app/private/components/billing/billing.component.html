@@ -126,7 +126,10 @@
                       </tfoot>
                     </table>
                 </div>
-                
+                  <div class="final-amt-paid">
+                    <p class="input-amt-txt"><strong>Amount To Be Paid : </strong></p>
+                    <input class="input-amt-paid" type="number" value="AmtToBePaid" formControlName="billingFinalAmtPaid">
+                  </div>
                   <button mat-button matStepperPrevious>Back</button>
                   <button mat-button matStepperNext (click)="payForAddedProducts()">Pay</button>
                 </div>

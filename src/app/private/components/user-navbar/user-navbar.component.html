@@ -3,7 +3,7 @@
   <mat-sidenav #sidenav mode="side" opened class="sidenav" [ngClass]="{'collapsed': isCollapsed}">
     <div class="d-flex flex-column p-3 text-white bg-dark" style="height: 100vh;">
       <div *ngIf="!isCollapsed" class="user">
-        <img *ngIf="userProfileImg" [src]="userProfileImg" alt="ProfileImg">
+        <img *ngIf="userProfileImg" [src]="userProfileImg ?? 'assets/default-img.png'" alt="ProfileImg">
         <h4 class="name">{{userName}}</h4>
         <p class="mailId">{{userEmail}}</p>
       </div>

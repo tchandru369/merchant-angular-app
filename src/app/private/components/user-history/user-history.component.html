@@ -1,1 +1,123 @@
-<p>user-history works!</p>
+<div class="history-page">
+
+  <mat-card-title>Select Date To view Transaction</mat-card-title>
+<div class="date-select">
+  
+    <mat-select placeholder="Select date" [(value)]="selectedDate">
+      <mat-option *ngFor="let bill of billUniqueDates" [value]="bill.custInvoiceDateRes">
+        {{ bill.custInvoiceDateRes }}
+      </mat-option>
+    </mat-select>
+   <button mat-button (click)="populateSelectedList()">submit</button>
+  
+</div>
+<div class="display-full-paid">
+
+    <mat-card>
+
+        <mat-card-content>
+            <mat-card-title>Due Customer List</mat-card-title>
+            
+            <table mat-table [dataSource]="filterBillsDueAmt">
+              <!-- Email Column -->
+
+              <ng-container matColumnDef="custEmailIdRes">
+                <th mat-header-cell *matHeaderCellDef> User Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.custEmailIdRes}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="custInvoiceIdRes">
+                <th mat-header-cell *matHeaderCellDef> Invoice ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.custInvoiceIdRes}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="custInvoiceDateRes">
+                <th mat-header-cell *matHeaderCellDef> Invoice Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.custInvoiceDateRes}} </td>
+              </ng-container>
+            
+              <!-- Amount Paid Column -->
+              <ng-container matColumnDef="custPaidAmtRes">
+                <th mat-header-cell *matHeaderCellDef> Amount Paid </th>
+                <td mat-cell *matCellDef="let element"> {{element.custPaidAmtRes}} </td>
+              </ng-container>
+            
+              <!-- Due Amount Column -->
+              <ng-container matColumnDef="custDueAmtRes">
+                <th mat-header-cell *matHeaderCellDef> Due Amount </th>
+                <td mat-cell *matCellDef="let element"> {{element.custDueAmtRes}} </td>
+              </ng-container>
+            
+              <!-- Total Amount Column -->
+              <ng-container matColumnDef="custTotalAmtRes">
+                <th mat-header-cell *matHeaderCellDef> Total Amount </th>
+                <td mat-cell *matCellDef="let element"> {{element.custTotalAmtRes}} </td>
+              </ng-container>
+            
+              <!-- Header Row -->
+              <tr mat-header-row *matHeaderRowDef="displayFullPaid"></tr>
+            
+              <!-- Data Row -->
+              <tr mat-row *matRowDef="let row; columns: displayFullPaid;"></tr>
+            </table>
+
+        </mat-card-content>
+    </mat-card>
+
+</div>
+
+<div class="display-due-paid">
+
+  <mat-card>
+
+      <mat-card-content>
+          <mat-card-title>Fully Paid List</mat-card-title>
+          
+          <table mat-table [dataSource]="filterBillsFullPaid">
+            <!-- Email Column -->
+
+            <ng-container matColumnDef="custEmailIdRes">
+              <th mat-header-cell *matHeaderCellDef> User Email </th>
+              <td mat-cell *matCellDef="let element"> {{element.custEmailIdRes}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="custInvoiceIdRes">
+              <th mat-header-cell *matHeaderCellDef> Invoice ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.custInvoiceIdRes}} </td>
+            </ng-container>
+        
+            <ng-container matColumnDef="custInvoiceDateRes">
+              <th mat-header-cell *matHeaderCellDef> Invoice Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.custInvoiceDateRes}} </td>
+            </ng-container>
+          
+            <!-- Amount Paid Column -->
+            <ng-container matColumnDef="custPaidAmtRes">
+              <th mat-header-cell *matHeaderCellDef> Amount Paid </th>
+              <td mat-cell *matCellDef="let element"> {{element.custPaidAmtRes}} </td>
+            </ng-container>
+          
+            <!-- Due Amount Column -->
+            <ng-container matColumnDef="custDueAmtRes">
+              <th mat-header-cell *matHeaderCellDef> Due Amount </th>
+              <td mat-cell *matCellDef="let element"> {{element.custDueAmtRes}} </td>
+            </ng-container>
+          
+            <!-- Total Amount Column -->
+            <ng-container matColumnDef="custTotalAmtRes">
+              <th mat-header-cell *matHeaderCellDef> Total Amount </th>
+              <td mat-cell *matCellDef="let element"> {{element.custTotalAmtRes}} </td>
+            </ng-container>
+          
+            <!-- Header Row -->
+            <tr mat-header-row *matHeaderRowDef="displayDuePaid"></tr>
+          
+            <!-- Data Row -->
+            <tr mat-row *matRowDef="let row; columns: displayDuePaid;"></tr>
+          </table>
+
+      </mat-card-content>
+  </mat-card>
+
+</div>
+</div>

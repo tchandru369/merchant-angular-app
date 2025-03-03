@@ -1,0 +1,50 @@
+.display-full-paid {
+  position: relative;
+  top: 10%;
+  overflow: visible;  /* adjust as needed */
+  }
+
+  mat-card {
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  mat-list {
+    display: flex;
+    flex-direction: row; /* Ensure items are aligned vertically */
+    padding: 10px;
+    justify-content: space-evenly;
+    margin-left: 8px;
+  }
+  
+  mat-list-item{
+    margin-right: 10px;
+  }
+
+  .display-due-paid{
+    margin-top: 10px;
+  }
+
+  .date-select {
+    display: flex;
+    align-items: center;
+  }
+  
+  .date-select mat-select {
+    margin-right: 10px; 
+    width: 100px;/* This adds a space between the select box and the button */
+  }
+  
+  .date-select button {
+    margin-left: 10px; /* Adjust margin-left to control the distance between the select and button */
+  }
+
+  .date-select {
+    width: 300px;
+    height: 100px;
+  }
+
+ 

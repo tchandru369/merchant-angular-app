@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class BillingService {
 
-   private productURL:string =  "https://shop-management-983146727685.asia-south1.run.app/services/v1/products"
-   private customerURL:string = "https://shop-management-983146727685.asia-south1.run.app/services/v1/customer"
-   private billingURL:string = "https://shop-management-983146727685.asia-south1.run.app/services/v1/billing"
+   private productURL:string =  "http://localhost:8083/services/v1/products"
+   private customerURL:string = "http://localhost:8083/services/v1/customer"
+   private billingURL:string = "http://localhost:8083/services/v1/billing"
 
   constructor(private httpClient : HttpClient) { }
 
@@ -61,6 +61,18 @@ export class BillingService {
       console.log(token);
       console.log(billingData);
       return this.httpClient.post<any>(`${this.billingURL}/billCustomer`,billingData,{headers});
+    }
+
+    viewBillHistory(ownerEmail:string):Observable<any>{
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('email', ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.billingURL}/viewBillHistory`,{headers,params});
     }
     
 

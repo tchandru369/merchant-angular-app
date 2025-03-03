@@ -6,6 +6,7 @@ import { MerchantService } from '../../services/merchant.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { imageHandle } from 'src/app/models/imageHandle.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-settings',
@@ -17,6 +18,7 @@ export class UserSettingsComponent implements OnInit {
 
 
   ownerEmail:any;
+  imageSelected: boolean = false; 
    defaultImageHandle: imageHandle = {
     // Assuming imageHandle has properties like `src`, `alt`, etc., set default values here
     file: new File([], ""), // default empty image source
@@ -30,7 +32,7 @@ export class UserSettingsComponent implements OnInit {
   };
 
   imageUrl: any;
-  constructor(private settingService:MerchantService,private sanitizer: DomSanitizer) {
+  constructor(private settingService:MerchantService,private sanitizer: DomSanitizer,private snackbar:MatSnackBar) {
    }
 
   ngOnInit(): void {
@@ -53,6 +55,7 @@ export class UserSettingsComponent implements OnInit {
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.imageSelected =true;
       this.merchantImgClass.merchantImg = file;
       const blobUrl = URL.createObjectURL(file);
       // Use DomSanitizer to trust the blob URL and mark it as safe
@@ -65,6 +68,7 @@ export class UserSettingsComponent implements OnInit {
   onFileChangeEvent(event : any) {
     console.log(event);
     if(event.target.files){
+      this.imageSelected =true;
       const file = event.target.files[0];
       const fileHandle : imageHandle={
         file : file,
@@ -124,9 +128,17 @@ export class UserSettingsComponent implements OnInit {
       this.settingService.uploadImage(formData).subscribe(
         (response:any) => {
           console.log('Image uploaded successfully', response);
+          this.snackbar.open(` Image uploaded successfully `,'close',{
+            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
+           })
+           this.imageSelected = false;
         },
         (error) => {
           console.error('Error uploading image', error);
+          this.snackbar.open(` Image Failed to upload `,'close',{
+            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
+           })
+           this.imageSelected = false;
         }
       );
     }
