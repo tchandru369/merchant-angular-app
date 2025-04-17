@@ -10,7 +10,7 @@ import { Observable, throwError } from 'rxjs';
 })
 export class UserService {
 
-  private baseURL:string =  "http://35-200-217-136.nip.io:8080/api/v1/auth"
+  private baseURL:string =  "http://34.93.187.85:443/api/v1/auth"
 
   constructor(private httpClient:HttpClient, private snackbar:MatSnackBar) { 
 
