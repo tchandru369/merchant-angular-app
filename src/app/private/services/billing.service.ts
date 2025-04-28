@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class BillingService {
 
-   private productURL:string =  "http://localhost:8083/services/v1/products"
-   private customerURL:string = "http://localhost:8083/services/v1/customer"
-   private billingURL:string = "http://localhost:8083/services/v1/billing"
+   private productURL:string =  "http://34.93.187.85:443/services/v1/products"
+   private customerURL:string = "http://34.93.187.85:443/services/v1/customer"
+   private billingURL:string = "http://34.93.187.85:443/services/v1/billing"
 
   constructor(private httpClient : HttpClient) { }
 
