@@ -9,7 +9,7 @@ import { merchantImg } from 'src/app/models/merchantImg.interface';
 export class MerchantService {
 
 
-  private merchantURL:string =  "http://34.93.187.85:443/services/v1/merchant"
+  private merchantURL:string =  "http://localhost:8083/services/v1/merchant"
 
   constructor(private httpClient:HttpClient) { }
 

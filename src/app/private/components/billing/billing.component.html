@@ -9,18 +9,37 @@
               <form [formGroup]="firstFormGroup">
                 <ng-template matStepLabel>Add Products</ng-template>
                 <mat-form-field>
-                  <mat-label>Product Details</mat-label>
-                  
-                  <mat-select formControlName="billingProductName"  class="form-control" (valueChange)="onchangeOfProductName(billingProductName.value)">
-                    <input matInput formControlName="billingsearchProduct"  placeholder="Type to search" />
-                    <mat-option *ngFor="let product of filteredAndSortedProducts" [value]="product">
-                      {{ product.productName }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field> 
+                  <mat-label>Customer Type:</mat-label>
+                    <mat-select formControlName="billingCustType" (selectionChange)="onUpdateBrandChange()">
+                      <mat-option value="">Select Brand</mat-option>
+                      <mat-option *ngFor="let type of customerType" [value]="type">{{ type }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 <mat-form-field>
-                  <input matInput type="text" placeholder="Enter Product Quantity" formControlName="billingProductQuantity">
-                  <mat-error *ngIf="billingProductQuantity.touched && billingProductQuantity.hasError('required')">Product Quantity is required</mat-error>
+                  <mat-label>Brand:</mat-label>
+                    <mat-select formControlName="billingCompanyName" (selectionChange)="onUpdateBrandChange()">
+                      <mat-option value="">Select Brand</mat-option>
+                      <mat-option *ngFor="let brand of updateBrands" [value]="brand">{{ brand }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Product:</mat-label>
+                      <mat-select formControlName="billingProductType" (selectionChange)="onUpdateProductChange()">
+                        <mat-option value="">Select Product</mat-option>
+                        <mat-option *ngFor="let product of updateProducts" [value]="product">
+                          {{ product }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Quantity:</mat-label>
+                       <mat-select formControlName="billingProductName" (selectionChange)="onUpdateQuantityChange()">
+                         <mat-option *ngFor="let productName of updateProductNames" [value]="productName">{{ productName }}</mat-option>
+                       </mat-select>
+                     </mat-form-field> 
+                <mat-form-field>
+                  <input matInput type="text" placeholder="Enter Product Quantity" formControlName="billingActualProdQty">
+                  <mat-error *ngIf="billingActualProdQty.touched && billingActualProdQty.hasError('required')">Product Quantity is required</mat-error>
   
                   </mat-form-field>
                   
@@ -32,7 +51,8 @@
                           <th>Name</th>
                           <th>Type</th>
                           <th>Quantity</th>
-                          <th>Price Per Item</th>
+                          <th>Cust Price</th>
+                          <th>Shop Price</th>
                           <th>Total Price</th>
                           <th>Option</th>
                         </tr>
@@ -42,8 +62,9 @@
                           <td>{{product.productName}}</td>
                           <td>{{product.productType}}</td>
                           <td>{{product.productQuantity}}</td>
-                          <td>{{product.productCustomerPrice}}</td>
-                          <td>{{product.productPrice}}</td>
+                          <td>{{product.productCustPrice}}</td>
+                          <td>{{product.productShopPrice}}</td>
+                          <td>{{product.productActualPrice}}</td>
                           <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
                         </tr>
                       </tbody>
@@ -101,7 +122,8 @@
                           <th>Name</th>
                           <th>Type</th>
                           <th>Quantity</th>
-                          <th>Price Per Item</th>
+                          <th>Cust Price</th>
+                          <th>Shop Price</th>
                           <th>Total Price</th>
                           <th>Option</th>
                         </tr>
@@ -111,8 +133,9 @@
                           <td>{{product.productName}}</td>
                           <td>{{product.productType}}</td>
                           <td>{{product.productQuantity}}</td>
-                          <td>{{product.productCustomerPrice}}</td>
-                          <td>{{product.productPrice}}</td>
+                          <td>{{product.productCustPrice}}</td>
+                          <td>{{product.productShopPrice}}</td>
+                          <td>{{product.productActualPrice}}</td>
                           <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
                         </tr>
                       </tbody>

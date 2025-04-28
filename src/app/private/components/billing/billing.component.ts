@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { customer } from 'src/app/models/customer.interface';
 import { billingInterface } from 'src/app/models/billing.interface';
 import { DatePipe } from '@angular/common';
+import { MilkProductDetails } from 'src/app/models/milkProduct.interface';
 
 @Component({
   selector: 'app-billing',
@@ -17,9 +18,14 @@ import { DatePipe } from '@angular/common';
 export class BillingComponent implements OnInit {
 
 
+  selectedProdValues: any = null;
   productInterface!: productInterface;
+  milkProdList:MilkProductDetails[]=[];
+  customerType: string[] = ['Shop', 'Individual'];
+  listTotalPrice:number = 0;
   CustomerDiscount:number=0;
   PayTotalPrice:number=0;
+  actualPriceProd:number = 0;
   PayTotalPriceDis:number = 0;
   customerInterface !: customer;
   BillingPPrice: number = 0;
@@ -35,13 +41,20 @@ export class BillingComponent implements OnInit {
   prodQtyIndx:number=0;
   displayedColumns: string[] = ['productName', 'productPrice', 'productType', 'productQuantity'];
   productList1: productInterface[]=[];
-  billingList:{productName?:string,productType?:string,productCustomerPrice?:string,productPrice?:string,productQuantity?:string,productOwner?:string
-     }[]=[];
+  billingList:{productName?:string,productType?:string,productQuantity?:string,productOwner?:string,productShopPrice?:number,productCustPrice?:number
+     productActualPrice?:number}[]=[];
+
+     billingMilkList:{}[]=[];
   billingProducts:productInterface[]= [];
   prodQty :string='';
   prodType:string='';
   productName:string='';
   BillingPQty:number = 0;
+  updateBrands:any[]=[];
+  updateProducts:any[]=[];
+  updateProductNames:any[]=[];
+  selectedUpdBrand:string = '';
+  selectedUpdProduct:string = '';
   
   constructor(private billingService : BillingService,private router:Router,private snackbar:MatSnackBar,private dataPipe:DatePipe) { 
     this.billingInterface = {
@@ -99,15 +112,60 @@ export class BillingComponent implements OnInit {
     //   });
   }
 
+  onUpdateBrandChange() {
+    this.updateProducts = [
+      ...new Set(this.milkProdList
+        .filter(item => item.companyName === this.billingCompanyName.value)
+        .map(item => item.productType)),
+    ];
+    this.selectedUpdProduct = '';
+    this.updateProductNames = [];
+    console.log(this.updateProducts);
+  }
+
+  onUpdateProductChange() {
+    this.updateProductNames = this.milkProdList
+      .filter(
+        item =>
+          item.companyName === this.billingCompanyName.value &&
+          item.productType === this.billingProductType.value
+      )
+      .map(item => item.productName);
+  }
+
+  onUpdateQuantityChange(){
+    this.selectedProdValues = this.milkProdList.find(
+      p =>
+        p.companyName === this.billingCompanyName.value &&
+        p.productType ===this.billingProductType.value &&
+        p.productName === this.billingProductName.value
+    );
+    
+    if(this.selectedProdValues){
+      this.billingProductBillPrice.setValue(this.selectedProdValues.productBillPrice);
+      this.billingProductShopPrice.setValue(this.selectedProdValues.productShopPrice);
+      this.billingProductCustPrice.setValue(this.selectedProdValues.productCustPrice);
+      this.billingProductQuantity.setValue(this.selectedProdValues.productQuantity);
+    }
+  }
+
+  
+
   private _formBuilder = inject(FormBuilder);
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
     billingProductName : new FormControl(null,[Validators.required]),
-    billingProductType : new FormControl( [null as string | null],[Validators.required,Validators.email]),
-    billingProductPrice : new FormControl(null,[Validators.required]),
+    billingProductType : new FormControl( null,[Validators.required]),
+    billingCompanyName : new FormControl(null,[Validators.required]),
     billingProductQuantity : new FormControl(null,[Validators.required]),
-    billingsearchProduct:new FormControl(null,[Validators.required])
+    billingProductBillPrice:new FormControl(null,[Validators.required]),
+    billingProductCustPrice:new FormControl(null,[Validators.required]),
+    billingProductShopPrice:new FormControl(null,[Validators.required]),
+    billingProductCreatedDate:new FormControl(null,[Validators.required]),
+    billingProductOwner:new FormControl(null,[Validators.required]),
+    billingCustType:new FormControl(null,[Validators.required]),
+    billingActualProdQty:new FormControl(null,[Validators.required])
   });
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
@@ -124,6 +182,7 @@ export class BillingComponent implements OnInit {
   get billingCustomerName():FormControl{
     return this.secondFormGroup.get('billingCustomerName') as FormControl;
   }
+
   get billingFinalAmtPaid():FormControl{
     return this.secondFormGroup.get('billingFinalAmtPaid') as FormControl;
   }
@@ -145,10 +204,21 @@ export class BillingComponent implements OnInit {
   get billingCustomerType():FormControl{
     return this.secondFormGroup.get('billingCustomerType') as FormControl;
   }
-
-
-  get billingsearchProduct():FormControl{
-    return this.firstFormGroup.get('billingsearchProduct') as FormControl;
+ 
+  get billingActualProdQty():FormControl{
+    return this.firstFormGroup.get('billingActualProdQty') as FormControl;
+  }
+  get billingCustType():FormControl{
+    return this.firstFormGroup.get('billingCustType') as FormControl;
+  }
+  get billingCompanyName():FormControl{
+    return this.firstFormGroup.get('billingCompanyName') as FormControl;
+  }
+  get billingProductQuantity():FormControl{
+    return this.firstFormGroup.get('billingProductQuantity') as FormControl;
+  }
+  get billingProductOwner():FormControl{
+    return this.firstFormGroup.get('billingProductOwner') as FormControl;
   }
   get billingProductName():FormControl{
     return this.firstFormGroup.get('billingProductName') as FormControl;
@@ -156,19 +226,26 @@ export class BillingComponent implements OnInit {
   get billingProductType():FormControl{
     return this.firstFormGroup.get('billingProductType') as FormControl;
   }
-  get billingProductPrice():FormControl{
-    return this.firstFormGroup.get('billingProductPrice') as FormControl;
+  get billingProductCreatedDate():FormControl{
+    return this.firstFormGroup.get('billingProductCreatedDate') as FormControl;
   }
-  get billingProductQuantity():FormControl{
-    return this.firstFormGroup.get('billingProductQuantity') as FormControl;
+  get billingProductBillPrice():FormControl{
+    return this.firstFormGroup.get('billingProductBillPrice') as FormControl;
+  }
+  get billingProductCustPrice():FormControl{
+    return this.firstFormGroup.get('billingProductCustPrice') as FormControl;
+  }
+  get billingProductShopPrice():FormControl{
+    return this.firstFormGroup.get('billingProductShopPrice') as FormControl;
   }
   isLinear = false;
 
   viewProdList(){
     this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.billingService.viewProduct(this.userEmail).subscribe((data:any) => {
-        this.productList1 = data;
+    this.billingService.viewOwnerMilkProd(this.userEmail).subscribe((data:any) => {
+        this.milkProdList = data;
         console.log(data);
+        this.updateBrands = [...new Set(this.milkProdList.map(item => item.companyName))];
     })
   }
 
@@ -221,47 +298,38 @@ export class BillingComponent implements OnInit {
   }
 
   addProductForBilling() {
-        this.productName = this.billingProductName.value.productName;
-        this.selectedProductQuantity = this.billingProductQuantity.value;
+    
         
-
-
-        console.log(this.productName);
-
-           for(let i=0;i<this.productList1.length;i++){
-            if(this.productName == this.productList1[i].productName){
-             this.prodQtyIndx = i;
-            }
-           }
-            console.log(this.prodQtyIndx);
-
-         const BillingProductName = this.productList1[this.prodQtyIndx].productName;
-         this.BillingPPrice = Number(this.productList1[this.prodQtyIndx].productCustomerPrice);
-          this.BillingPQty = Number(this.productList1[this.prodQtyIndx].productQuantity);
-          const BillingProductType = this.productList1[this.prodQtyIndx].productType;
-          const BillingProductOwner = this.productList1[this.prodQtyIndx].productOwner;
-          if(this.BillingPQty < this.selectedProductQuantity ){
+         this.billingCompanyName.setValue(sessionStorage.getItem(sessionStorage.getItem('ownerEmail') || ''))
+          if(this.billingProductQuantity.value < this.billingActualProdQty.value){
             this.snackbar.open(`Stock available only : ${this.BillingPQty}`,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
              })
           }else{
-          const actualPriceForItem = String(this.BillingPPrice);
-          const actualPrice = String(this.selectedProductQuantity * this.BillingPPrice);
-          const actualQuantity = String(this.selectedProductQuantity);
+
+          const actualShopPriceForItem = this.billingProductShopPrice.value;
+          const actualCustPriceForItem = this.billingProductCustPrice.value;
+          if(this.billingCustType.value === 'Shop'){
+            this.actualPriceProd = this.billingActualProdQty.value * actualShopPriceForItem;
+          }else if(this.billingCustType.value === 'Individual'){
+            this.actualPriceProd = this.billingActualProdQty.value * actualCustPriceForItem;
+          }
           for(let i=0;i<this.billingList.length;i++){
-            if(BillingProductName == this.billingList[i].productName){
+            if(this.billingProductName.value == this.milkProdList[i].productName && this.billingProductType.value == this.milkProdList[i].productType && this.billingCompanyName.value == this.milkProdList[i].companyName){
               this.billing_add_count = this.billing_add_count+1;
             }
            }
            if(this.billing_add_count == 0){
-            this.billingList.push({productName:BillingProductName,productType:BillingProductType
-              ,productCustomerPrice:actualPriceForItem, productPrice:actualPrice,productQuantity:actualQuantity,productOwner:BillingProductOwner});
-             this.firstFormGroup.reset(); 
+            this.billingList.push({productName:this.billingProductName.value,productType:this.billingProductType.value,
+              productQuantity:this.billingActualProdQty.value,productOwner:this.billingCompanyName.value,
+              productShopPrice:this.billingProductShopPrice.value,productCustPrice:this.billingProductCustPrice.value,
+              productActualPrice:this.actualPriceProd});
+             this.setFirstFormFieldNull() 
            }else{
-            this.firstFormGroup.reset(); 
+            this.setFirstFormFieldNull() 
 
            }
-           this.billing_add_count = 0;
+           this.billing_add_count == 0;
            console.log(this.billingList);
            
           }
@@ -335,6 +403,19 @@ export class BillingComponent implements OnInit {
       this.billingCustomerType.setValue(null);
     }
 
+    setFirstFormFieldNull(){
+      this.billingProductName.reset(); 
+    this.billingProductType.reset(); 
+    this.billingCompanyName.reset(); 
+    this.billingProductQuantity.reset();  
+    this.billingProductBillPrice.reset();
+    this.billingProductCustPrice.reset();
+    this.billingProductShopPrice.reset();
+    this.billingProductCreatedDate.reset();
+    this.billingProductOwner.reset();
+    this.billingActualProdQty.reset();
+    }
+
     getTotalProduct() :number{
 
      return this.payTotalProductQty = this.billingList.reduce((total, product) => total +Number(product.productQuantity), 0);
@@ -354,7 +435,7 @@ export class BillingComponent implements OnInit {
         this.CustomerDiscount = 0;
       }
       
-      this.totalPrice = this.billingList.reduce((total, product) => total +Number(product.productPrice), 0);
+      //this.totalPrice = this.billingList.reduce((total, product) => total +Number(product.productPrice), 0);
       const discountAmt = (this.totalPrice * this.CustomerDiscount/100);
       this.PayTotalPrice = this.totalPrice;
       this.PayTotalPriceDis = this.totalPrice - discountAmt;
