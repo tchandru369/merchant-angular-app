@@ -2,9 +2,9 @@ export interface billingHistory{
     custInvoiceIdRes:string;
     custEmailIdRes:string;
     custPhnNoRes:string;
-    custPaidAmtRes:string;
-    custDueAmtRes:string;
-    custTotalAmtRes:string;
+    custPaidAmtRes:number;
+    custDueAmtRes:number;
+    custTotalAmtRes:number;
     custInvoiceDateRes:string;
     custFullPaidFlgRes:string;
 }

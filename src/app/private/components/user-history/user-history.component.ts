@@ -19,8 +19,8 @@ export class UserHistoryComponent implements OnInit {
   billUniqueDates :billingHistory[]=[];
   filterBillsFullPaid:billingHistFullPaid[]=[];
   filterBillsDueAmt:billingHistDueList[]=[];
-  billPaidHistory:{custInvoiceIdRes:string,custEmailIdRes:string,custPhnNoRes:string,custPaidAmtRes:string,custDueAmtRes:string
-    ,custTotalAmtRes:string,custFullPaidFlgRes:string,custInvoiceDateRes:string }[]=[];
+  billPaidHistory:{custInvoiceIdRes:string,custEmailIdRes:string,custPhnNoRes:string,custPaidAmtRes:number,custDueAmtRes:number
+    ,custTotalAmtRes:number,custFullPaidFlgRes:string,custInvoiceDateRes:string }[]=[];
   billDueAmtList:billingHistDueList[]=[];
   displayFullPaid: string[] = [
     'custEmailIdRes',
@@ -105,8 +105,8 @@ getUniqueDates(bills: billingHistory[]) {
 
   segregateListDatas(billHistoryList : billingHistory[]){
     
-    this.billFullPaidList = billHistoryList.filter(product=>product.custFullPaidFlgRes === "1");
-    this.billDueAmtList = billHistoryList.filter(product=>product.custFullPaidFlgRes === "0");
+    this.billFullPaidList = billHistoryList.filter(product=>product.custFullPaidFlgRes === "Y");
+    this.billDueAmtList = billHistoryList.filter(product=>product.custFullPaidFlgRes === "N");
     this.billUniqueDates = this.getUniqueDates(billHistoryList);
     console.log(this.billDueAmtList);
     console.log(this.billFullPaidList);

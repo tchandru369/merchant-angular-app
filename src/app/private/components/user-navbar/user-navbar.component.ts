@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class UserNavbarComponent implements OnInit {
 
+
  
 
   userName :string="";
@@ -41,6 +42,11 @@ export class UserNavbarComponent implements OnInit {
     console.log("Entered MoveToBilling")
     this.router.navigate(['private', 'billing']);
   }
+
+  moveToMyRequestPage() {
+    console.log("Entered MoveToRequests")
+    this.router.navigate(['private', 'my-requests']);
+    }
 
   moveToAddProductPage(){
     console.log("Entered MoveToProducts")

@@ -1,3 +1,4 @@
+import { ConStDtls } from 'src/app/models/ConSt.interface';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BillingService } from '../../services/billing.service';
@@ -8,6 +9,10 @@ import { customer } from 'src/app/models/customer.interface';
 import { billingInterface } from 'src/app/models/billing.interface';
 import { DatePipe } from '@angular/common';
 import { MilkProductDetails } from 'src/app/models/milkProduct.interface';
+import { ShopCustomer } from 'src/app/models/ShopCustomer.interface';
+import { OrderRequest } from 'src/app/models/orderRequest.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-dialog.component';
 
 @Component({
   selector: 'app-billing',
@@ -22,6 +27,8 @@ export class BillingComponent implements OnInit {
   productInterface!: productInterface;
   milkProdList:MilkProductDetails[]=[];
   customerType: string[] = ['Shop', 'Individual'];
+  genderList:string[]=['Male','Female','Others']
+  conStDtls:ConStDtls[]=[];
   listTotalPrice:number = 0;
   CustomerDiscount:number=0;
   PayTotalPrice:number=0;
@@ -32,16 +39,19 @@ export class BillingComponent implements OnInit {
   totalPrice:number=0;
   payTotalProductQty:number=0;
   billingInterface!: billingInterface;
+  shopCustomer!:ShopCustomer;
   billing_add_count:number=0;
   validateCusFalse:boolean=false;
   userEmail:string="";
   searchProduct:string='';
   quantityProduct:string='';
   selectedProductQuantity:number=0;
+  custValidate:boolean = false;
+
   prodQtyIndx:number=0;
   displayedColumns: string[] = ['productName', 'productPrice', 'productType', 'productQuantity'];
   productList1: productInterface[]=[];
-  billingList:{productName?:string,productType?:string,productQuantity?:string,productOwner?:string,productShopPrice?:number,productCustPrice?:number
+  billingList:{productName?:string,productType?:string,productQuantity?:number,productOwner?:string,productShopPrice?:number,productCustPrice?:number
      productActualPrice?:number}[]=[];
 
      billingMilkList:{}[]=[];
@@ -50,13 +60,34 @@ export class BillingComponent implements OnInit {
   prodType:string='';
   productName:string='';
   BillingPQty:number = 0;
+  countryList:any[]=[];
+  stateList:any[]=[];
+  cityList:any[]=[];
+  selectedCountry:string='';
+  selectedState:string='';
   updateBrands:any[]=[];
   updateProducts:any[]=[];
   updateProductNames:any[]=[];
+  orderReqList:OrderRequest[]=[];
   selectedUpdBrand:string = '';
   selectedUpdProduct:string = '';
+  selectedUpdState:string='';
+  orderRequest!:OrderRequest;
   
-  constructor(private billingService : BillingService,private router:Router,private snackbar:MatSnackBar,private dataPipe:DatePipe) { 
+  constructor(private billingService : BillingService,private router:Router,private snackbar:MatSnackBar,private dataPipe:DatePipe,private dialog: MatDialog) { 
+    
+    this.orderRequest={
+       orderCustName : '',
+       orderCustPhoneNo:'',
+       orderCustCrtdDate:'',
+       orderCustOwnerName:'',
+       orderCustEmailId:'',
+       orderCustType:'',
+       orderCustTotalPrice:0,
+       orderFinalAmtPaid:0,
+       orderList:[]
+    };
+    
     this.billingInterface = {
       billingCustomerName: '',
       billingCustomerEmail: '',
@@ -79,10 +110,29 @@ export class BillingComponent implements OnInit {
       customerType:'',
       customerUniqueNo:''
     }
+   
+    this.shopCustomer ={
+      custType:'',
+      custPanNo:'',
+      custEmailId:'',
+      custOwmerDetails:'',
+      custDob:'',
+      custPinCode:'',
+      custState:'',
+      custCity:'',
+      custAddress:'',
+      custPhoneNo:'',
+      custName:'',
+      custGender:'',
+      custCountry:''
+    }
+  
   }
 
   ngOnInit(): void {
     this.viewProdList();
+    this. viewConStList();
+    this.getOwnerCustList();
     // this.firstFormGroup
     //   .get('billingProductName') 
     //   ?.valueChanges.subscribe((selectedProduct:productInterface | null) => {
@@ -133,6 +183,26 @@ export class BillingComponent implements OnInit {
       .map(item => item.productName);
   }
 
+  onUpdateCountryChange() {
+    this.stateList = [
+      ...new Set(this.conStDtls
+        .filter(item => item.countryNames === this.billingCustomerCountry.value)
+        .map(item => item.stateNames)),
+    ];
+    this.selectedUpdState = '';
+    this.cityList = [];
+  }
+
+  onUpdateStateChange() {
+    this.cityList = this.conStDtls
+      .filter(
+        item =>
+          item.countryNames === this.billingCustomerCountry.value &&
+          item.stateNames === this.billingCustomerState.value
+      )
+      .map(item => item.cityNames);
+  }
+
   onUpdateQuantityChange(){
     this.selectedProdValues = this.milkProdList.find(
       p =>
@@ -170,24 +240,48 @@ export class BillingComponent implements OnInit {
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
     billingCustomerName : new FormControl(null,[Validators.required]),
-    billingCustomerUNo : new FormControl(null,[Validators.required]),
+    billingCustomerPanNo : new FormControl(null,[Validators.required]),
     billingCustomerEmail:new FormControl(null,[Validators.required]),
     billingCustomerPhNo : new FormControl(null,[Validators.required]),
     billingCustomerPhNoToV: new FormControl(null,[Validators.required]),
     billingCustomerAddrs : new FormControl(null,[Validators.required]),
     billingCustomerType :new FormControl(null,[Validators.required]),
-    billingFinalAmtPaid : new FormControl(null,[Validators.required])
+    billingCustomerDob : new FormControl(null,[Validators.required]),
+    billingCustomerPinCode: new FormControl(null,[Validators.required]),
+    billingCustomerState: new FormControl(null,[Validators.required]),
+    billingCustomerCity: new FormControl(null,[Validators.required]),
+    billingCustomerCountry:new FormControl(null,[Validators.required]),
+    billingCustomerGender: new FormControl(null,[Validators.required]),
+    billingCustomerViewGen:new FormControl(null,[Validators.required]),
+    billingCustomerViewSte:new FormControl(null,[Validators.required]),
+    billingCustomerViewCtry:new FormControl(null,[Validators.required]),
+    billingCustomerViewCty:new FormControl(null,[Validators.required])
   });
 
+  get billingCustomerViewGen():FormControl{
+    return this.secondFormGroup.get('billingCustomerViewGen') as FormControl;
+  }
+  get billingCustomerViewSte():FormControl{
+    return this.secondFormGroup.get('billingCustomerViewSte') as FormControl;
+  }
+  get billingCustomerViewCtry():FormControl{
+    return this.secondFormGroup.get('billingCustomerViewCtry') as FormControl;
+  }
+  get billingCustomerViewCty():FormControl{
+    return this.secondFormGroup.get('billingCustomerViewCty') as FormControl;
+  }
   get billingCustomerName():FormControl{
     return this.secondFormGroup.get('billingCustomerName') as FormControl;
   }
-
-  get billingFinalAmtPaid():FormControl{
-    return this.secondFormGroup.get('billingFinalAmtPaid') as FormControl;
+  get billingCustomerGender():FormControl{
+    return this.secondFormGroup.get('billingCustomerGender') as FormControl;
   }
-  get billingCustomerUNo():FormControl{
-    return this.secondFormGroup.get('billingCustomerUNo') as FormControl;
+
+  get billingCustomerPanNo():FormControl{
+    return this.secondFormGroup.get('billingCustomerPanNo') as FormControl;
+  }
+  get billingCustomerDob():FormControl{
+    return this.secondFormGroup.get('billingCustomerDob') as FormControl;
   }
   get billingCustomerEmail():FormControl{
     return this.secondFormGroup.get('billingCustomerEmail') as FormControl;
@@ -201,8 +295,20 @@ export class BillingComponent implements OnInit {
   get billingCustomerAddrs():FormControl{
     return this.secondFormGroup.get('billingCustomerAddrs') as FormControl;
   }
+  get billingCustomerPinCode():FormControl{
+    return this.secondFormGroup.get('billingCustomerPinCode') as FormControl;
+  }
+  get billingCustomerState():FormControl{
+    return this.secondFormGroup.get('billingCustomerState') as FormControl;
+  }
   get billingCustomerType():FormControl{
     return this.secondFormGroup.get('billingCustomerType') as FormControl;
+  }
+  get billingCustomerCity():FormControl{
+    return this.secondFormGroup.get('billingCustomerCity') as FormControl;
+  }
+  get billingCustomerCountry():FormControl{
+    return this.secondFormGroup.get('billingCustomerCountry') as FormControl;
   }
  
   get billingActualProdQty():FormControl{
@@ -249,6 +355,14 @@ export class BillingComponent implements OnInit {
     })
   }
 
+  viewConStList(){
+    this.billingService.viewConStDtls().subscribe((data:any) => {
+        this.conStDtls = data;
+        console.log(data);
+        this.countryList = [...new Set(this.conStDtls.map(item => item.countryNames))];
+    })
+  }
+
   get filteredAndSortedProducts() {
     const searchTerm = this.firstFormGroup.get('billingsearchProduct')?.value || '';// Log search term
 
@@ -287,7 +401,7 @@ export class BillingComponent implements OnInit {
        this.prodQtyIndx = i;
       }
      }
-  
+
      this.productInterface.productName = this.productList1[this.prodQtyIndx].productName;
      this.productInterface.productOwner = this.productList1[this.prodQtyIndx].productOwner;
      this.productInterface.productPrice = this.productList1[this.prodQtyIndx].productPrice;
@@ -300,7 +414,6 @@ export class BillingComponent implements OnInit {
   addProductForBilling() {
     
         
-         this.billingCompanyName.setValue(sessionStorage.getItem(sessionStorage.getItem('ownerEmail') || ''))
           if(this.billingProductQuantity.value < this.billingActualProdQty.value){
             this.snackbar.open(`Stock available only : ${this.BillingPQty}`,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
@@ -315,7 +428,7 @@ export class BillingComponent implements OnInit {
             this.actualPriceProd = this.billingActualProdQty.value * actualCustPriceForItem;
           }
           for(let i=0;i<this.billingList.length;i++){
-            if(this.billingProductName.value == this.milkProdList[i].productName && this.billingProductType.value == this.milkProdList[i].productType && this.billingCompanyName.value == this.milkProdList[i].companyName){
+            if(this.billingProductName.value == this.billingList[i].productName && this.billingProductType.value == this.billingList[i].productType && this.billingCompanyName.value == this.billingList[i].productOwner){
               this.billing_add_count = this.billing_add_count+1;
             }
            }
@@ -329,7 +442,7 @@ export class BillingComponent implements OnInit {
             this.setFirstFormFieldNull() 
 
            }
-           this.billing_add_count == 0;
+           this.billing_add_count = 0;
            console.log(this.billingList);
            
           }
@@ -356,16 +469,31 @@ export class BillingComponent implements OnInit {
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
           
-           this.setSecondFormFeildsNull();
+           //this.setSecondFormFeildsNull();
+           this.secondFormGroup.reset();
            this.validateCusFalse = true;
+           this.custValidate = false;
         }else{
-          this.customerInterface = data;
-        this.billingCustomerName.setValue(this.customerInterface?.customerName);
-       this.billingCustomerEmail.setValue(this.customerInterface?.customerEmail);
-       this.billingCustomerAddrs.setValue(this.customerInterface?.customerAddress);
-       this.billingCustomerPhNo.setValue(this.customerInterface?.customerPhoneNo);
-       this.billingCustomerUNo.setValue(this.customerInterface?.customerUniqueNo);
-       this.billingCustomerType.setValue(this.customerInterface?.customerType);
+          this.shopCustomer = data;
+          this.custValidate = true;
+        this.billingCustomerName.setValue(this.shopCustomer?.custName);
+       this.billingCustomerEmail.setValue(this.shopCustomer?.custEmailId);
+       this.billingCustomerAddrs.setValue(this.shopCustomer?.custAddress);
+       this.billingCustomerPhNo.setValue(this.shopCustomer?.custPhoneNo);
+       //this.billingCustomerUNo.setValue(this.customerInterface?.customerUniqueNo);
+       this.billingCustomerType.setValue(this.shopCustomer?.custType);
+       const [day, month, year] = this.shopCustomer?.custDob.split('-').map(Number);
+  // Create date object in UTC (assume local time at midnight)
+        const date = new Date(Date.UTC(year, month - 1, day));
+       this.billingCustomerDob.setValue(date.toISOString());
+       this.billingCustomerViewCty.setValue(this.shopCustomer?.custCity);
+       this.billingCustomerViewCtry.setValue(this.shopCustomer?.custCountry);
+       this.billingCustomerViewSte.setValue(this.shopCustomer?.custState);
+       this.billingCustomerPanNo.setValue(this.shopCustomer?.custPanNo);
+       this.billingCustomerViewGen.setValue(this.shopCustomer?.custGender);
+       this.billingCustomerPinCode.setValue(this.shopCustomer?.custPinCode);
+
+
        this.validateCusFalse = false;
         }
     })
@@ -376,14 +504,32 @@ export class BillingComponent implements OnInit {
     registerCustomer(){
        
       
-        this.customerInterface.customerName = this.billingCustomerName.value;
-        this.customerInterface.customerEmail = this.billingCustomerEmail.value;
-        this.customerInterface.customerAddress = this.billingCustomerAddrs.value;
-        this.customerInterface.customerPhoneNo = this.billingCustomerPhNo.value;
-      
-      
+        this.shopCustomer.custName = this.billingCustomerName.value;
+        this.shopCustomer.custEmailId = this.billingCustomerEmail.value;
+        this.shopCustomer.custAddress = this.billingCustomerAddrs.value;
+        this.shopCustomer.custPhoneNo = this.billingCustomerPhNo.value;
+        this.shopCustomer.custDob = this.dataPipe.transform(this.billingCustomerDob.value, 'dd-MM-yyyy')!;
+        this.shopCustomer.custCity = this.billingCustomerCity.value;
+        this.shopCustomer.custOwmerDetails =  sessionStorage.getItem('ownerEmail')|| '';
+        this.shopCustomer.custPanNo = this.billingCustomerPanNo.value;
+        this.shopCustomer.custPinCode = this.billingCustomerPinCode.value;
+        this.shopCustomer.custState = this.billingCustomerState.value;
+        
+        this.shopCustomer.custCountry = this.billingCustomerCountry.value;
+        if(this.billingCustomerGender.value == 'Male'){
+          this.shopCustomer.custGender = 'M';
+        }else if(this.billingCustomerGender.value == 'Female'){
+          this.shopCustomer.custGender = 'F';
+        }else if(this.billingCustomerGender.value == 'Others'){
+          this.shopCustomer.custGender = 'O';}
 
-      this.billingService.registerCustomer(this.customerInterface).subscribe((data:any) => {
+          if(this.billingCustType.value === 'Shop'){
+            this.shopCustomer.custType = 'S';
+          }else if(this.billingCustType.value === 'Induvidual'){
+            this.shopCustomer.custType = 'I';
+          }
+
+      this.billingService.registerCustomer(this.shopCustomer).subscribe((data:any) => {
         
         console.log(data);
         if(data.response == "success"){
@@ -399,7 +545,7 @@ export class BillingComponent implements OnInit {
       this.billingCustomerEmail.setValue(null);
       this.billingCustomerAddrs.setValue(null);
       this.billingCustomerPhNo.setValue(null);
-      this.billingCustomerUNo.setValue(null);
+      //this.billingCustomerUNo.setValue(null);
       this.billingCustomerType.setValue(null);
     }
 
@@ -423,24 +569,21 @@ export class BillingComponent implements OnInit {
     }
 
     getTotalPrice() : number{
-      const customerType = this.billingCustomerType.value;
-      if(customerType === 'B'){
-         this.CustomerDiscount = 5;
-      }else if(customerType === 'S'){
-        this.CustomerDiscount = 8;
-      }else if(customerType === 'E'){
-        this.CustomerDiscount = 10;
-      }
-      else{
-        this.CustomerDiscount = 0;
-      }
       
-      //this.totalPrice = this.billingList.reduce((total, product) => total +Number(product.productPrice), 0);
+      this.totalPrice = this.billingList.reduce((total, product) => total +Number(product.productActualPrice), 0);
       const discountAmt = (this.totalPrice * this.CustomerDiscount/100);
       this.PayTotalPrice = this.totalPrice;
       this.PayTotalPriceDis = this.totalPrice - discountAmt;
-      return this.totalPrice - discountAmt;
+      return this.totalPrice;
        
+      }
+
+      getOwnerCustList(){
+        this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
+        this.billingService.viewCustOrder(this.userEmail).subscribe((data:any) => {
+            this.orderReqList = data;
+            console.log(data);
+        })
       }
       
       payForAddedProducts() {
@@ -448,8 +591,8 @@ export class BillingComponent implements OnInit {
        this.billingInterface.billingCustomerEmail = this.billingCustomerEmail.value;
        this.billingInterface.billingCustomerPhNo = this.billingCustomerPhNo.value;
        this.billingInterface.billingCustomerAddress = this.billingCustomerAddrs.value;
-       this.billingInterface.billingAmtPaid = this.billingFinalAmtPaid.value;
-       this.billingInterface.billingDuePrice = String(this.PayTotalPrice - Number(this.billingFinalAmtPaid.value));
+       //this.billingInterface.billingAmtPaid = this.billingFinalAmtPaid.value;
+      // this.billingInterface.billingDuePrice = String(this.PayTotalPrice - Number(this.billingFinalAmtPaid.value));
        const currentDate = new Date();
       const curD = this.dataPipe.transform(new Date(), 'dd-MM-yyyy')!;
        this.billingInterface.billingDate = String(curD);
@@ -457,17 +600,72 @@ export class BillingComponent implements OnInit {
        this.billingInterface.billingTotalPriceTax = String(this.PayTotalPriceDis);
 
        this.billingInterface.billingTotalProductQty = String(this.getTotalProduct());
-        this.billingInterface.productDetails = this.billingList;
+       // this.billingInterface.productDetails = this.billingList;
         console.log(this.billingInterface);
         this.billingService.payBillCustomer(this.billingInterface).subscribe((data:any) => {
         
           console.log(data);
           if(data.response == "success"){
-            this.snackbar.open(` Bill Payed : ${data.response} `,'close',{
+            this.snackbar.open(` Bill Payed : ${data.errorMsg} `,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
              })
           }
       })
+      }
+
+      registerOrder(){
+        const dialogRef = this.dialog.open(EditRequestDialogComponent, {
+            width: '400px',  // Clone to avoid mutating directly
+          });
+        
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              // User confirmed deletion
+              this.registerOrderRequest();
+              console.log('order Request added');
+            } else {
+              // User canceled
+              console.log('Order Request cancelled canceled');
+            }
+          });
+      }
+      registerOrderRequest(){
+
+        
+        const curD = this.dataPipe.transform(new Date(), 'dd-MM-yyyy')!;
+        this.orderRequest.orderCustCrtdDate = String(curD);
+        this.orderRequest.orderCustEmailId = this.billingCustomerEmail.value;
+        this.orderRequest.orderCustName = this.billingCustomerName.value;
+        this.orderRequest.orderCustOwnerName = sessionStorage.getItem('ownerEmail')|| '';
+        this.orderRequest.orderCustPhoneNo = this.billingCustomerPhNo.value;
+        this.orderRequest.orderCustTotalPrice = this.totalPrice;
+        //this.orderRequest.orderCustType = this.billingCustomerType.value;
+
+        if(this.billingCustType.value === 'Shop'){
+          this.orderRequest.orderCustType = 'S';
+        }else if(this.billingCustType.value === 'Induvidual'){
+          this.orderRequest.orderCustType = 'I';
+        }
+
+        for(let i=0;i<this.billingList.length;i++){
+          this.orderRequest.orderList.push({orderCustProdCmp:this.billingList[i].productOwner||'',orderCustProdName:this.billingList[i].productName||'',
+            orderCustProdQty:this.billingList[i].productQuantity||0,orderCustProdPrice:this.billingList[i].productActualPrice||0,orderCustProdType:this.billingList[i].productType||''});
+        }
+       console.log(this.orderRequest);
+
+       this.billingService.addOrderRequest(this.orderRequest).subscribe((data:any) => {
+        
+        console.log(data);
+        if(data.response == "success"){
+          this.snackbar.open(` Request Addition : ${data.errorMsg} `,'close',{
+            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
+           })
+        }else{
+          this.snackbar.open(`${data.errorMsg} `,'close',{
+            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
+           })
+        }
+    })
       }
    
 }

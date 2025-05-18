@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
@@ -22,9 +22,17 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { UserHistoryComponent } from './components/user-history/user-history.component';
-
+import { MatDatepickerModule } from  '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ReqOrdersComponent } from './components/req-orders/req-orders.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MyRequestsComponent } from './components/my-requests/my-requests.component';
+import { EditRequestDialogComponent } from './components/edit-request-dialog/edit-request-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ProcOrdersComponent } from './components/proc-orders/proc-orders.component';
 
 @NgModule({
+  providers: [DatePipe],
   declarations: [
     UserDashboardComponent,
     AddProductsComponent,
@@ -32,12 +40,18 @@ import { UserHistoryComponent } from './components/user-history/user-history.com
     UserNavbarComponent,
     LayoutComponent,
     UserSettingsComponent,
-    UserHistoryComponent
+    UserHistoryComponent,
+    ReqOrdersComponent,
+    MyRequestsComponent,
+    EditRequestDialogComponent,
+    ProcOrdersComponent
   ],
   imports: [
     CommonModule,
     PrivateRoutingModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatStepperModule,
     MatSelectModule,
     MatTableModule,
@@ -51,7 +65,9 @@ import { UserHistoryComponent } from './components/user-history/user-history.com
     HttpClientModule,
     MatSidenavModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatExpansionModule,
+    MatDialogModule
   ]
 })
 export class PrivateModule { }

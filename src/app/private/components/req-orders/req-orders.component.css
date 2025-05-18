@@ -1,0 +1,39 @@
+.customer-card {
+    margin: 20px;
+}
+
+.customer-summary {
+    display : flex;
+    align-items : center;
+    justify-content : space-between;
+}
+
+
+.customer-name,
+
+.customer-email,
+
+.customer-total {
+
+    margin-right: 10px;
+
+}
+
+.actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+}
+
+.expansion-panel {
+
+    margin-top: 10px;
+
+}
+
+.customer-details {
+
+    padding: 16px;
+}

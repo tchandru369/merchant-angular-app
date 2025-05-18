@@ -7,6 +7,7 @@ import { BillingComponent } from './components/billing/billing.component';
 import { LayoutComponent } from './layout/layout.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { UserHistoryComponent } from './components/user-history/user-history.component';
+import { MyRequestsComponent } from './components/my-requests/my-requests.component';
 
 const routes: Routes = [
   
@@ -27,7 +28,8 @@ const routes: Routes = [
     { path: 'add-products',component:AddProductsComponent,canActivate:[AuthGuard]},
     { path: 'billing',component:BillingComponent,canActivate:[AuthGuard]},
     { path: 'user-settings',component:UserSettingsComponent,canActivate:[AuthGuard]},
-    { path: 'user-history',component:UserHistoryComponent,canActivate:[AuthGuard]}
+    { path: 'user-history',component:UserHistoryComponent,canActivate:[AuthGuard]},
+    { path: 'my-requests',component:MyRequestsComponent,canActivate:[AuthGuard]}
 
   // Add more routes for the private module
   ]

@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class BillingService {
 
-   private productURL:string =  "http://34.93.187.85:443/services/v1/products"
-   private customerURL:string = "http://34.93.187.85:443/services/v1/customer"
-   private billingURL:string = "http://34.93.187.85:443/services/v1/billing"
+   private productURL:string =  "http://localhost:8083/services/v1/products"
+   private customerURL:string = "http://localhost:8083/services/v1/customer"
+   private billingURL:string = "http://localhost:8083/services/v1/billing"
 
   constructor(private httpClient : HttpClient) { }
 
@@ -38,6 +38,15 @@ export class BillingService {
       return this.httpClient.get<any>(`${this.productURL}/viewMilkProducts`,{headers,params});
     }
 
+    viewConStDtls():Observable<any>{
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });       // Add productId parameter
+      return this.httpClient.get<any>(`${this.billingURL}/getConStDtls`,{headers});
+    }
+
     validateCustomerByPhNo(customerPhNo:string):Observable<any>{
       const token = sessionStorage.getItem('jwtToken');
       const headers = new HttpHeaders({
@@ -59,7 +68,7 @@ export class BillingService {
       });
       console.log(token);
       console.log(customerData);
-      return this.httpClient.post<any>(`${this.customerURL}/saveCustomer`,customerData,{headers});
+      return this.httpClient.post<any>(`${this.customerURL}/saveShopCust`,customerData,{headers});
     }
    
 
@@ -85,6 +94,90 @@ export class BillingService {
       const params = new HttpParams()
         .set('email', ownerEmail);        // Add productId parameter
       return this.httpClient.get<any>(`${this.billingURL}/viewBillHistory`,{headers,params});
+    }
+
+    addOrderRequest(orderData:any):Observable<any>{
+
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/addOrderReq`,orderData,{headers});
+    }
+
+    viewCustOrder(ownerEmail:string):Observable<any>{
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('email', ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.billingURL}/getOrderReq`,{headers,params});
+    }
+
+    processedOrder(ownerEmail:string):Observable<any>{
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('email', ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.billingURL}/getProcOrders`,{headers,params});
+    }
+
+    deleteOrderRequest(orderData:any):Observable<any>{
+
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/deleteOrderReq`,orderData,{headers});
+    }
+
+    deleteProcOrderRequest(orderData:any):Observable<any>{
+
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/deleteProcOrder`,orderData,{headers});
+    }
+
+    processOrderRequest(orderData:any):Observable<any>{
+
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/OrderProcReq`,orderData,{headers});
+    }
+
+    paidOrderRequest(orderData:any):Observable<any>{
+
+      const token = sessionStorage.getItem('jwtToken');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/paidOrderReq`,orderData,{headers});
     }
     
 
