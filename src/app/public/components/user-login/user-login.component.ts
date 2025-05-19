@@ -59,7 +59,7 @@ export class UserLoginComponent implements OnInit {
               this.isCustomerLoggedIn = true;
               this.router.navigate(['../../private/user-dashboard']);
             }else if(response.response == "failure"){
-              this.snackBar.open(`User ${this.merchantEmail.value} does not exist!`,'close',{
+              this.snackBar.open(`User does not exist!`,'close',{
                 duration: 20000,horizontalPosition:'right',verticalPosition:'top'
                });
             }

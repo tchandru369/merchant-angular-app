@@ -4,6 +4,8 @@ import { CustomValidators } from '../../_helpers/custom-validators';
 import { UserService } from '../../services/user-services/user.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+import { UserI } from 'src/app/models/user.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-register',
@@ -12,11 +14,18 @@ import { tap } from 'rxjs/operators';
 })
 export class UserRegisterComponent implements OnInit {
 
-  
+  users:UserI;
   ngOnInit(): void {
   }
 
-  constructor(private userService : UserService, private router:Router) { 
+  constructor(private userService : UserService, private router:Router,private snackbar:MatSnackBar) { 
+     this.users={
+      merchantAddress:'',
+      merchantEmail :'',
+      merchantPassword:'',
+      merchantPhoneNumber:'',
+      merchantUserName:''
+     }
    
   }
 
@@ -61,15 +70,31 @@ export class UserRegisterComponent implements OnInit {
     if(this.form.valid){
       this.userService.createMerchant(
         {
-          merchantUserName: this.merchantUserName.value,
-          merchantEmail:this.merchantEmail.value,
-          merchantPassword:this.merchantPassword.value,
-          merchantAddress:this.merchantAddress.value,
-          merchantPhoneNumber:this.merchantPhoneNumber.value
+          
         }
       ).pipe(
         tap(() => this.router.navigate(['../user-login']))
       ).subscribe();
+          this.users.merchantUserName= this.merchantUserName.value,
+        this.users.merchantEmail=this.merchantEmail.value,
+          this.users.merchantPassword=this.merchantPassword.value,
+          this.users.merchantAddress=this.merchantAddress.value,
+          this.users.merchantPhoneNumber=this.merchantPhoneNumber.value
+
+      this.userService.createMerchant(this.users).subscribe((data:any) =>{
+    console.log(data);
+    if(data.response == "success"){
+      this.snackbar.open(`User created Successfully`,'close',{
+        duration: 2000,horizontalPosition:'right',verticalPosition:'top'
+       })       
+    }else{
+      this.snackbar.open(`Something went wrong...!`,'close',{
+        duration: 2000,horizontalPosition:'right',verticalPosition:'top'
+       })
+    }
+   },
+   error => console.log(error)
+  );
     }
   }
 }

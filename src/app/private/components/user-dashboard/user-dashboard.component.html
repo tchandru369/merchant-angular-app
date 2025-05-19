@@ -6,38 +6,48 @@
         <mat-card-content>
             <mat-card-title>Stocks Demand</mat-card-title>
             
-            <table mat-table [dataSource]="demandProdList" class="mat-elevation-z8">
+            <table mat-table [dataSource]="milkProdList" class="mat-elevation-z8">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
               
                 <!-- Position Column -->
+                <ng-container matColumnDef="companyName">
+                  <th mat-header-cell *matHeaderCellDef> Brand </th>
+                  <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+                </ng-container>
+              
+                <!-- Name Column -->
+                <ng-container matColumnDef="productType">
+                  <th mat-header-cell *matHeaderCellDef> Type </th>
+                  <td mat-cell *matCellDef="let element"> {{element.productType}} </td>
+                </ng-container>
+
                 <ng-container matColumnDef="productName">
                   <th mat-header-cell *matHeaderCellDef> Name </th>
                   <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
                 </ng-container>
               
-                <!-- Name Column -->
-                <ng-container matColumnDef="productPrice">
-                  <th mat-header-cell *matHeaderCellDef> Actual Price </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productPrice}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="productCustomerPrice">
-                  <th mat-header-cell *matHeaderCellDef> Customer Price </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productCustomerPrice}} </td>
-                </ng-container>
-              
                 <!-- Weight Column -->
-                <ng-container matColumnDef="productType">
-                  <th mat-header-cell *matHeaderCellDef> Type </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productType}} </td>
+                <ng-container matColumnDef="productBillPrice">
+                  <th mat-header-cell *matHeaderCellDef> Bill Price</th>
+                  <td mat-cell *matCellDef="let element"> {{element.productBillPrice}} </td>
                 </ng-container>
               
                 <!-- Symbol Column -->
+                <ng-container matColumnDef="productShopPrice">
+                  <th mat-header-cell *matHeaderCellDef> Shop Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.productShopPrice}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productCustPrice">
+                  <th mat-header-cell *matHeaderCellDef> Customer Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.productCustPrice}} </td>
+                </ng-container>
+
                 <ng-container matColumnDef="productQuantity">
                   <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productQuantity}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.productQuantity}}</td>
                 </ng-container>
               
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

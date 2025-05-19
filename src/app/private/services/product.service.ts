@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ProductService {
   
 
-  private baseURL:string =  "http://34.93.187.85:443/services/v1/products"
+  private baseURL:string =  "http://localhost:8083/services/v1/products"
 
   constructor(private httpClient:HttpClient) { }
 
@@ -46,8 +46,10 @@ export class ProductService {
 
     const params = new HttpParams()
       .set('name', ownerEmail);        // Add productId parameter
-    return this.httpClient.get<any>(`${this.baseURL}/demandProducts`,{headers,params});
+    return this.httpClient.get<any>(`${this.baseURL}/viewDemandPrd`,{headers,params});
   }
+
+  
 
   updateProduct(data:any):Observable<any>{
     const token = sessionStorage.getItem('jwtToken');

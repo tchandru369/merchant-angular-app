@@ -173,12 +173,17 @@ merchantAddPRoduct() {
 
    this.productService.addMilkProduct(this.productList).subscribe((data:any) =>{
     console.log(data);
-    if(data.response == "success"){
+    if(data.body.errorMsg == "success"){
       this.snackbar.open(`Product Added successfully`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })
        this.productList = [];
        
+    }else{
+      this.snackbar.open(`${data.body.errorMsg}`,'close',{
+        duration: 2000,horizontalPosition:'right',verticalPosition:'top'
+       })
+       this.productList = [];
     }
    },
    error => console.log(error)
