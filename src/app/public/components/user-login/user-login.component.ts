@@ -40,32 +40,46 @@ export class UserLoginComponent implements OnInit {
      this.router.navigate(['../app-user-register']);
     }
     merchantUserLogin() {
-      if(this.loginForm.valid){
-        this.userService.loginMerchantServices(
-          {
-            merchantEmail:this.merchantEmail.value,
-            merchantPassword:this.merchantPassword.value,
-          }
-        ).subscribe(
-          (response:any) => {
-            console.log('login successful',response);
-
-            if(response.response == "success"){
-              sessionStorage.setItem('jwtToken',response.token);
-              sessionStorage.setItem('ownerEmail',this.merchantEmail.value);
-              sessionStorage.setItem('ownerName',response.userName);
-              sessionStorage.setItem('ownerPhoto',response.userPhoto);
-              sessionStorage.setItem('ownerProfileImg',"merchant-profile-img");
-              this.isCustomerLoggedIn = true;
-              this.router.navigate(['../../private/user-dashboard']);
-            }else if(response.response == "failure"){
-              this.snackBar.open(`User does not exist!`,'close',{
-                duration: 20000,horizontalPosition:'right',verticalPosition:'top'
-               });
-            }
-          }
-        );
+      if (this.loginForm.valid) {
+    this.userService.loginMerchantServices({
+      merchantEmail: this.merchantEmail.value,
+      merchantPassword: this.merchantPassword.value,
+    }).subscribe({
+      next: (response: any) => {
+        console.log('login successful', response);
+        if (response.response === "success") {
+          sessionStorage.setItem('jwtToken', response.token);
+          sessionStorage.setItem('ownerEmail', this.merchantEmail.value);
+          sessionStorage.setItem('ownerName', response.userName);
+          sessionStorage.setItem('ownerPhoto', response.userPhoto);
+          sessionStorage.setItem('ownerProfileImg', "merchant-profile-img");
+          this.isCustomerLoggedIn = true;
+          this.router.navigate(['../../private/user-dashboard']);
+        } else if (response.response === "failure") {
+          this.snackBar.open(`User does not exist!`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      },
+      error: (error) => {
+        if (error.status === 403) {
+          this.snackBar.open(`Access denied: You are not authorized.`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        } else {
+          this.snackBar.open(`An error occurred: ${error.message}`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
       }
+    });
+  }
     }
 
 }

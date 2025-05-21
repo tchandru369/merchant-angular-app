@@ -93,7 +93,21 @@ export class UserRegisterComponent implements OnInit {
        })
     }
    },
-   error => console.log(error)
+   (error) => {
+        if (error.status === 403) {
+          this.snackbar.open(`Access denied: You are not authorized.`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        } else {
+          this.snackbar.open(`An error occurred: ${error.message}`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        }
+      }
   );
     }
   }
