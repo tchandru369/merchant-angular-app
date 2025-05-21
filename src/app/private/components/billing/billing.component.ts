@@ -23,6 +23,7 @@ import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-
 export class BillingComponent implements OnInit {
 
 
+  isLoading:boolean=false;
   selectedProdValues: any = null;
   productInterface!: productInterface;
   milkProdList:MilkProductDetails[]=[];
@@ -458,11 +459,13 @@ export class BillingComponent implements OnInit {
     }
   
     validateCustomerByPhNo(){
+      this.isLoading = true;
       const customerPhToV = this.billingCustomerPhNoToV.value;
       this.billingService.validateCustomerByPhNo(customerPhToV).subscribe((data:any) => {
         
         console.log(data);
         if(data.response == "failure"){
+          this.isLoading = false;
           const errorMessage = data.errorMsg;
           const errorCodes = data.errorCode;
           this.snackbar.open(` ${errorMessage} : ${errorCodes} `,'close',{
@@ -474,6 +477,7 @@ export class BillingComponent implements OnInit {
            this.validateCusFalse = true;
            this.custValidate = false;
         }else{
+          this.isLoading = false;
           this.shopCustomer = data;
           this.custValidate = true;
         this.billingCustomerName.setValue(this.shopCustomer?.custName);
@@ -503,7 +507,7 @@ export class BillingComponent implements OnInit {
 
     registerCustomer(){
        
-      
+       this.isLoading = true;
         this.shopCustomer.custName = this.billingCustomerName.value;
         this.shopCustomer.custEmailId = this.billingCustomerEmail.value;
         this.shopCustomer.custAddress = this.billingCustomerAddrs.value;
@@ -533,6 +537,7 @@ export class BillingComponent implements OnInit {
         
         console.log(data);
         if(data.response == "success"){
+          this.isLoading = false;
           this.snackbar.open(` Customer registration : ${data.response} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
@@ -631,7 +636,7 @@ export class BillingComponent implements OnInit {
       }
       registerOrderRequest(){
 
-        
+        this.isLoading = true;
         const curD = this.dataPipe.transform(new Date(), 'dd-MM-yyyy')!;
         this.orderRequest.orderCustCrtdDate = String(curD);
         this.orderRequest.orderCustEmailId = this.billingCustomerEmail.value;
@@ -657,15 +662,18 @@ export class BillingComponent implements OnInit {
         
         console.log(data);
         if(data.response == "success"){
+          this.isLoading = false;
           this.snackbar.open(` Request Addition : ${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }else{
+          this.isLoading = false;
           this.snackbar.open(`${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }
     })
+    this.isLoading = false;
       }
    
 }

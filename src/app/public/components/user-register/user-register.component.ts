@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UserRegisterComponent implements OnInit {
 
   users:UserI;
+  isLoading:boolean=false;
   ngOnInit(): void {
   }
 
@@ -66,7 +67,7 @@ export class UserRegisterComponent implements OnInit {
   }
 
   merchantUserRegister() {
-     
+     this.isLoading = true;
     if(this.form.valid){
       this.userService.createMerchant(
         {
@@ -84,10 +85,12 @@ export class UserRegisterComponent implements OnInit {
       this.userService.createMerchant(this.users).subscribe((data:any) =>{
     console.log(data);
     if(data.response == "success"){
+      this.isLoading = false;
       this.snackbar.open(`User created Successfully`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })       
     }else{
+      this.isLoading = false;
       this.snackbar.open(`Something went wrong...!`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })
@@ -95,12 +98,14 @@ export class UserRegisterComponent implements OnInit {
    },
    (error) => {
         if (error.status === 403) {
+          this.isLoading = false;
           this.snackbar.open(`Access denied: You are not authorized.`, 'close', {
             duration: 20000,
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
         } else {
+          this.isLoading = false;
           this.snackbar.open(`An error occurred: ${error.message}`, 'close', {
             duration: 20000,
             horizontalPosition: 'right',

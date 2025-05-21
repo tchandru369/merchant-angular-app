@@ -16,7 +16,9 @@ import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-
 export class ReqOrdersComponent implements OnInit {
 
 
+  isLoading:boolean=false;
 proceedOrderRequest(customer:any){
+  this.isLoading = true;
     //  this.orderRequest.orderCustEmailId = customer.orderCustEmailId;
     //  this.orderRequest.orderCustCrtdDate = customer.orderCustCrtdDate;
     //  this.orderRequest.orderCustName = customer.orderCustName;
@@ -29,17 +31,19 @@ proceedOrderRequest(customer:any){
         
         console.log(data);
         if(data.errorCode == "0"){
+          this.isLoading = false;
           this.orderReqList = this.orderReqList.filter(c => c !== customer);
           this.snackbar.open(` Status : ${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }else if(data.errorCode == "1"){
+          this.isLoading = false;
           this.snackbar.open(` Status : ${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }
     })
-     
+     this.isLoading = false;
   }
 
 
@@ -122,6 +126,7 @@ proceedOrderRequest(customer:any){
   }
 
   deleteOrderRequest(customer:any){
+    this.isLoading = true;
      this.orderRequest.orderCustEmailId = customer.orderCustEmailId;
      this.orderRequest.orderCustCrtdDate = customer.orderCustCrtdDate;
      this.orderRequest.orderCustName = customer.orderCustName;
@@ -134,13 +139,14 @@ proceedOrderRequest(customer:any){
         
         console.log(data);
         if(data.response == "success"){
+          this.isLoading = false;
           this.orderReqList = this.orderReqList.filter(c => c !== customer);
           this.snackbar.open(` Processing : ${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }
     })
-     
+     this.isLoading = false;
   }
 
 }

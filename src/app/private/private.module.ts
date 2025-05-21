@@ -30,6 +30,7 @@ import { MyRequestsComponent } from './components/my-requests/my-requests.compon
 import { EditRequestDialogComponent } from './components/edit-request-dialog/edit-request-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProcOrdersComponent } from './components/proc-orders/proc-orders.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   providers: [DatePipe],
@@ -67,7 +68,8 @@ import { ProcOrdersComponent } from './components/proc-orders/proc-orders.compon
     MatIconModule,
     MatToolbarModule,
     MatExpansionModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ]
 })
 export class PrivateModule { }

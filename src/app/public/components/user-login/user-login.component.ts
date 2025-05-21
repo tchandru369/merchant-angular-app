@@ -14,6 +14,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UserLoginComponent implements OnInit {
 
   isCustomerLoggedIn : boolean = false;
+  isLoading: boolean = false;
+
 
 
   constructor(private router:Router, private userService:UserService, private snackBar : MatSnackBar) { }
@@ -40,6 +42,7 @@ export class UserLoginComponent implements OnInit {
      this.router.navigate(['../app-user-register']);
     }
     merchantUserLogin() {
+      this.isLoading = true;
       if (this.loginForm.valid) {
     this.userService.loginMerchantServices({
       merchantEmail: this.merchantEmail.value,
@@ -55,7 +58,9 @@ export class UserLoginComponent implements OnInit {
           sessionStorage.setItem('ownerProfileImg', "merchant-profile-img");
           this.isCustomerLoggedIn = true;
           this.router.navigate(['../../private/user-dashboard']);
+          this.isLoading = false;
         } else if (response.response === "failure") {
+          this.isLoading = false;
           this.snackBar.open(`User does not exist!`, 'close', {
             duration: 20000,
             horizontalPosition: 'right',
@@ -65,12 +70,14 @@ export class UserLoginComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 403) {
+          this.isLoading = false;
           this.snackBar.open(`Access denied: You are not authorized.`, 'close', {
             duration: 20000,
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
         } else {
+          this.isLoading = false;
           this.snackBar.open(`An error occurred: ${error.message}`, 'close', {
             duration: 20000,
             horizontalPosition: 'right',

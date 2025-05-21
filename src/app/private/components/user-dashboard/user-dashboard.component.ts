@@ -13,6 +13,7 @@ import { MilkProductDetails } from 'src/app/models/milkProduct.interface';
 export class UserDashboardComponent implements OnInit {
 
   userEmail:string = '';
+  isLoading:boolean = false;
     milkProdList:MilkProductDetails[]=[];
 
   demandProdList:{productName:string,productType:string,productPrice:string,productCustomerPrice:string,productQuantity:string
@@ -25,11 +26,13 @@ export class UserDashboardComponent implements OnInit {
   }
 
   viewDemandProdList(){
+        this.isLoading = true;
     this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
     this.productService.viewDemandProduct(this.userEmail).subscribe((data:any) => {
         this.milkProdList = data;
         console.log(data);
     })
+    this.isLoading = false;
   }
 
 }

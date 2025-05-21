@@ -15,6 +15,7 @@ export class UserHistoryComponent implements OnInit {
 
   billHistoryList : billingHistory[]=[];
   userEmail:string='';
+  isLoading:boolean = false;
   billFullPaidList:billingHistFullPaid[]=[];
   billUniqueDates :billingHistory[]=[];
   filterBillsFullPaid:billingHistFullPaid[]=[];
@@ -61,8 +62,10 @@ getUniqueDates(bills: billingHistory[]) {
   }
 
   viewBillHistoryList(){
+    this.isLoading = true;
     this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
     this.billingService.viewBillHistory(this.userEmail).subscribe((data:any) => {
+      this.isLoading = false;
         this.billHistoryList = data;
         console.log(data);
         // this.segregateListData(data);
@@ -70,6 +73,7 @@ getUniqueDates(bills: billingHistory[]) {
         console.log("This is fullPaidList",this.billHistoryList);
         this.segregateListDatas(this.billHistoryList);
     })
+    this.isLoading = false;
   }
 
   // segregateListData(data:any){

@@ -15,6 +15,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ProcOrdersComponent implements OnInit {
 
+  userEmail = '';  
+    isLoading:boolean=false;
+    procOrderList:OrderRequest[]=[];
+    orderRequest:OrderRequest;
+
   addForm:FormGroup =  new FormGroup({
       finalAmtPaid : new FormControl(null,[Validators.required])
       }
@@ -25,6 +30,7 @@ export class ProcOrdersComponent implements OnInit {
 }
 
   paidOrderRequest(customer:any){
+    this.isLoading = true;
       //  this.orderRequest.orderCustEmailId = customer.orderCustEmailId;
       //  this.orderRequest.orderCustCrtdDate = customer.orderCustCrtdDate;
       //  this.orderRequest.orderCustName = customer.orderCustName;
@@ -37,19 +43,18 @@ export class ProcOrdersComponent implements OnInit {
           
           console.log(data);
           if(data.response == "success"){
+            this.isLoading = false;
             this.procOrderList = this.procOrderList.filter(c => c !== customer);
             this.snackbar.open(` Bill Processing : ${data.response} `,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
              })
           }
       })
-       
+       this.isLoading = false;
     }
   
   
-    userEmail = '';  
-    procOrderList:OrderRequest[]=[];
-    orderRequest:OrderRequest;
+    
   
     constructor(private billingService : BillingService,private router:Router,private snackbar:MatSnackBar,private dataPipe:DatePipe,private dialog: MatDialog)
      {
@@ -110,14 +115,18 @@ export class ProcOrdersComponent implements OnInit {
     }
   
     getProcOrderList(){
+      this.isLoading = true;
       this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
       this.billingService.processedOrder(this.userEmail).subscribe((data:any) => {
+        this.isLoading = false;
           this.procOrderList = data;
           console.log(data);
       })
+      this.isLoading = false;
     }
   
     deleteProcOrderRequest(customer:any){
+      this.isLoading = true;
       //  this.orderRequest.orderCustEmailId = customer.orderCustEmailId;
       //  this.orderRequest.orderCustCrtdDate = customer.orderCustCrtdDate;
       //  this.orderRequest.orderCustName = customer.orderCustName;
@@ -130,13 +139,14 @@ export class ProcOrdersComponent implements OnInit {
           
           console.log(data);
           if(data.response == "success"){
+            this.isLoading = false;
             this.procOrderList = this.procOrderList.filter(c => c !== customer);
             this.snackbar.open(` Customer registration : ${data.response} `,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
              })
           }
       })
-       
+       this.isLoading = false;
     }
   
 

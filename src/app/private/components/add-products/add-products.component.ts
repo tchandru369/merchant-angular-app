@@ -18,6 +18,7 @@ export class AddProductsComponent implements OnInit {
 
 
   count : any = 0;
+  isLoading:boolean=false;
   selectedProdValues: any = null;
   productList1: productInterface[]=[];
   milkProdList:MilkProductDetails[]=[];
@@ -170,16 +171,18 @@ addProductList() {
    this.count = 0;
 }
 merchantAddPRoduct() {
-
+   this.isLoading = true;
    this.productService.addMilkProduct(this.productList).subscribe((data:any) =>{
     console.log(data);
     if(data.body.errorMsg == "success"){
+         this.isLoading = false;
       this.snackbar.open(`Product Added successfully`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })
        this.productList = [];
        
     }else{
+         this.isLoading = false;
       this.snackbar.open(`${data.body.errorMsg}`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })
@@ -188,7 +191,7 @@ merchantAddPRoduct() {
    },
    error => console.log(error)
   );
-    
+   this.isLoading = false; 
 }
 
 viewProdList(){
@@ -202,6 +205,7 @@ viewProdList(){
   
 
   ngOnInit(): void {
+    
     this.viewProdList();
     this.getMilkProdList();
     this.getOwnerMilkProdList();
@@ -328,7 +332,7 @@ get updateProductShopPrice():FormControl{
     // // this.productInterface.productPrice = this.updateProductPrice.value;
     //  this.productInterface.productQuantity = this.updateProductQuantity.value;
     //  this.productInterface.productType = this.updateProductType.value;
-
+     this.isLoading = true;
     this.milkProdDetails.companyName = this.updateCompanyName.value;
     this.milkProdDetails.productBillPrice = this.updateProductBillPrice.value;
     this.milkProdDetails.productCustPrice = this.updateProductCustPrice.value;
@@ -342,6 +346,7 @@ get updateProductShopPrice():FormControl{
     this.productService.updateMilkProd(this.milkProdDetails).subscribe((data:any) =>{
       console.log(data);
       if(data.response == "success"){
+        this.isLoading = false;
         this.snackbar.open(`Product Updated successfully`,'close',{
           duration: 5000,horizontalPosition:'right',verticalPosition:'top'
          })
@@ -349,7 +354,9 @@ get updateProductShopPrice():FormControl{
       }
      },
      error => console.log(error)
+     
     );
+    this.isLoading = false;
   }
 
   setSecondFormFeildsNull(){
@@ -374,12 +381,15 @@ get updateProductShopPrice():FormControl{
   }
 
   getOwnerMilkProdList(){
+    this.isLoading =true;
     this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
     this.productService.viewOwnerMilkProd(this.userEmail).subscribe((data:any) => {
+      this.isLoading = false;
       this.milkProdList = data;
       console.log(data);
       this.updateBrands = [...new Set(this.milkProdList.map(item => item.companyName))];
 
   })
+  this.isLoading = false;
   }
 }

@@ -18,6 +18,7 @@ export class UserSettingsComponent implements OnInit {
 
 
   ownerEmail:any;
+  isLoading:boolean = false;
   imageSelected: boolean = false; 
    defaultImageHandle: imageHandle = {
     // Assuming imageHandle has properties like `src`, `alt`, etc., set default values here
@@ -113,6 +114,7 @@ export class UserSettingsComponent implements OnInit {
     }
 
     onUpdateImg(): void {
+      this.isLoading = true;
       if (!this.merchantImgClass.merchantImg.url) {
         alert('Please select an image.');
         return;
@@ -127,6 +129,7 @@ export class UserSettingsComponent implements OnInit {
       console.log(this.merchantImgClass);
       this.settingService.uploadImage(formData).subscribe(
         (response:any) => {
+          this.isLoading = false;
           console.log('Image uploaded successfully', response);
           this.snackbar.open(` Image uploaded successfully `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
@@ -134,6 +137,7 @@ export class UserSettingsComponent implements OnInit {
            this.imageSelected = false;
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error uploading image', error);
           this.snackbar.open(` Image Failed to upload `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
