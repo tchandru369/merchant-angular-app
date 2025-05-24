@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  encryptionKeyEncoded: 'VFRDMjAxN0V5ZVZNSw=='
 };
