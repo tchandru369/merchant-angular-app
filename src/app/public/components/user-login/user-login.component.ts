@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/private/services/auth.service';
+import { EncryptionService } from 'src/app/private/services/encryption.service';
 
 @Component({
   selector: 'app-user-login',
@@ -18,7 +20,9 @@ export class UserLoginComponent implements OnInit {
 
 
 
-  constructor(private router:Router, private userService:UserService, private snackBar : MatSnackBar) { }
+  constructor(private router:Router, private userService:UserService, private snackBar : MatSnackBar,private auth:AuthService
+    ,private encryptionService: EncryptionService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -51,13 +55,23 @@ export class UserLoginComponent implements OnInit {
       next: (response: any) => {
         console.log('login successful', response);
         if (response.response === "success") {
-          sessionStorage.setItem('jwtToken', response.token);
+          const encryptedJwt = this.encryptionService.encrypt(response.token);
+          const encUserType = this.encryptionService.encrypt(response.userType);
+          sessionStorage.setItem('jwtToken',encryptedJwt);
           sessionStorage.setItem('ownerEmail', this.merchantEmail.value);
           sessionStorage.setItem('ownerName', response.userName);
-          sessionStorage.setItem('ownerPhoto', response.userPhoto);
           sessionStorage.setItem('ownerProfileImg', "merchant-profile-img");
           this.isCustomerLoggedIn = true;
-          this.router.navigate(['../../private/user-dashboard']);
+          if(response.userType === 'User'){
+            this.auth.setUserRole(response.userType);
+            this.router.navigate(['../../private/user-dashboard']);
+             this.isLoading = false;
+          }else if(response.userType === 'Cust'){
+            this.auth.setUserRole(response.userType);
+             console.log("Entered Customer DashBoard")
+             this.router.navigate(['private', 'cust-dashboard']);
+             this.isLoading = false;
+          }
           this.isLoading = false;
         } else if (response.response === "failure") {
           this.isLoading = false;
@@ -76,7 +90,15 @@ export class UserLoginComponent implements OnInit {
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
-        } else {
+        }else if(error.status === 401){
+           this.isLoading = false;
+          this.snackBar.open(`Access denied: You are not authorized.`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        } 
+        else {
           this.isLoading = false;
           this.snackBar.open(`An error occurred: ${error.message}`, 'close', {
             duration: 20000,

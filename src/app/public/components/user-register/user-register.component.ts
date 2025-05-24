@@ -86,7 +86,7 @@ export class UserRegisterComponent implements OnInit {
     console.log(data);
     if(data.response == "success"){
       this.isLoading = false;
-      this.snackbar.open(`User created Successfully`,'close',{
+      this.snackbar.open(`${data.errorMsg}`,'close',{
         duration: 2000,horizontalPosition:'right',verticalPosition:'top'
        })       
     }else{

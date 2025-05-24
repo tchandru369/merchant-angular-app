@@ -59,3 +59,6 @@
     </div>
     </mat-expansion-panel>
 </mat-card>
+<div *ngIf="isLoading" class="loader-overlay">
+  <mat-progress-spinner mode="indeterminate" color="primary" diameter="60"></mat-progress-spinner>
+</div>

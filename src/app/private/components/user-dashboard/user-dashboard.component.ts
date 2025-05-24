@@ -14,6 +14,7 @@ export class UserDashboardComponent implements OnInit {
 
   userEmail:string = '';
   isLoading:boolean = false;
+  isDataPresent:boolean=false;
     milkProdList:MilkProductDetails[]=[];
 
   demandProdList:{productName:string,productType:string,productPrice:string,productCustomerPrice:string,productQuantity:string
@@ -23,6 +24,11 @@ export class UserDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.viewDemandProdList();
+    if(this.viewDemandProdList.length>0){
+      this.isDataPresent = true;
+    }else{
+      this.isDataPresent = false;
+    }
   }
 
   viewDemandProdList(){

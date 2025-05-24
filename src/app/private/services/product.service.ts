@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EncryptionService } from './encryption.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,11 @@ export class ProductService {
 
   private baseURL:string =  "http://34.47.255.188:443/services/v1/products"
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private encService:EncryptionService) { }
 
   addProduct(arrayData:any[]):Observable<any>{
 
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -25,7 +26,7 @@ export class ProductService {
   }
 
   viewProduct(ownerEmail:string):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -38,7 +39,7 @@ export class ProductService {
 
   
   viewDemandProduct(ownerEmail:string):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -52,7 +53,7 @@ export class ProductService {
   
 
   updateProduct(data:any):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -65,7 +66,7 @@ export class ProductService {
 
   addMilkProduct(arrayData:any[]):Observable<any>{
 
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -76,7 +77,7 @@ export class ProductService {
   }
 
   getMilkProduct():Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -86,7 +87,7 @@ export class ProductService {
   }
 
   viewOwnerMilkProd(ownerEmail:string):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -98,7 +99,7 @@ export class ProductService {
   }
 
   updateMilkProd(data:any):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json

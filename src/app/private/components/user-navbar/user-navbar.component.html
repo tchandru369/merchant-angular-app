@@ -7,7 +7,7 @@
         <h4 class="name">{{userName}}</h4>
         <p class="mailId">{{userEmail}}</p>
       </div>
-      <mat-nav-list>
+      <mat-nav-list *ngIf="!custFlg">
         <a mat-list-item (click)="moveToUserDashboardPage()">
           <mat-icon>home</mat-icon>Home</a>
         <a mat-list-item (click)="moveToBillingPage()"><mat-icon>payment</mat-icon>Billing</a>
@@ -15,6 +15,14 @@
         <a mat-list-item (click)="moveToHistoryPage()" ><mat-icon>history</mat-icon>History</a>
         <a mat-list-item (click)="moveToMyRequestPage()" ><mat-icon>history</mat-icon>My Requests</a>
         <a mat-list-item (click)="moveToUserSettings()"><mat-icon>settings</mat-icon>Settings</a>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="custFlg">
+        <a mat-list-item (click)="moveToUserDashboardPage()">
+          <mat-icon>home</mat-icon>Home</a>
+        <a mat-list-item (click)="moveToPlaceOrderPage()"><mat-icon>add_shopping_cart</mat-icon>Place Orders</a>
+        <a mat-list-item (click)="moveToCustHistoryPage()" ><mat-icon>history</mat-icon>History</a>
+        <a mat-list-item (click)="moveToCustSettings()"><mat-icon>settings</mat-icon>Settings</a>
       </mat-nav-list>
     </div>
   </mat-sidenav>

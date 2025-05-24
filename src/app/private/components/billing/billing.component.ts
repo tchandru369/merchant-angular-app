@@ -538,7 +538,8 @@ export class BillingComponent implements OnInit {
         console.log(data);
         if(data.response == "success"){
           this.isLoading = false;
-          this.snackbar.open(` Customer registration : ${data.response} `,'close',{
+          this.secondFormGroup.reset();
+          this.snackbar.open(` Customer registration : ${data.errorMsg} `,'close',{
             duration: 5000,horizontalPosition:'center',verticalPosition:'top'
            })
         }

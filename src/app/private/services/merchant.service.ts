@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { merchantImg } from 'src/app/models/merchantImg.interface';
+import { EncryptionService } from './encryption.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,10 @@ export class MerchantService {
 
   private merchantURL:string =  "http://34.47.255.188:443/services/v1/merchant"
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private encService:EncryptionService) { }
 
   uploadImage(formData:FormData): Observable<any> {
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`,  // Bearer token  // Set the content type to application/json
         });
@@ -22,7 +23,7 @@ export class MerchantService {
   }
 
   getImage(data:any): Observable<any> {
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     });
@@ -33,7 +34,7 @@ export class MerchantService {
   }
 
   getProfileImage(ownerEmail:string,ownerImgModule:string):Observable<any>{
-    const token = sessionStorage.getItem('jwtToken');
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
@@ -46,7 +47,7 @@ export class MerchantService {
 }
 
 getMerchantDetails(ownerEmail:string):Observable<any>{
-  const token = sessionStorage.getItem('jwtToken');
+  const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
   const headers = new HttpHeaders({
     'Authorization': `Bearer ${token}`,  // Bearer token
     'Content-Type': 'application/json'   // Set the content type to application/json

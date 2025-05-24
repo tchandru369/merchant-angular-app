@@ -5,8 +5,10 @@
 
         <mat-card-content>
             <mat-card-title>Stocks Demand</mat-card-title>
+
+            <mat-card-subtitle *ngIf="!isDataPresent">Stocks are available upto the limits</mat-card-subtitle>
             
-            <table mat-table [dataSource]="milkProdList" class="mat-elevation-z8">
+            <table *ngIf="isDataPresent" mat-table [dataSource]="milkProdList" class="mat-elevation-z8">
 
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
@@ -57,5 +59,8 @@
         </mat-card-content>
     </mat-card>
  
+</div>
+<div *ngIf="isLoading" class="loader-overlay">
+  <mat-progress-spinner mode="indeterminate" color="primary" diameter="60"></mat-progress-spinner>
 </div>
 

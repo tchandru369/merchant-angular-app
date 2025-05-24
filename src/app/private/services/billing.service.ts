@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EncryptionService } from './encryption.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,11 @@ export class BillingService {
    private customerURL:string = "http://34.47.255.188:443/services/v1/customer"
    private billingURL:string = "http://34.47.255.188:443/services/v1/billing"
 
-  constructor(private httpClient : HttpClient) { }
+  constructor(private httpClient : HttpClient,private encService:EncryptionService) { }
 
 
     viewProduct(ownerEmail:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -27,7 +28,7 @@ export class BillingService {
     }
 
     viewOwnerMilkProd(ownerEmail:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -39,7 +40,7 @@ export class BillingService {
     }
 
     viewConStDtls():Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -48,7 +49,7 @@ export class BillingService {
     }
 
     validateCustomerByPhNo(customerPhNo:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -61,7 +62,7 @@ export class BillingService {
 
     registerCustomer(customerData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -74,7 +75,7 @@ export class BillingService {
 
     payBillCustomer(billingData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -85,7 +86,7 @@ export class BillingService {
     }
 
     viewBillHistory(ownerEmail:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -98,7 +99,7 @@ export class BillingService {
 
     addOrderRequest(orderData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -109,7 +110,7 @@ export class BillingService {
     }
 
     viewCustOrder(ownerEmail:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -121,7 +122,7 @@ export class BillingService {
     }
 
     processedOrder(ownerEmail:string):Observable<any>{
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -134,7 +135,7 @@ export class BillingService {
 
     deleteOrderRequest(orderData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -146,7 +147,7 @@ export class BillingService {
 
     deleteProcOrderRequest(orderData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -158,7 +159,7 @@ export class BillingService {
 
     processOrderRequest(orderData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json
@@ -170,7 +171,7 @@ export class BillingService {
 
     paidOrderRequest(orderData:any):Observable<any>{
 
-      const token = sessionStorage.getItem('jwtToken');
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,  // Bearer token
         'Content-Type': 'application/json'   // Set the content type to application/json

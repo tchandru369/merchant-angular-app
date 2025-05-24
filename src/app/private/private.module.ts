@@ -31,6 +31,10 @@ import { EditRequestDialogComponent } from './components/edit-request-dialog/edi
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProcOrdersComponent } from './components/proc-orders/proc-orders.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CustDashboardComponent } from './components/cust-dashboard/cust-dashboard.component';
+import { CustPlaceOrderComponent } from './components/cust-place-order/cust-place-order.component';
+import { CustHistoryComponent } from './components/cust-history/cust-history.component';
+import { CustSettingsComponent } from './components/cust-settings/cust-settings.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -45,7 +49,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReqOrdersComponent,
     MyRequestsComponent,
     EditRequestDialogComponent,
-    ProcOrdersComponent
+    ProcOrdersComponent,
+    CustDashboardComponent,
+    CustPlaceOrderComponent,
+    CustHistoryComponent,
+    CustSettingsComponent
   ],
   imports: [
     CommonModule,
