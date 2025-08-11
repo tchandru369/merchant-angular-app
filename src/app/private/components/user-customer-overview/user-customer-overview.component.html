@@ -1,0 +1,10 @@
+<app-cust-card-slider (customerSelected)="onCustomerSelected($event)"></app-cust-card-slider>
+
+<!-- Spinner while loading -->
+<div *ngIf="isDetailLoading">Loading customer details...</div>
+
+<!-- Detail component -->
+<app-cust-overview-details
+  *ngIf="selectedCustomer && !isDetailLoading"
+  [customer]="selectedCustomer">
+</app-cust-overview-details>

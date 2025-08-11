@@ -1,63 +1,95 @@
-.display-full-paid {
-  position: relative;
-  top: 10%;
-  overflow: visible;  /* adjust as needed */
-  }
-
-  mat-card {
-    width: 100%;
-  }
-
-  table {
-    width: 100%;
-  }
-
-  mat-list {
-    display: flex;
-    flex-direction: row; /* Ensure items are aligned vertically */
-    padding: 10px;
-    justify-content: space-evenly;
-    margin-left: 8px;
-  }
-
-  .loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+/* General Styles */
+.display-full-paid,
+.display-due-paid {
+    position: relative;
+    top: 10%;
+    overflow: visible;  /* Adjust as needed */
 }
-  
-  mat-list-item{
-    margin-right: 10px;
-  }
 
-  .display-due-paid{
-    margin-top: 10px;
-  }
+mat-card {
+    width: 100%;
+}
 
-  .date-select {
+table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure borders are collapsed for better appearance */
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    padding: 12px 15px; /* Add padding for better spacing */
+    text-align: left; /* Align text to the left */
+    border-bottom: 1px solid #ccc; /* Add a bottom border for separation */
+}
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
-  }
-  
-  .date-select mat-select {
-    margin-right: 10px; 
-    width: 100px;/* This adds a space between the select box and the button */
-  }
-  
-  .date-select button {
+    justify-content: center;
+    z-index: 9999;
+}
+
+.date-select {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap in smaller screens */
+    margin-bottom: 10px; /* Space below the date selection */
+}
+
+.date-select mat-select {
+    margin-right: 10px;
+    width: 100%; /* Use full width on mobile */
+    max-width: 200px; /* Limit max width on larger screens */
+}
+
+.date-select button {
     margin-left: 10px; /* Adjust margin-left to control the distance between the select and button */
-  }
+}
 
-  .date-select {
-    width: 300px;
-    height: 100px;
-  }
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .display-full-paid,
+    .display-due-paid {
+        margin: 0; /* Remove margin for mobile */
+        top: 0; /* Reset position */
+    }
 
- 
+    table {
+        display: block; /* Make tables block-level for scrolling */
+        overflow-x: auto; /* Allow horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+        padding: 10px 12px; /* Adjust padding for smaller screens */
+    }
+
+    table th, table td {
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    mat-card {
+        margin: 10px 0; /* Add some margin between cards */
+    }
+
+    .date-select {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: stretch; /* Stretch items to full width */
+    }
+
+    .date-select mat-select {
+        max-width: none; /* Remove max-width for full width */
+        margin-bottom: 10px; /* Space between select and button */
+    }
+
+    .date-select button {
+        width: 100%; /* Full width button */
+    }
+}

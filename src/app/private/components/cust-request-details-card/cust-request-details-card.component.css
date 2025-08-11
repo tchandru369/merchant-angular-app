@@ -1,0 +1,76 @@
+.customer-card {
+    margin: 20px;
+}
+
+.customer-summary {
+    display : flex;
+    align-items : center;
+    justify-content : space-between;
+}
+
+.customer-email{
+    margin-left: 10px;
+}
+
+.customer-name,
+
+.customer-total {
+
+    margin-right: 10px;
+
+}
+
+.status-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #4caf50; /* green */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge-placed{
+    position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #8816e0; /* green */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge-reject {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #e01616; /* green */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+}
+
+.expansion-panel {
+
+    margin-top: 10px;
+
+}
+
+.customer-details {
+
+    padding: 16px;
+}

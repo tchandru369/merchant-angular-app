@@ -1,43 +1,81 @@
-.mat-form-field{
- padding: 15px;
+.mat-form-field {
+    padding: 15px;
+    width: 100%; /* Ensure full width for form fields */
 }
 
-.add_button{
-    margin-left: 30px;
+.add_button {
+    margin-left: 0; /* Adjust margin for mobile */
+    width: 100%; /* Full width button */
 }
 
-.viewProductContainer{
+.viewProductContainer {
     margin-top: 20px;
 }
 
-.addContainer{
-   margin-top: 10px;
+.addContainer {
+    margin-top: 10px;
 }
 
 table {
     width: 100%;
-  }
+    border-collapse: collapse; /* Ensure proper spacing */
+    overflow-x: auto; /* Allow horizontal scrolling */
+}
 
-  mat-list {
+th, td {
+    padding: 8px; /* Add padding for table cells */
+    text-align: left; /* Align text to the left */
+}
+
+/* Responsive Table Styles */
+.table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
     display: flex;
-    flex-direction: row; /* Ensure items are aligned vertically */
-    padding: 0;
-    justify-content: space-evenly;
-  }
-  
-  mat-list-item{
-    margin-right: 10px;
-  }
- 
-  .loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .addContainer, .UpdateContainer, .viewProductContainer {
+        padding: 10px; /* Reduce padding for mobile */
+    }
+
+    .mat-form-field {
+        margin-bottom: 10px; /* Space between fields */
+    }
+
+    .add_button, .save-button button {
+        width: 100%; /* Full width for buttons */
+        margin-top: 10px; /* Space above buttons */
+    }
+
+    table {
+        font-size: 14px; /* Smaller font size for tables */
+        display: block; /* Make table block for scrolling */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    th, td {
+        padding: 10px; /* Adjust padding for table cells */
+    }
+    th.mat-header-cell,
+    td.mat-cell {
+        padding: 10px 12px; /* Adjust padding for smaller screens */
+    }
+
+    .loader-overlay {
+        padding: 20px; /* Padding for the loader */
+    }
 }

@@ -1,1 +1,77 @@
-<p>cust-place-order works!</p>
+<div class="addContainer">
+      <mat-card>
+        <mat-card-title>Add Product</mat-card-title>
+             <mat-card-content>
+              <form [formGroup]="addForm" >
+        
+                <mat-form-field>
+                  <mat-label>Brand:</mat-label>
+                    <mat-select formControlName="custCompanyName" (selectionChange)="onBrandChange()">
+                      <mat-option value="">Select Brand</mat-option>
+                      <mat-option *ngFor="let brand of brands" [value]="brand">{{ brand }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Product:</mat-label>
+                      <mat-select formControlName="custProductType" (selectionChange)="onProductChange()">
+                        <mat-option value="">Select Product</mat-option>
+                        <mat-option *ngFor="let product of products" [value]="product">
+                          {{ product }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Quantity:</mat-label>
+                       <mat-select formControlName="custProductName">
+                         <mat-option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                <mat-form-field>
+                <input matInput type="text" placeholder="Enter Product Quantity" formControlName="custProductQuantity">
+                <mat-error *ngIf="custProductQuantity.touched && custProductQuantity.hasError('required')">Product Quantity is required</mat-error>
+
+                </mat-form-field>
+
+                <button mat-button (click)="AddProductList()" class="add_button">Add</button>
+              <div class="buttons">
+                <mat-card-title>Product List</mat-card-title>
+                <mat-hint *ngIf="!checkList">No Products Added</mat-hint>
+                <div class="col-md-8 mt-4 mb-4">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Brand</th>
+                        <th>Type</th>
+                        <th>variety</th>
+                        <th>Quantity/L</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let product of productList">
+                        <td>{{product.companyName}}</td>
+                        <td>{{product.productType}}</td>
+                        <td>{{product.productName}}</td>
+                        <td>{{product.productQuantity}}</td>
+                        <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+                
+                <div class="save-button">
+                 <button mat-button type="submit" [disabled]="!checkList" (click)="merchantPlaceProduct()">Submit</button>
+                </div>
+              </div>                
+            </form>
+
+             </mat-card-content>
+      </mat-card>
+      
+      
+
+    </div>
+
+    <div *ngIf="isLoading" class="loader-overlay">
+  <mat-progress-spinner mode="indeterminate" color="primary" diameter="60"></mat-progress-spinner>
+</div>

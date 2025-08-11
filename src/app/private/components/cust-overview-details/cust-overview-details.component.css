@@ -1,0 +1,42 @@
+.mat-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mat-info-item {
+  flex: 1 1 30%;
+  min-width: 200px;
+}
+
+table {
+    width: 100%;
+  }
+
+  mat-list {
+    display: flex;
+    flex-direction: row; /* Ensure items are aligned vertically */
+    padding: 0;
+    justify-content: space-evenly;
+  }
+  
+  mat-list-item{
+    margin-right: 10px;
+  }
+
+  .status-success {
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+p {
+  font-style: italic;
+  color: gray;
+  margin: 16px 0;
+}

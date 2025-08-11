@@ -1,14 +1,21 @@
-mat-input{
-    padding: 3px;
+mat-input {
+  padding: 3px;
 }
 
-.mat-form-field{
-    padding: 15px;
-   }
+.mat-form-field {
+  padding: 15px;
+}
 
-   table {
-    width: 100%;
-  }
+.table {
+  width: 100%; /* Ensure the table takes full width */
+  table-layout: auto; /* Allow the table to adjust column widths automatically */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+.table th,
+.table td {
+  white-space: nowrap; /* Prevent text from wrapping, which can help with overflow issues */
+}
 
 .loader-overlay {
   position: fixed;
@@ -22,33 +29,80 @@ mat-input{
   justify-content: center;
   z-index: 9999;
 }
-.validate-customer-phno{
-    text-align: center;
-}
-mat-hint{
-    text-align: center;
+
+.validate-customer-phno {
+  text-align: center;
 }
 
-tfoot td {
-    font-weight: bold;
-    font-size: 1.1em;
-  }
-
-.input-amt-paid{
-    width: 150px;
-    height: 40px;
-    font-size: 20px;
+mat-hint {
+  text-align: center;
 }
 
-.input-amt-txt{
-    font-size: 20px; /* Set the same font size for both */
+.input-amt-paid {
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+}
+
+.input-amt-txt {
+  font-size: 20px; /* Set the same font size for both */
   line-height: 1.5;
   margin-top: 5px;
   margin-right: 5px;
 }
 
-
 .final-amt-paid {
-    display: flex;
-    justify-content: flex-end; /* Aligns the input to the right */
+  display: flex;
+  justify-content: flex-end; /* Aligns the input to the right */
+}
+
+th,
+td {
+  padding: 8px; /* Add padding for table cells */
+  text-align: left; /* Align text to the left */
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .billingContainer {
+    padding: 10px; /* Reduce padding for mobile */
   }
+
+  .mat-form-field {
+    width: 100%; /* Full width for form fields */
+    margin-bottom: 10px; /* Space between fields */
+  }
+
+  .add_button,
+  .removeItem_button,
+  button[mat-button] {
+    width: 100%; /* Full width buttons */
+    margin-top: 10px; /* Space above buttons */
+  }
+
+  table {
+    font-size: 14px; /* Smaller font size for tables */
+    display: block; /* Make table block for scrolling */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+
+  th,
+  td {
+    padding: 10px; /* Adjust padding for table cells */
+  }
+
+  /* .table th, 
+    .table td {
+        display: inline-block;
+        min-width: 100px;
+    } */
+
+  .table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+
+  .loader-overlay {
+    padding: 20px; /* Padding for the loader */
+  }
+}

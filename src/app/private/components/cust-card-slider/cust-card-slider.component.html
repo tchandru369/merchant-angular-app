@@ -1,0 +1,33 @@
+<div class="slider-wrapper">
+  <!-- Left Arrow -->
+  <button mat-icon-button (click)="scrollLeft()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <!-- Horizontal Card Scroll Area -->
+  <div class="card-container" #cardContainer>
+      <mat-card
+      class="customer-card"
+      *ngFor="let customer of customers"
+      (click)="select(customer)">
+
+      <!-- Top Corner Badge for Type -->
+      <div class="type-badge" *ngIf="customer.custType === 'I' || customer.custType === 'S'">
+        {{ customer.custType }}
+      </div>
+
+      <mat-card-title>{{ customer.custName }}</mat-card-title>
+      <mat-card-subtitle>{{ customer.custEmail }}</mat-card-subtitle>
+      <p>Status: 
+        <span [ngClass]="{'pending': customer.custBalanceFlg === '1', 'paid': customer.custBalanceFlg === '0'}">
+          {{ customer.custBalanceFlg === '1' ? 'Pending' : 'Paid' }}
+        </span>
+      </p>
+    </mat-card>
+  </div>
+
+  <!-- Right Arrow -->
+  <button mat-icon-button (click)="scrollRight()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

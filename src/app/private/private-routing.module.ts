@@ -1,3 +1,4 @@
+import { CustRequestStatusComponent } from './components/cust-request-status/cust-request-status.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
@@ -14,6 +15,8 @@ import { CustGuard } from '../guards/cust.guard';
 import { CustHistoryComponent } from './components/cust-history/cust-history.component';
 import { CustPlaceOrderComponent } from './components/cust-place-order/cust-place-order.component';
 import { CustSettingsComponent } from './components/cust-settings/cust-settings.component';
+import { UserCustomerOverviewComponent } from './components/user-customer-overview/user-customer-overview.component';
+import { CustMakePaymentComponent } from './components/cust-make-payment/cust-make-payment.component';
 
 const routes: Routes = [
   
@@ -39,7 +42,10 @@ const routes: Routes = [
     { path: 'cust-dashboard',component:CustDashboardComponent,canActivate:[AuthGuard,CustGuard]},
     { path: 'cust-history',component:CustHistoryComponent,canActivate:[AuthGuard,CustGuard]},
     { path: 'cust-place-order',component:CustPlaceOrderComponent,canActivate:[AuthGuard,CustGuard]},
-    { path: 'cust-settings',component:CustSettingsComponent,canActivate:[AuthGuard,CustGuard]}
+    { path: 'cust-settings',component:CustSettingsComponent,canActivate:[AuthGuard,CustGuard]},
+    { path: 'cust-request-status',component:CustRequestStatusComponent,canActivate:[AuthGuard,CustGuard]},
+    { path: 'user-customer-overview',component:UserCustomerOverviewComponent,canActivate:[AuthGuard,OwnerGuard]},
+    { path: 'cust-make-payment',component:CustMakePaymentComponent,canActivate:[AuthGuard,CustGuard]}
   // Add more routes for the private module
   ]
 },

@@ -416,7 +416,7 @@ export class BillingComponent implements OnInit {
     
         
           if(this.billingProductQuantity.value < this.billingActualProdQty.value){
-            this.snackbar.open(`Stock available only : ${this.BillingPQty}`,'close',{
+            this.snackbar.open(`Stock available only : ${this.billingProductQuantity.value}`,'close',{
               duration: 5000,horizontalPosition:'center',verticalPosition:'top'
              })
           }else{
@@ -527,9 +527,9 @@ export class BillingComponent implements OnInit {
         }else if(this.billingCustomerGender.value == 'Others'){
           this.shopCustomer.custGender = 'O';}
 
-          if(this.billingCustType.value === 'Shop'){
+          if(this.billingCustomerType.value === 'Shop'){
             this.shopCustomer.custType = 'S';
-          }else if(this.billingCustType.value === 'Induvidual'){
+          }else if(this.billingCustomerType.value === 'Individual'){
             this.shopCustomer.custType = 'I';
           }
 

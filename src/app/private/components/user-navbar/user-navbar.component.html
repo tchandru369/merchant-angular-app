@@ -15,6 +15,7 @@
         <a mat-list-item (click)="moveToHistoryPage()" ><mat-icon>history</mat-icon>History</a>
         <a mat-list-item (click)="moveToMyRequestPage()" ><mat-icon>history</mat-icon>My Requests</a>
         <a mat-list-item (click)="moveToUserSettings()"><mat-icon>settings</mat-icon>Settings</a>
+        <a mat-list-item (click)=" moveToCustomerOverviewPage()"><mat-icon>settings</mat-icon>My Customers</a>
       </mat-nav-list>
 
       <mat-nav-list *ngIf="custFlg">
@@ -22,7 +23,9 @@
           <mat-icon>home</mat-icon>Home</a>
         <a mat-list-item (click)="moveToPlaceOrderPage()"><mat-icon>add_shopping_cart</mat-icon>Place Orders</a>
         <a mat-list-item (click)="moveToCustHistoryPage()" ><mat-icon>history</mat-icon>History</a>
+        <a mat-list-item (click)="moveToCustMakePymtPage()" ><mat-icon>history</mat-icon>Make Payment</a>
         <a mat-list-item (click)="moveToCustSettings()"><mat-icon>settings</mat-icon>Settings</a>
+        <a mat-list-item (click)="moveToCustRequestStatus()"><mat-icon>settings</mat-icon>My Requests</a>
       </mat-nav-list>
     </div>
   </mat-sidenav>
@@ -37,8 +40,6 @@
       <!-- Right-side search and logout buttons -->
       <span class="spacer"></span>
       <div class="form-inline">
-        <input matInput class="form-control mr-sm-2" type="search" placeholder="Search">
-        <button mat-button type="submit">Search</button>
         <button mat-button (click)="userLogout()">Log out</button>
       </div>
     </mat-toolbar>

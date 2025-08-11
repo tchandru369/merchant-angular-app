@@ -1,0 +1,120 @@
+<h3>Customer Info</h3>
+<div class="mat-info-row">
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>Address</mat-label>
+    <input matInput [value]="customer.custAddress" readonly>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>City</mat-label>
+    <input matInput [value]="customer.custCity" readonly>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>Country</mat-label>
+    <input matInput [value]="customer.custCountry" readonly>
+  </mat-form-field>
+</div>
+
+<div class="mat-info-row">
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>Created Date</mat-label>
+    <input matInput [value]="customer.custCreatedDate" readonly>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>DOB</mat-label>
+    <input matInput [value]="customer.custDob" readonly>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="mat-info-item">
+    <mat-label>Pincode</mat-label>
+    <input matInput [value]="customer.custPincode" readonly>
+  </mat-form-field>
+</div>
+
+<h4>Account & Balance</h4>
+<ng-container *ngIf="customer.balanceList.length > 0; else noBalance">
+  <table mat-table [dataSource]="customer.balanceList" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="custBalDate">
+      <th mat-header-cell *matHeaderCellDef> Bill Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.custBalDate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="custBalActAmt">
+      <th mat-header-cell *matHeaderCellDef> Actual Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.custBalActAmt}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="custBalAmt">
+      <th mat-header-cell *matHeaderCellDef> Balance </th>
+      <td mat-cell *matCellDef="let element"> {{element.custBalAmt}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="custBalOrderStatus">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element">
+        <span [ngClass]="{
+          'status-success': element.custBalOrderStatus === 'BS',
+          'status-pending': element.custBalOrderStatus === 'BP'
+        }">
+          {{ element.custBalOrderStatus === 'BS' ? 'Success' : element.custBalOrderStatus === 'BP' ? 'Pending' :
+          element.custBalOrderStatus }}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayBalance"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayBalance;"></tr>
+  </table>
+</ng-container>
+
+<!-- Template for no data -->
+<ng-template #noBalance>
+  <p>No Balance to display</p>
+</ng-template>
+
+<h4>Recent Transactions</h4>
+<ng-container *ngIf="customer.transactionList.length > 0; else noBalance">
+  <table mat-table [dataSource]="customer.transactionList" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="orderPlacedDate">
+      <th mat-header-cell *matHeaderCellDef> Ordered Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.orderPlacedDate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderBillPayDate">
+      <th mat-header-cell *matHeaderCellDef> Paid Date </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.orderBillPayDate || 'Not Paid' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderProdTotalAmt">
+      <th mat-header-cell *matHeaderCellDef> Total Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.orderProdTotalAmt}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderReqStatus">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element">
+        <span [ngClass]="{
+          'status-success': element.orderReqStatus === 'BS',
+          'status-pending': element.orderReqStatus === 'BP'
+        }">
+          {{ element.orderReqStatus === 'BS' ? 'Success' : element.orderReqStatus === 'BP' ? 'Pending' :
+          element.custBalOrderStatus }}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayLastTrans"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayLastTrans;"></tr>
+  </table>
+</ng-container>
+
+<!-- Template for no data -->
+<ng-template #noBalance>
+  <p>No Transaction to display</p>
+</ng-template>

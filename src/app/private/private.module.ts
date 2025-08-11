@@ -35,6 +35,17 @@ import { CustDashboardComponent } from './components/cust-dashboard/cust-dashboa
 import { CustPlaceOrderComponent } from './components/cust-place-order/cust-place-order.component';
 import { CustHistoryComponent } from './components/cust-history/cust-history.component';
 import { CustSettingsComponent } from './components/cust-settings/cust-settings.component';
+import { CustOrderReqComponent } from './components/cust-order-req/cust-order-req.component';
+import { CustRequestStatusComponent } from './components/cust-request-status/cust-request-status.component';
+import { CustRequestDetailsCardComponent } from './components/cust-request-details-card/cust-request-details-card.component';
+import { UserCustomerOverviewComponent } from './components/user-customer-overview/user-customer-overview.component';
+import { CustCardSliderComponent } from './components/cust-card-slider/cust-card-slider.component';
+import { CustOverviewDetailsComponent } from './components/cust-overview-details/cust-overview-details.component';
+import { MatSortModule } from '@angular/material/sort';
+import { QRCodeModule } from 'angularx-qrcode';
+import { CustMakePaymentComponent } from './components/cust-make-payment/cust-make-payment.component';
+import { CustOrderPaymentListComponent } from './components/cust-order-payment-list/cust-order-payment-list.component';
+import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -53,12 +64,23 @@ import { CustSettingsComponent } from './components/cust-settings/cust-settings.
     CustDashboardComponent,
     CustPlaceOrderComponent,
     CustHistoryComponent,
-    CustSettingsComponent
+    CustSettingsComponent,
+    CustOrderReqComponent,
+    CustRequestStatusComponent,
+    CustRequestDetailsCardComponent,
+    UserCustomerOverviewComponent,
+    CustCardSliderComponent,
+    CustOverviewDetailsComponent,
+    CustMakePaymentComponent,
+    CustOrderPaymentListComponent,
+    QrDialogComponent
   ],
   imports: [
     CommonModule,
     PrivateRoutingModule,
+    QRCodeModule,
     MatCardModule,
+    MatSortModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatStepperModule,

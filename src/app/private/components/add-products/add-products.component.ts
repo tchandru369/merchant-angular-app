@@ -8,6 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MilkProductDetails } from 'src/app/models/milkProduct.interface';
 import { compList } from 'src/app/models/compList.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-dialog.component';
 
 @Component({
   selector: 'app-add-products',
@@ -15,6 +17,7 @@ import { compList } from 'src/app/models/compList.interface';
   styleUrls: ['./add-products.component.css']
 })
 export class AddProductsComponent implements OnInit {
+
 
 
   count : any = 0;
@@ -25,7 +28,7 @@ export class AddProductsComponent implements OnInit {
   compList:compList[]=[];
   productInterface!: productInterface;
   milkProdDetails!:MilkProductDetails;
-  displayedColumns: string[] = ['companyName', 'productType' ,'productName','productBillPrice', 'productShopPrice','productCustPrice','productQuantity'];
+  displayedColumns: string[] = ['companyName', 'productType' ,'productName','productBillPrice', 'productShopPrice','productCustPrice','productQuantity','actions'];
   displayProdList : string[] = ['productNameL','productPriceL','productCustomerPriceL','productTypeL','productQuantityL'];
   userEmail:string="";
   checkList:boolean=false;
@@ -48,7 +51,7 @@ export class AddProductsComponent implements OnInit {
   productList:{companyName:string,productQuantity:number,productShopPrice:number,productCustPrice:number,productBillPrice:number
     ,productOwner:any,productType:string,productName:string }[]=[];
 
-    constructor(private productService:ProductService,private router:Router, private snackbar:MatSnackBar) {
+    constructor(private productService:ProductService,private router:Router, private snackbar:MatSnackBar,private dialog: MatDialog) {
           this.productInterface  ={
 
             productName:'',
@@ -73,6 +76,46 @@ export class AddProductsComponent implements OnInit {
 
           
     }
+
+    dataSource = new MatTableDataSource(this.milkProdList);
+
+
+    deleteSelectedProd(product:any){
+            const dialogRef = this.dialog.open(EditRequestDialogComponent, {
+                width: '400px',  // Clone to avoid mutating directly
+              });
+            
+              dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                  // User confirmed deletion
+                  this.deleteProduct(product);
+                  console.log('order Request deleted');
+                } else {
+                  // User canceled
+                  console.log('Order Request cancelled');
+                }
+              });
+          }
+deleteProduct(product: any): void {
+ 
+
+  this.productService.deleteMilkProd(product).subscribe((data:any) =>{
+      console.log(data);
+      if(data.response == "success"){
+        this.isLoading = false;
+        this.snackbar.open(`Product Deleted successfully`,'close',{
+          duration: 5000,horizontalPosition:'right',verticalPosition:'top'
+         });
+        this.milkProdList = this.milkProdList.filter(item => item !== product);
+        this.dataSource._updateChangeSubscription();  
+      }
+     },
+     error => console.log(error)
+     
+    );
+    this.isLoading = false;    // notify the table about the change
+  
+}
 
     removeItem(element:any) {
       this.productList.forEach((values,index) => {

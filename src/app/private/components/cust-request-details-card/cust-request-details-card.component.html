@@ -1,0 +1,75 @@
+<div class="history-page">
+  <mat-card-title>Select Date To view Transaction</mat-card-title>
+  <div
+    class="date-select"
+    style="display: flex; align-items: center; gap: 12px"
+  >
+    <form [formGroup]="dateForm">
+      <mat-form-field color="accent" appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="selectedDate"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker2">
+        </mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <mat-error
+          *ngIf="
+            dateForm.get('selectedDate')?.touched &&
+            dateForm.get('selectedDate')?.hasError('required')
+          "
+        >
+          Date is required
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      Submit
+    </button>
+  </div>
+
+  <mat-card *ngFor="let customer of custPlacedList" class="customer-card">
+    <span *ngIf="customer.orderReqStatus === 'OPA'" class="status-badge">
+      APPROVED
+    </span>
+    <span *ngIf="customer.orderReqStatus === 'OPR'" class="status-badge-reject">
+      REJECTED
+    </span>
+    <span *ngIf="customer.orderReqStatus === 'OP'" class="status-badge-placed">
+      ORDER PLACED
+    </span>
+
+    <mat-card-content class="customer-summary">
+      <span class="customer-name">{{ customer.orderCustEmailId }}</span>
+      
+    </mat-card-content>
+
+    <mat-expansion-panel class="expansion-panel" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>arrow_drop_down</mat-icon>
+
+          <mat-card-subtitle>Expand for Full Details</mat-card-subtitle>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="customer-details">
+        <p>Phone: {{ customer.orderCustPhoneNo }}</p>
+
+        <p>Customer Type: {{ customer.orderCustType }}</p>
+
+        <p>Requested Date: {{ customer.orderCustCrtdDate }}</p>
+
+        <mat-list>
+          <mat-list-item *ngFor="let order of customer.orderList">
+            {{ order.orderCustProdCmp }} - {{ order.orderCustProdType }} -
+            {{ order.orderCustProdName }} - {{ order.orderCustProdQty }} -
+            {{ order.orderCustProdName }} - *{{ order.orderCustProdPrice }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-expansion-panel>
+  </mat-card>
+</div>

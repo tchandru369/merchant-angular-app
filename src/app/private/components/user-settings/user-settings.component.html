@@ -1,60 +1,73 @@
 <div class="container">
-     
-    
-    <div class="formContainer">
-      <mat-card>
-        <mat-card-title class="setting_title">My Details</mat-card-title>
-
-             <mat-card-content>
-
-                <div class="user">
-                    <img  [src]="imageUrl ?? 'assets/default-img.png'" alt="ProfileImg" class="profile-image">
-                    <button mat-mini-fab (click)="inputImage.click()">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-button (click)="onUpdateImg()" class="green-button" *ngIf="imageSelected">Update Image</button>
-
-                </div>
-                <input #inputImage  id="merchantImg" type="file" hidden (change)="onFileChangeEvent($event)" value="selectedFile"/>
 
 
-              <form [formGroup]="settingForm" (ngSubmit)="merchantUserUpdate()" >
-        
-                <mat-form-field>
-                <input matInput type="text" placeholder="Enter your name" formControlName="merchantUserName">
-                <mat-error *ngIf="merchantUserName.touched && merchantUserName.hasError('required')">UserName is required</mat-error>
+  <div class="formContainer">
+    <mat-card>
+      <mat-card-title class="setting_title">My Details</mat-card-title>
 
-                </mat-form-field>  
-                <mat-form-field>
-                <input matInput type="email" placeholder="Enter your email" formControlName="merchantEmail">
-                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('required')">Email is required</mat-error>
-                <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('email')">Email must be valid</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Enter your Address" formControlName="merchantAddress">
-                <mat-error *ngIf="merchantAddress.touched && merchantAddress.hasError('required')">Address is required</mat-error>
+      <mat-card-content>
 
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="number" placeholder="Enter your phone number" formControlName="merchantPhoneNumber">
-                <mat-error *ngIf="merchantPhoneNumber.touched && merchantPhoneNumber.hasError('required')">PhoneNumber is required</mat-error>
-          
-              </mat-form-field>
-              <div class="buttons">
-                <div class="save-button">
-                 <button mat-button type="submit" [disabled]="!settingForm.valid">Update</button>
-                </div>
-              </div>
-                
-            </form>
+        <div class="user">
+          <img [src]="imageUrl ?? 'assets/default-img.png'" alt="ProfileImg" class="profile-image">
+          <button mat-mini-fab (click)="inputImage.click()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-button (click)="onUpdateImg()" class="green-button" *ngIf="imageSelected">Update Image</button>
 
-             </mat-card-content>
-      </mat-card>
-      
-      
+        </div>
+        <input #inputImage id="merchantImg" type="file" hidden (change)="onFileChangeEvent($event)"
+          value="selectedFile" />
 
-    </div>
-    
+
+        <form [formGroup]="settingForm" (ngSubmit)="merchantUserUpdate()">
+
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter your name" formControlName="merchantUserName">
+            <mat-error *ngIf="merchantUserName.touched && merchantUserName.hasError('required')">UserName is
+              required</mat-error>
+
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="email" placeholder="Enter your email" formControlName="merchantEmail">
+            <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="merchantEmail.touched && merchantEmail.hasError('email')">Email must be valid</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter your Address" formControlName="merchantAddress">
+            <mat-error *ngIf="merchantAddress.touched && merchantAddress.hasError('required')">Address is
+              required</mat-error>
+
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" placeholder="Enter your phone number" formControlName="merchantPhoneNumber">
+            <mat-error *ngIf="merchantPhoneNumber.touched && merchantPhoneNumber.hasError('required')">PhoneNumber is
+              required</mat-error>
+
+          </mat-form-field>
+          <div class="buttons">
+            <div class="save-button">
+              <button mat-button type="submit" [disabled]="!settingForm.valid">Update</button>
+            </div>
+          </div>
+
+        </form>
+        <mat-card-title class="payment_title">Add Payment Details</mat-card-title>
+        <form [formGroup]="upiForm">
+           <mat-form-field>
+                <input matInput type="text" placeholder="Enter your UPI ID" formControlName="merchantUpi">
+                <mat-error *ngIf="merchantUpi.touched && merchantUpi.hasError('required')">UserName is required</mat-error>
+          </mat-form-field>
+        </form>
+          <div class="upi-add-button">
+              <button mat-button (click)="updateUPIDetailsOfOwner()" [disabled]="!merchantUpi.hasError">Update</button>
+            </div>
+      </mat-card-content>
+    </mat-card>
+
+
+
+  </div>
+
 </div>
 <div *ngIf="isLoading" class="loader-overlay">
   <mat-progress-spinner mode="indeterminate" color="primary" diameter="60"></mat-progress-spinner>

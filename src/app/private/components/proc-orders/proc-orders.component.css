@@ -3,50 +3,82 @@
 }
 
 .customer-summary {
-    display : flex;
-    align-items : center;
-    justify-content : space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
 }
 
-
 .customer-name,
-
 .customer-email,
-
 .customer-total {
-
     margin-right: 10px;
-
+    flex: 1; /* Allow items to take equal space */
 }
 
 .actions {
-
     display: flex;
-
     justify-content: flex-end;
-
+    flex-wrap: wrap; /* Allow action buttons to wrap */
+    width: 100%; /* Ensure actions take full width */
+    margin-top: 10px; /* Space above actions */
 }
 
 .expansion-panel {
-
     margin-top: 10px;
-
 }
 
 .customer-details {
-
     padding: 16px;
 }
 
 .loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .customer-card {
+        margin: 10px; /* Reduce margin for smaller screens */
+    }
+
+    .customer-summary {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    .customer-name,
+    .customer-email,
+    .customer-total {
+        margin-right: 0; /* Remove right margin for stacked layout */
+        margin-bottom: 5px; /* Add space between stacked elements */
+        width: 100%; /* Full width for each element */
+    }
+
+    .actions {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch; /* Stretch buttons to full width */
+    }
+
+    .actions button {
+        width: 100%; /* Full width buttons */
+        margin-bottom: 5px; /* Space between buttons */
+    }
+
+    .customer-details {
+        padding: 12px; /* Adjust padding for smaller screens */
+    }
+
+    mat-form-field {
+        width: 100%; /* Full width for form fields */
+    }
 }

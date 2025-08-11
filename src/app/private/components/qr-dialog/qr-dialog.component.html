@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>UPI Payment</h2>
+<mat-dialog-content>
+  <div style="text-align: center;">
+    <qrcode
+      [qrdata]="data.upiQRValue"
+      [width]="250"
+      [errorCorrectionLevel]="'M'">
+    </qrcode>
+    <p>Scan to pay</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+<button mat-button color="primary" (click)="onProceed()">Yes</button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

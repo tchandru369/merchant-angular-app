@@ -1,0 +1,43 @@
+.mat-form-field{
+ padding: 15px;
+}
+
+.add_button{
+    margin-left: 30px;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.viewProductContainer{
+    margin-top: 20px;
+}
+
+.addContainer{
+   margin-top: 10px;
+}
+
+table {
+    width: 100%;
+  }
+
+  mat-list {
+    display: flex;
+    flex-direction: row; /* Ensure items are aligned vertically */
+    padding: 0;
+    justify-content: space-evenly;
+  }
+  
+  mat-list-item{
+    margin-right: 10px;
+  }

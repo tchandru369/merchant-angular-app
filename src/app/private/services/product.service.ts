@@ -9,7 +9,7 @@ import { EncryptionService } from './encryption.service';
 export class ProductService {
   
 
-  private baseURL:string =  "http://34.47.255.188:443/services/v1/products"
+  private baseURL:string =  "http://35.192.139.201:443/services/v1/products"
 
   constructor(private httpClient:HttpClient,private encService:EncryptionService) { }
 
@@ -104,9 +104,16 @@ export class ProductService {
       'Authorization': `Bearer ${token}`,  // Bearer token
       'Content-Type': 'application/json'   // Set the content type to application/json
     });
-
-    const params = new HttpParams()
-      .set('name', data);        // Add productId parameter
+       // Add productId parameter
     return this.httpClient.post<any>(`${this.baseURL}/updateMilkPrd`,data,{headers});
+  }
+
+  deleteMilkProd(data:any):Observable<any>{
+    const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Bearer token
+      'Content-Type': 'application/json'   // Set the content type to application/json
+    });      // Add productId parameter
+    return this.httpClient.post<any>(`${this.baseURL}/deleteMilkPrd`,data,{headers});
   }
 }

@@ -1,224 +1,241 @@
 <div class="container">
-     
-    
-    <div class="addContainer">
-      <mat-card>
-        <mat-card-title>Add Product</mat-card-title>
-             <mat-card-content>
-              <form [formGroup]="addForm" >
-        
-                <mat-form-field>
-                  <mat-label>Brand:</mat-label>
-                    <mat-select formControlName="companyName" (selectionChange)="onBrandChange()">
-                      <mat-option value="">Select Brand</mat-option>
-                      <mat-option *ngFor="let brand of brands" [value]="brand">{{ brand }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Product:</mat-label>
-                      <mat-select formControlName="productType" (selectionChange)="onProductChange()">
-                        <mat-option value="">Select Product</mat-option>
-                        <mat-option *ngFor="let product of products" [value]="product">
-                          {{ product }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <mat-form-field>
-                      <mat-label>Quantity:</mat-label>
-                       <mat-select formControlName="productName">
-                         <mat-option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</mat-option>
-                       </mat-select>
-                     </mat-form-field>
-               <mat-form-field>
-                <input matInput type="text" placeholder="Enter Bill Price" formControlName="productBillPrice">
-                <mat-error *ngIf="productBillPrice.touched && productBillPrice.hasError('required')">Product Price is required</mat-error>
 
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Enter Customer Price" formControlName="productCustPrice">
-                <mat-error *ngIf="productCustPrice.touched && productCustPrice.hasError('required')">Product Price is required</mat-error>
 
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Enter Shop Price" formControlName="productShopPrice">
-                <mat-error *ngIf="productShopPrice.touched && productShopPrice.hasError('required')">Product Price is required</mat-error>
+  <div class="addContainer">
+    <mat-card>
+      <mat-card-title>Add Product</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="addForm">
 
-              </mat-form-field>
-                <mat-form-field>
-                <input matInput type="text" placeholder="Enter Product Quantity" formControlName="productQuantity">
-                <mat-error *ngIf="productQuantity.touched && productQuantity.hasError('required')">Product Quantity is required</mat-error>
+          <mat-form-field>
+            <mat-label>Brand:</mat-label>
+            <mat-select formControlName="companyName" (selectionChange)="onBrandChange()">
+              <mat-option value="">Select Brand</mat-option>
+              <mat-option *ngFor="let brand of brands" [value]="brand">{{ brand }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Product:</mat-label>
+            <mat-select formControlName="productType" (selectionChange)="onProductChange()">
+              <mat-option value="">Select Product</mat-option>
+              <mat-option *ngFor="let product of products" [value]="product">
+                {{ product }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Quantity:</mat-label>
+            <mat-select formControlName="productName">
+              <mat-option *ngFor="let productName of productNames" [value]="productName">{{ productName }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Bill Price" formControlName="productBillPrice">
+            <mat-error *ngIf="productBillPrice.touched && productBillPrice.hasError('required')">Product Price is
+              required</mat-error>
 
-                </mat-form-field>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Customer Price" formControlName="productCustPrice">
+            <mat-error *ngIf="productCustPrice.touched && productCustPrice.hasError('required')">Product Price is
+              required</mat-error>
 
-                <button mat-button (click)="addProductList()" class="add_button">Add</button>
-              <div class="buttons">
-                <mat-card-title>Product List</mat-card-title>
-                <mat-hint *ngIf="!checkList">No Products Added</mat-hint>
-                <div class="col-md-8 mt-4 mb-4">
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Brand</th>
-                        <th>Type</th>
-                        <th>variety</th>
-                        <th>Quantity/L</th>
-                        <th>Bill Price</th>
-                        <th>Shop Price</th>
-                        <th>Customer Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let product of productList">
-                        <td>{{product.companyName}}</td>
-                        <td>{{product.productType}}</td>
-                        <td>{{product.productName}}</td>
-                        <td>{{product.productQuantity}}</td>
-                        <td>{{product.productBillPrice}}</td>
-                        <td>{{product.productShopPrice}}</td>
-                        <td>{{product.productCustPrice}}</td>
-                        <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-              </div>
-                
-                <div class="save-button">
-                 <button mat-button type="submit" [disabled]="!checkList" (click)="merchantAddPRoduct()">Submit</button>
-                </div>
-              </div>                
-            </form>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Shop Price" formControlName="productShopPrice">
+            <mat-error *ngIf="productShopPrice.touched && productShopPrice.hasError('required')">Product Price is
+              required</mat-error>
 
-             </mat-card-content>
-      </mat-card>
-      
-      
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Product Quantity" formControlName="productQuantity">
+            <mat-error *ngIf="productQuantity.touched && productQuantity.hasError('required')">Product Quantity is
+              required</mat-error>
 
-    </div>
+          </mat-form-field>
 
-    <div class="UpdateContainer">
-      <mat-card>
-        <mat-card-title>Update Product</mat-card-title>
-             <mat-card-content>
-              <form [formGroup]="updateForm" >
-        
-                <mat-form-field>
-                  <mat-label>Brand:</mat-label>
-                    <mat-select formControlName="updateCompanyName" (selectionChange)="onUpdateBrandChange()">
-                      <mat-option value="">Select Brand</mat-option>
-                      <mat-option *ngFor="let brand of updateBrands" [value]="brand">{{ brand }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Product:</mat-label>
-                      <mat-select formControlName="updateProductType" (selectionChange)="onUpdateProductChange()">
-                        <mat-option value="">Select Product</mat-option>
-                        <mat-option *ngFor="let product of updateProducts" [value]="product">
-                          {{ product }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <mat-form-field>
-                      <mat-label>Quantity:</mat-label>
-                       <mat-select formControlName="updateProductName" (selectionChange)="onUpdateQuantityChange()">
-                         <mat-option *ngFor="let productName of updateProductNames" [value]="productName">{{ productName }}</mat-option>
-                       </mat-select>
-                     </mat-form-field>
-               <mat-form-field>
-                <input matInput type="text" placeholder="Enter Bill Price" formControlName="updateProductBillPrice">
-                <mat-error *ngIf="updateProductBillPrice.touched && updateProductBillPrice.hasError('required')">Product Bill Price is required</mat-error>
-
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Enter Customer Price" formControlName="updateProductCustPrice">
-                <mat-error *ngIf="updateProductCustPrice.touched && updateProductCustPrice.hasError('required')">Product Customer Price is required</mat-error>
-
-              </mat-form-field>
-
-              <mat-form-field>
-                <input matInput type="text" placeholder="Enter Shop Price" formControlName="updateProductShopPrice">
-                <mat-error *ngIf="updateProductShopPrice.touched && updateProductShopPrice.hasError('required')">Product Shop Price is required</mat-error>
-
-              </mat-form-field>
-                <mat-form-field>
-                <input matInput type="text" placeholder="Enter Product Quantity" formControlName="updateProductQuantity">
-                <mat-error *ngIf="updateProductQuantity.touched && updateProductQuantity.hasError('required')">Product Quantity is required</mat-error>
-
-                </mat-form-field>
-              <div class="buttons">
-                <div class="save-button">
-                 <button mat-button type="Update" [disabled]="!checkListUpdate" (click)="merchantUpdateProduct()">Submit</button>
-                </div>
-              </div>                
-            </form>
-
-             </mat-card-content>
-      </mat-card>
-      
-      
-
-    </div>
-
-    <div class="viewProductContainer">
-      <mat-card>
-        <mat-card-title>My Product</mat-card-title>
-             <mat-card-content>
-              <table mat-table [dataSource]="milkProdList" class="mat-elevation-z8">
-
-                <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
-              
-                <!-- Position Column -->
-                <ng-container matColumnDef="companyName">
-                  <th mat-header-cell *matHeaderCellDef> Brand </th>
-                  <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
-                </ng-container>
-              
-                <!-- Name Column -->
-                <ng-container matColumnDef="productType">
-                  <th mat-header-cell *matHeaderCellDef> Type </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productType}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="productName">
-                  <th mat-header-cell *matHeaderCellDef> Name </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
-                </ng-container>
-              
-                <!-- Weight Column -->
-                <ng-container matColumnDef="productBillPrice">
-                  <th mat-header-cell *matHeaderCellDef> Bill Price</th>
-                  <td mat-cell *matCellDef="let element"> {{element.productBillPrice}} </td>
-                </ng-container>
-              
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="productShopPrice">
-                  <th mat-header-cell *matHeaderCellDef> Shop Price </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productShopPrice}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="productCustPrice">
-                  <th mat-header-cell *matHeaderCellDef> Customer Price </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productCustPrice}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="productQuantity">
-                  <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                  <td mat-cell *matCellDef="let element"> {{element.productQuantity}}</td>
-                </ng-container>
-              
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <button mat-button (click)="addProductList()" class="add_button">Add</button>
+          <div class="buttons">
+            <mat-card-title>Product List</mat-card-title>
+            <mat-hint *ngIf="!checkList">No Products Added</mat-hint>
+            <div class="col-md-8 mt-4 mb-4 table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Brand</th>
+                    <th>Type</th>
+                    <th>variety</th>
+                    <th>Quantity/L</th>
+                    <th>Bill Price</th>
+                    <th>Shop Price</th>
+                    <th>Customer Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of productList">
+                    <td>{{product.companyName}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>{{product.productName}}</td>
+                    <td>{{product.productQuantity}}</td>
+                    <td>{{product.productBillPrice}}</td>
+                    <td>{{product.productShopPrice}}</td>
+                    <td>{{product.productCustPrice}}</td>
+                    <td> <button mat-button (click)="removeItem(product)" class="removeItem_button">Remove</button></td>
+                  </tr>
+                </tbody>
               </table>
-                            
-            
+            </div>
 
-             </mat-card-content>
-      </mat-card>
-      
-      
+            <div class="save-button">
+              <button mat-button type="submit" [disabled]="!checkList" (click)="merchantAddPRoduct()">Submit</button>
+            </div>
+          </div>
+        </form>
 
-    </div>
-    
+      </mat-card-content>
+    </mat-card>
+
+
+
+  </div>
+
+  <div class="UpdateContainer">
+    <mat-card>
+      <mat-card-title>Update Product</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="updateForm">
+
+          <mat-form-field>
+            <mat-label>Brand:</mat-label>
+            <mat-select formControlName="updateCompanyName" (selectionChange)="onUpdateBrandChange()">
+              <mat-option value="">Select Brand</mat-option>
+              <mat-option *ngFor="let brand of updateBrands" [value]="brand">{{ brand }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Product:</mat-label>
+            <mat-select formControlName="updateProductType" (selectionChange)="onUpdateProductChange()">
+              <mat-option value="">Select Product</mat-option>
+              <mat-option *ngFor="let product of updateProducts" [value]="product">
+                {{ product }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Quantity:</mat-label>
+            <mat-select formControlName="updateProductName" (selectionChange)="onUpdateQuantityChange()">
+              <mat-option *ngFor="let productName of updateProductNames" [value]="productName">{{ productName
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Bill Price" formControlName="updateProductBillPrice">
+            <mat-error *ngIf="updateProductBillPrice.touched && updateProductBillPrice.hasError('required')">Product
+              Bill Price is required</mat-error>
+
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Customer Price" formControlName="updateProductCustPrice">
+            <mat-error *ngIf="updateProductCustPrice.touched && updateProductCustPrice.hasError('required')">Product
+              Customer Price is required</mat-error>
+
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Shop Price" formControlName="updateProductShopPrice">
+            <mat-error *ngIf="updateProductShopPrice.touched && updateProductShopPrice.hasError('required')">Product
+              Shop Price is required</mat-error>
+
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter Product Quantity" formControlName="updateProductQuantity">
+            <mat-error *ngIf="updateProductQuantity.touched && updateProductQuantity.hasError('required')">Product
+              Quantity is required</mat-error>
+
+          </mat-form-field>
+          <div class="buttons">
+            <div class="save-button">
+              <button mat-button type="Update" [disabled]="!checkListUpdate"
+                (click)="merchantUpdateProduct()">Submit</button>
+            </div>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+
+
+
+  </div>
+
+  <div class="viewProductContainer">
+    <mat-card>
+      <mat-card-title>My Product</mat-card-title>
+      <mat-card-content>
+        <table mat-table [dataSource]="milkProdList" class="mat-elevation-z8">
+
+          <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="companyName">
+            <th mat-header-cell *matHeaderCellDef> Brand </th>
+            <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="productType">
+            <th mat-header-cell *matHeaderCellDef> Type </th>
+            <td mat-cell *matCellDef="let element"> {{element.productType}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="productBillPrice">
+            <th mat-header-cell *matHeaderCellDef> Bill Price</th>
+            <td mat-cell *matCellDef="let element"> {{element.productBillPrice}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="productShopPrice">
+            <th mat-header-cell *matHeaderCellDef> Shop Price </th>
+            <td mat-cell *matCellDef="let element"> {{element.productShopPrice}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="productCustPrice">
+            <th mat-header-cell *matHeaderCellDef> Customer Price </th>
+            <td mat-cell *matCellDef="let element"> {{element.productCustPrice}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="productQuantity">
+            <th mat-header-cell *matHeaderCellDef> Quantity </th>
+            <td mat-cell *matCellDef="let element"> {{element.productQuantity}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button color="warn" (click)="deleteSelectedProd(element)">Delete</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
+
+      </mat-card-content>
+    </mat-card>
+
+
+
+  </div>
+
 </div>
 
 <div *ngIf="isLoading" class="loader-overlay">

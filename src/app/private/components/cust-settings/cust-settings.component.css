@@ -1,0 +1,19 @@
+.selected-image{
+    width: 150px;
+    height:150px;
+}
+
+.profile-image{
+    position: relative;
+}
+.user{
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 5px;
+    img{
+      width: 150px;  /* Set a width for the image */
+    height: 150px; /* Set a height for the image */
+    border-radius: 50%; /* This makes the image circular */
+    object-fit: cover; 
+    }
+   }

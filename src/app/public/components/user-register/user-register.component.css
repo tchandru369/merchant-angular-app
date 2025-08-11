@@ -1,41 +1,74 @@
-.container{
+.container {
     display: flex;
     justify-content: center;
-    margin-top: 100px;
+    align-items: center; /* Center items vertically */
+    margin: 0; /* Remove top margin for mobile view */
+    height: 100vh; /* Full height for mobile view */
+    padding: 0 20px; /* Added padding for mobile view */
 }
 
 .loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
+mat-card {
+    width: 100%; /* Full width for mobile */
+    height: auto; /* Adjust height automatically */
+    max-width: 600px; /* Increased max width for larger screens */
+    padding: 20px; /* Added padding for better spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+    border-radius: 8px; /* Optional: rounded corners */
+}
 
-mat-card{
-    mat-card-content{
-        form{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width:500px;
-        }
-       
+mat-card-content {
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%; /* Full width for mobile */
     }
 }
-.buttons{
+
+.buttons {
     display: flex;
-    flex-direction: row;
-    
+    flex-direction: row; /* Row layout for both mobile and desktop */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 20px; /* Added margin for spacing */
 }
-.save-button{
-    display: flex;
-    justify-content: flex-end;
-    margin-left: 350px;
+
+.back-button,
+.save-button {
+    flex: 1; /* Allow buttons to take equal space */
+    margin: 0 5px; /* Added margin for spacing between buttons */
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0; /* Remove padding for full-screen effect */
+        height: 100vh; /* Ensure container takes full height */
+        margin: 0; /* Remove margin */
+    }
+
+    mat-card {
+        height: auto; /* Allow card to adjust height */
+        max-height: 90vh; /* Limit max height to avoid overflow */
+        overflow-y: auto; /* Allow scrolling if content overflows */
+    }
+
+    .buttons {
+        flex-direction: row; /* Keep buttons in a row for mobile */
+    }
+
+    .save-button {
+        justify-content: flex-end; /* Align save button to the right */
+    }
 }
