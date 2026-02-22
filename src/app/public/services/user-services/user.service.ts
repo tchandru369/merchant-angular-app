@@ -11,7 +11,8 @@ import { MerchantReg } from 'src/app/models/merchantReg.interface';
 })
 export class UserService {
 
-  private baseURL:string =  "http://localhost:8083/api/v1/auth"
+  //private baseURL:string =  "http://localhost:8083/api/v1/auth";
+  private baseURL:string =  "https://shop-manage-lf1a.onrender.com/api/v1/auth"
 
   constructor(private httpClient:HttpClient, private snackbar:MatSnackBar) { 
 

@@ -8,9 +8,13 @@ import { EncryptionService } from './encryption.service';
 })
 export class BillingService {
 
-   private productURL:string =  "http://localhost:8083/services/v1/products"
-   private customerURL:string = "http://localhost:8083/services/v1/customer"
-   private billingURL:string = "http://localhost:8083/services/v1/billing"
+  //  private productURL:string =  "http://localhost:8083/services/v1/products";
+  //  private customerURL:string = "http://localhost:8083/services/v1/customer";
+  //  private billingURL:string = "http://localhost:8083/services/v1/billing";
+
+   private productURL:string =  "https://shop-manage-lf1a.onrender.com/services/v1/products";
+   private customerURL:string = "https://shop-manage-lf1a.onrender.com/services/v1/customer";
+   private billingURL:string = "https://shop-manage-lf1a.onrender.com/services/v1/billing";
 
   constructor(private httpClient : HttpClient,private encService:EncryptionService) { }
 

@@ -9,7 +9,8 @@ import { EncryptionService } from './encryption.service';
 export class ProductService {
   
 
-  private baseURL:string =  "http://localhost:8083/services/v1/products"
+  //private baseURL:string =  "http://localhost:8083/services/v1/products";
+  private baseURL:string =  "https://shop-manage-lf1a.onrender.com/services/v1/products";
 
   constructor(private httpClient:HttpClient,private encService:EncryptionService) { }
 
