@@ -12,7 +12,7 @@ import { MilkProductDetails } from 'src/app/models/milkProduct.interface';
 })
 export class UserDashboardComponent implements OnInit {
 
-  userEmail:string = '';
+  ownerRefId:string = '';
   isLoading:boolean = false;
   isDataPresent:boolean=false;
     milkProdList:MilkProductDetails[]=[];
@@ -24,7 +24,7 @@ export class UserDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.viewDemandProdList();
-    if(this.viewDemandProdList.length>0){
+    if(this.milkProdList.length>0){
       this.isDataPresent = true;
     }else{
       this.isDataPresent = false;
@@ -33,8 +33,8 @@ export class UserDashboardComponent implements OnInit {
 
   viewDemandProdList(){
         this.isLoading = true;
-    this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.productService.viewDemandProduct(this.userEmail).subscribe((data:any) => {
+    this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+    this.productService.viewDemandProduct(this.ownerRefId).subscribe((data:any) => {
         this.milkProdList = data;
         console.log(data);
     })

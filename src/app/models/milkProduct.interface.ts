@@ -5,7 +5,7 @@ export interface MilkProductDetails{
     productCustPrice:number;
     productShopPrice:number;
     productQuantity:number;
-    productOwner:string;
+    productOwnerRefId:string;
     companyName:string;
     productCreatedDate:string;
 }

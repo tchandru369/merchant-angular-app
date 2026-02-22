@@ -61,6 +61,7 @@ export class UserLoginComponent implements OnInit {
           sessionStorage.setItem('ownerEmail', this.merchantEmail.value);
           sessionStorage.setItem('ownerName', response.userName);
           sessionStorage.setItem('ownerProfileImg', "merchant-profile-img");
+          sessionStorage.setItem('ownerRefId', response.custRefId);
           this.isCustomerLoggedIn = true;
           if(response.userType === 'User'){
             this.auth.setUserRole(response.userType);

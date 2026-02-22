@@ -6,10 +6,11 @@ export interface ShopCustomer{
     custState:string;
     custPinCode:string;
     custDob:string;
-    custOwmerDetails:string;
     custEmailId:string;
     custPanNo:string;
     custType:string;
     custGender:string;
     custCountry:string;
+    custOwnerRefId:string;
+    shopCustRefId:string;
 }

@@ -19,8 +19,8 @@ custPlacedList: CustOrderReq[] = [];
 shopCustomer!: ShopCustomer;
 selectedDate: string='';
   isLoading: boolean = false;
-  userEmail: string = '';
-  custEmail:string='';
+  ownerRefId: string = '';
+  custRefId:string='';
   date:string='';
   constructor(
     private billingService: BillingService,
@@ -34,7 +34,7 @@ selectedDate: string='';
       custType: '',
       custPanNo: '',
       custEmailId: '',
-      custOwmerDetails: '',
+      custOwnerRefId: '',
       custDob: '',
       custPinCode: '',
       custState: '',
@@ -44,6 +44,7 @@ selectedDate: string='';
       custName: '',
       custGender: '',
       custCountry: '',
+      shopCustRefId:''
     };
   }
 
@@ -67,15 +68,39 @@ selectedDate: string='';
 
   ngOnInit(): void {
     this.getCustomerDetailsByEmailPh();
+    
+  }
+
+  getCustOrderRequestListRecent() {
+    this.isLoading = true;
+    this.custRefId = sessionStorage.getItem('ownerRefId') || '';
+    this.ownerRefId = sessionStorage.getItem('ownerRefIdValue') || '';
+    this.date = "recent";
+    console.log("Entered Recent List Function")
+    this.billingService
+      .custOrderReqList(this.ownerRefId,this.custRefId,this.date)
+      .subscribe((data: any) => {
+        this.isLoading = false;
+
+        if(data.length === 0){
+          this.snackbar.open(`There is no order has been placed on this date`,'close',{
+        duration: 2000,horizontalPosition:'center',verticalPosition:'top'
+       })
+        }else{
+        this.custPlacedList = data;
+        console.log(data);
+        }   
+      });
+    this.isLoading = false;
   }
 
    getCustOrderRequestList() {
     this.isLoading = true;
-    this.custEmail = sessionStorage.getItem('ownerEmail') || '';
-    this.userEmail = this.shopCustomer.custOwmerDetails;
+    this.custRefId = sessionStorage.getItem('ownerRefId') || '';
+    this.ownerRefId = this.shopCustomer.custOwnerRefId;
     this.date = this.dataPipe.transform(this.dateForm.get('selectedDate')?.value, 'dd-MM-yyyy')!;
     this.billingService
-      .custOrderReqList(this.userEmail,this.custEmail,this.date)
+      .custOrderReqList(this.ownerRefId,this.custRefId,this.date)
       .subscribe((data: any) => {
         this.isLoading = false;
 
@@ -94,12 +119,14 @@ selectedDate: string='';
 
    
   getCustomerDetailsByEmailPh() {
-    const custEmail = sessionStorage.getItem('ownerEmail');
+    const ownerRefId = sessionStorage.getItem('ownerRefId');
     this.billingService
-      .getCustDtlsByPhEmail(custEmail)
+      .getCustDtlsByPhEmail(ownerRefId)
       .subscribe((data: any) => {
         this.shopCustomer = data;
         console.log(this.shopCustomer);
+        this.getCustOrderRequestListRecent();
       });
+      
   }
 }

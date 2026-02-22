@@ -48,7 +48,7 @@ export class CustPlaceOrderComponent implements OnInit {
       custType: '',
       custPanNo: '',
       custEmailId: '',
-      custOwmerDetails: '',
+      custOwnerRefId: '',
       custDob: '',
       custPinCode: '',
       custState: '',
@@ -58,16 +58,21 @@ export class CustPlaceOrderComponent implements OnInit {
       custName: '',
       custGender: '',
       custCountry: '',
+      shopCustRefId:''
     };
     this.orderRequest = {
       orderCustName: '',
+      orderRefId:'',
       orderCustPhoneNo: '',
       orderCustCrtdDate: '',
-      orderCustOwnerName: '',
+      orderOwnerRefId: '',
       orderCustEmailId: '',
       orderCustType: '',
       orderCustTotalPrice: 0,
       orderFinalAmtPaid: 0,
+      noteToPayer:'',
+      orderCustRefId:'',
+      orderPymtRefId:'',
       orderList: [],
     };
   }
@@ -141,7 +146,7 @@ export class CustPlaceOrderComponent implements OnInit {
     this.getMilkProdList();
   }
   getCustomerDetailsByEmailPh() {
-    const custEmail = sessionStorage.getItem('ownerEmail');
+    const custEmail = sessionStorage.getItem('ownerRefId');
     this.billingService
       .getCustDtlsByPhEmail(custEmail)
       .subscribe((data: any) => {
@@ -156,9 +161,10 @@ export class CustPlaceOrderComponent implements OnInit {
     this.orderRequest.orderCustCrtdDate = String(curD);
     this.orderRequest.orderCustEmailId = this.shopCustomer.custEmailId;
     this.orderRequest.orderCustName = this.shopCustomer.custName;
-    this.orderRequest.orderCustOwnerName =this.shopCustomer.custOwmerDetails;
+    this.orderRequest.orderOwnerRefId =this.shopCustomer.custOwnerRefId;
     this.orderRequest.orderCustPhoneNo = this.shopCustomer.custPhoneNo;
     //this.orderRequest.orderCustType = this.billingCustomerType.value;
+    this.orderRequest.orderCustRefId = String(sessionStorage.getItem('ownerRefId'));
 
     this.orderRequest.orderCustType = this.shopCustomer.custType;
 
@@ -200,7 +206,7 @@ export class CustPlaceOrderComponent implements OnInit {
     const productNameList = this.custProductName.value;
     const productTypeList = this.custProductType.value;
     const productQuantityList = this.custProductQuantity.value;
-    const productOwnerList = sessionStorage.getItem('ownerEmail');
+    const productOwnerList = sessionStorage.getItem('ownerRefId');
 
     for (let i = 0; i < this.productList.length; i++) {
       if (

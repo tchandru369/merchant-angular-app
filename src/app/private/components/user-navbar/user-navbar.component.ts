@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { imageHandle } from 'src/app/models/imageHandle.interface';
 import { MerchantService } from '../../services/merchant.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-user-navbar',
@@ -14,30 +15,44 @@ import { AuthService } from '../../services/auth.service';
 export class UserNavbarComponent implements OnInit {
   userName: string = '';
   userPhoto: any;
-  userEmail: string = '';
+  ownerRefId: string = '';
   userProfileImg: any;
+  ownerEmail:string ='';
   isCollapsed = false;
   userType: string = '';
   custFlg: boolean = false;
+  paymentRequestCount:number = 0;
 
   constructor(
     private router: Router,
     private settingService: MerchantService,
     private sanitizer: DomSanitizer,
     private auth: AuthService
-  ) {}
+  ) {
+
+    this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe(() => {
+    this.setFocusOnContent();
+  });
+  }
 
   ngOnInit(): void {
     this.userName = String(sessionStorage.getItem('ownerName'));
     this.userPhoto = String(sessionStorage.getItem('userPhoto'));
-    this.userEmail = String(sessionStorage.getItem('ownerEmail'));
+    this.ownerRefId = String(sessionStorage.getItem('ownerRefId'));
+    this.ownerEmail = String(sessionStorage.getItem('ownerEmail'))
     this.userType = this.auth.getUserRole();
     if (this.userType === 'Cust') {
       this.custFlg = true;
     }
     this.getProfileImg();
-        this.onResize(null); // Initialize the state based on current window size
+        this.onResize(new UIEvent('resize')); // Initialize the state based on current window size
 
+  }
+
+  ngAfterViewInit() {
+    this.setFocusOnContent();
   }
 
   toggleCollapse() {
@@ -46,7 +61,7 @@ export class UserNavbarComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: null) {
+  onResize(event: UIEvent) {
     if (window.innerWidth <= 768) {
       this.isCollapsed = true; // Collapse on mobile
     } else {
@@ -54,38 +69,56 @@ export class UserNavbarComponent implements OnInit {
     }
   }
 
+  navigateAndCollapse(route: string) {
+    this.router.navigate([route]).then(() => {
+      this.isCollapsed = true; // Close the sidenav
+      this.setFocusOnContent(); // Set focus on the content area
+    }).catch(err => {
+      console.error('Navigation error:', err); // Log any errors
+    });
+  }
+
+setFocusOnContent() {
+    const contentElement = document.querySelector('.content') as HTMLElement; // Ensure this selector matches your layout
+    if (contentElement) {
+      contentElement.setAttribute('tabindex', '-1'); // Make it focusable
+      contentElement.focus(); // Focus on the content
+    }
+  }
+
   moveToCustRequestStatus() {
-    this.router.navigate(['private', 'cust-request-status']);
+     this.navigateAndCollapse('private/cust-request-status');
   }
 
   moveToCustSettings() {
-    this.router.navigate(['private', 'cust-settings']);
+     this.navigateAndCollapse('private/cust-settings');
   }
   moveToCustHistoryPage() {
-    this.router.navigate(['private', 'cust-history']);
+     this.navigateAndCollapse('private/cust-history');
   }
   moveToPlaceOrderPage() {
-    this.router.navigate(['private', 'cust-place-order']);
+   this.navigateAndCollapse('private/cust-place-order');
+   this.isCollapsed = true;
   }
 
   moveToBillingPage() {
     console.log('Entered MoveToBilling');
-    this.router.navigate(['private', 'billing']);
+     this.navigateAndCollapse('private/billing');
   }
 
   moveToMyRequestPage() {
     console.log('Entered MoveToRequests');
-    this.router.navigate(['private', 'my-requests']);
+    this.navigateAndCollapse('private/my-requests');
   }
 
   moveToAddProductPage() {
     console.log('Entered MoveToProducts');
-    this.router.navigate(['private', 'add-products']);
+    this.navigateAndCollapse('private/add-products');
   }
 
   moveToCustomerOverviewPage() {
     console.log('Entered MoveToCustomerOverview');
-    this.router.navigate(['private', 'user-customer-overview']);
+    this.navigateAndCollapse('private/user-customer-overview');
   }
 
   userLogout() {
@@ -96,22 +129,22 @@ export class UserNavbarComponent implements OnInit {
 
   moveToUserDashboardPage() {
     console.log('Entered UserDashboard');
-    this.router.navigate(['private', 'user-dashboard']);
+   this.navigateAndCollapse('private/user-dashboard');
   }
 
   moveToUserSettings() {
-    this.router.navigate(['private', 'user-settings']);
+    this.navigateAndCollapse('private/user-settings');
   }
   moveToHistoryPage() {
-    this.router.navigate(['private', 'user-history']);
+    this.navigateAndCollapse('private/user-history');
   }
 
   moveToCustMakePymtPage() {
-    this.router.navigate(['private', 'cust-make-payment']);
+    this.navigateAndCollapse('private/cust-make-payment');
   }
 
   getProfileImg() {
-    const ownerEmail = String(sessionStorage.getItem('ownerEmail'));
+    const ownerEmail = String(sessionStorage.getItem('ownerRefId'));
     const ownerImgModule = String(sessionStorage.getItem('ownerProfileImg'));
     this.settingService.getProfileImage(ownerEmail, ownerImgModule).subscribe(
       (data: any) => {

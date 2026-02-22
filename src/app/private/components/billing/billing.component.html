@@ -134,7 +134,7 @@
               </mat-form-field>
               <mat-form-field *ngIf="!custValidate">
                 <mat-label>Gender :</mat-label>
-                <mat-select formControlName="billingCustomerGender" (selectionChange)="onUpdateCountryChange()">
+                <mat-select formControlName="billingCustomerGender" >
                   <mat-option value="">Select Gender</mat-option>
                   <mat-option *ngFor="let gender of genderList" [value]="gender">{{ gender }}</mat-option>
                 </mat-select>

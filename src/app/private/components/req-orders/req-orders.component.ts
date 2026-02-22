@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { OrderRequest } from 'src/app/models/orderRequest.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-dialog.component';
+import { MessageDialogComponent } from '../Dialogs/message-dialog/message-dialog.component';
 
 @Component({
   selector: 'app-req-orders',
@@ -38,16 +39,19 @@ proceedOrderRequest(customer:any){
            })
         }else if(data.errorCode == "1"){
           this.isLoading = false;
-          this.snackbar.open(` Status : ${data.errorMsg} `,'close',{
-            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
-           })
+          this.openDialog('Error', `Error: ${data.errorMsg.slice(0, -2)}`);
         }
     })
      this.isLoading = false;
   }
 
+  openDialog(title: string, message: string) {
+  this.dialog.open(MessageDialogComponent, {
+    data: { title: title, message: message }
+  });
+}
 
-  userEmail = '';
+  ownerRefId = '';
   orderReqList:OrderRequest[]=[];
 
   procOrderList:OrderRequest[]=[];
@@ -58,13 +62,17 @@ proceedOrderRequest(customer:any){
 
     this.orderRequest={
        orderCustName : '',
+       orderRefId:'',
        orderCustPhoneNo:'',
        orderCustCrtdDate:'',
-       orderCustOwnerName:'',
+       orderOwnerRefId:'',
        orderCustEmailId:'',
        orderCustType:'',
        orderCustTotalPrice:0,
        orderFinalAmtPaid:0,
+       noteToPayer:'',
+       orderCustRefId:'',
+       orderPymtRefId:'',
        orderList:[]
     };
     }
@@ -110,16 +118,16 @@ proceedOrderRequest(customer:any){
   }
 
   getOwnerCustList(){
-    this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.billingService.viewCustOrder(this.userEmail).subscribe((data:any) => {
+    this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+    this.billingService.viewCustOrder(this.ownerRefId).subscribe((data:any) => {
         this.orderReqList = data;
         console.log(data);
     })
   }
 
   getProcOrderList(){
-    this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.billingService.processedOrder(this.userEmail).subscribe((data:any) => {
+    this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+    this.billingService.processedOrder(this.ownerRefId).subscribe((data:any) => {
         this.procOrderList = data;
         console.log(data);
     })
@@ -129,10 +137,13 @@ proceedOrderRequest(customer:any){
     this.isLoading = true;
      this.orderRequest.orderCustEmailId = customer.orderCustEmailId;
      this.orderRequest.orderCustCrtdDate = customer.orderCustCrtdDate;
+     this.orderRequest.orderCustRefId = customer.orderCustRefId;
+     this.orderRequest.orderOwnerRefId = customer.orderOwnerRefId;
+     this.orderRequest.orderPymtRefId = customer.orderPymtRefId;
      this.orderRequest.orderCustName = customer.orderCustName;
-     this.orderRequest.orderCustOwnerName = customer.orderCustOwnerName;
      this.orderRequest.orderCustPhoneNo = customer.orderCustPhoneNo;
      this.orderRequest.orderCustType = customer.orderCustType;
+     this.orderRequest.orderRefId = customer.orderRefId;
      this.orderRequest.orderCustTotalPrice = customer.orderCustTotalPrice;
 
      this.billingService.deleteOrderRequest(this.orderRequest).subscribe((data:any) => {

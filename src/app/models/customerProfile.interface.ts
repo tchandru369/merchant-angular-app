@@ -5,5 +5,6 @@ export interface customerProfile {
   custType: string;
   custEmail: string;
   custName: string;
+  custRefId:string;
 }
 

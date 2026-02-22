@@ -30,7 +30,7 @@ export class AddProductsComponent implements OnInit {
   milkProdDetails!:MilkProductDetails;
   displayedColumns: string[] = ['companyName', 'productType' ,'productName','productBillPrice', 'productShopPrice','productCustPrice','productQuantity','actions'];
   displayProdList : string[] = ['productNameL','productPriceL','productCustomerPriceL','productTypeL','productQuantityL'];
-  userEmail:string="";
+  ownerRefId:string="";
   checkList:boolean=false;
   prodQtyIndx:number=0;
   checkListUpdate:boolean = false;
@@ -49,7 +49,7 @@ export class AddProductsComponent implements OnInit {
   selectedProduct: string = '';
 
   productList:{companyName:string,productQuantity:number,productShopPrice:number,productCustPrice:number,productBillPrice:number
-    ,productOwner:any,productType:string,productName:string }[]=[];
+    ,productOwnerRefId:any,productType:string,productName:string }[]=[];
 
     constructor(private productService:ProductService,private router:Router, private snackbar:MatSnackBar,private dialog: MatDialog) {
           this.productInterface  ={
@@ -57,7 +57,7 @@ export class AddProductsComponent implements OnInit {
             productName:'',
             productType:'',
             productPrice:'',
-            productOwner:'',
+            productOwnerRefId:'',
             productCustomerPrice:'',
             productQuantity:''
           }; 
@@ -67,7 +67,7 @@ export class AddProductsComponent implements OnInit {
             productCreatedDate:'',
             productCustPrice:0,
             productName:'',
-            productOwner:'',
+            productOwnerRefId:'',
             productQuantity:0,
             productShopPrice:0,
             productType:'',
@@ -198,7 +198,7 @@ addProductList() {
    const productNameList = this.productName.value;
    const productTypeList = this.productType.value;
    const productQuantityList = this.productQuantity.value;
-   const productOwnerList = sessionStorage.getItem('ownerEmail');
+   const productOwnerList = sessionStorage.getItem('ownerRefId');
 
 
    for(let i=0;i<this.productList.length;i++){
@@ -208,7 +208,7 @@ addProductList() {
    }
    if(this.count == 0){
     this.productList.push({companyName:compNameList,productName:productNameList,productShopPrice:productShopPriceList
-      ,productCustPrice:productCustPriceList,productBillPrice:productBillPriceList,productQuantity:productQuantityList,productType:productTypeList,productOwner:productOwnerList});
+      ,productCustPrice:productCustPriceList,productBillPrice:productBillPriceList,productQuantity:productQuantityList,productType:productTypeList,productOwnerRefId:productOwnerList});
       this.checkList = true;
    }
    this.count = 0;
@@ -238,8 +238,8 @@ merchantAddPRoduct() {
 }
 
 viewProdList(){
-  this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-  this.productService.viewProduct(this.userEmail).subscribe((data:any) => {
+  this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+  this.productService.viewProduct(this.ownerRefId).subscribe((data:any) => {
       this.productList1 = data;
       console.log(data);
   })
@@ -382,7 +382,7 @@ get updateProductShopPrice():FormControl{
     this.milkProdDetails.productShopPrice = this.updateProductShopPrice.value;
     this.milkProdDetails.productQuantity = this.updateProductQuantity.value;
     this.milkProdDetails.productName = this.updateProductName.value;
-    this.milkProdDetails.productOwner = sessionStorage.getItem('ownerEmail')|| '';
+    this.milkProdDetails.productOwnerRefId = sessionStorage.getItem('ownerRefId')|| '';
     this.milkProdDetails.productType = this.updateProductType.value;
 
    
@@ -425,8 +425,8 @@ get updateProductShopPrice():FormControl{
 
   getOwnerMilkProdList(){
     this.isLoading =true;
-    this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.productService.viewOwnerMilkProd(this.userEmail).subscribe((data:any) => {
+    this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+    this.productService.viewOwnerMilkProd(this.ownerRefId).subscribe((data:any) => {
       this.isLoading = false;
       this.milkProdList = data;
       console.log(data);

@@ -15,7 +15,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ProcOrdersComponent implements OnInit {
 
-  userEmail = '';  
+  ownerRefId = '';  
     isLoading:boolean=false;
     procOrderList:OrderRequest[]=[];
     orderRequest:OrderRequest;
@@ -61,13 +61,17 @@ export class ProcOrdersComponent implements OnInit {
   
       this.orderRequest={
          orderCustName : '',
+         orderRefId :'',
          orderCustPhoneNo:'',
          orderCustCrtdDate:'',
-         orderCustOwnerName:'',
+         orderOwnerRefId:'',
          orderCustEmailId:'',
          orderCustType:'',
          orderCustTotalPrice:0,
          orderFinalAmtPaid:0,
+         noteToPayer:'',
+         orderCustRefId:'',
+         orderPymtRefId:'',
          orderList:[]
       };
       }
@@ -116,8 +120,8 @@ export class ProcOrdersComponent implements OnInit {
   
     getProcOrderList(){
       this.isLoading = true;
-      this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-      this.billingService.processedOrder(this.userEmail).subscribe((data:any) => {
+      this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+      this.billingService.processedOrder(this.ownerRefId).subscribe((data:any) => {
         this.isLoading = false;
           this.procOrderList = data;
           console.log(data);

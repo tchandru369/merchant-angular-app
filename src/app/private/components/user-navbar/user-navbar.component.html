@@ -1,53 +1,66 @@
 <mat-sidenav-container class="sidenav-container">
   <!-- Side Navigation -->
-  <mat-sidenav #sidenav mode="side" opened class="sidenav" [ngClass]="{'collapsed': isCollapsed}">
+  <mat-sidenav #sidenav mode="over" class="sidenav" [ngClass]="{'collapsed': isCollapsed}"
+    (closed)="isCollapsed = false">
     <div class="d-flex flex-column p-3 text-white bg-dark" style="height: 100vh;">
-      <div *ngIf="!isCollapsed" class="user">
+      <div class="user">
         <img *ngIf="userProfileImg" [src]="userProfileImg ?? 'assets/default-img.png'" alt="ProfileImg">
-        <h4 class="name">{{userName}}</h4>
-        <p class="mailId">{{userEmail}}</p>
+        <div class="user-info">
+          <h4 class="name">{{userName}}</h4>
+          <p class="mailId">{{ownerEmail}}</p>
+        </div>
       </div>
       <mat-nav-list *ngIf="!custFlg">
-        <a mat-list-item (click)="moveToUserDashboardPage()">
+        <a mat-list-item (click)="navigateAndCollapse('private/user-dashboard')">
           <mat-icon>home</mat-icon>Home</a>
-        <a mat-list-item (click)="moveToBillingPage()"><mat-icon>payment</mat-icon>Billing</a>
-        <a mat-list-item (click)="moveToAddProductPage()"><mat-icon>add_shopping_cart</mat-icon>Add Products</a>
-        <a mat-list-item (click)="moveToHistoryPage()" ><mat-icon>history</mat-icon>History</a>
-        <a mat-list-item (click)="moveToMyRequestPage()" ><mat-icon>history</mat-icon>My Requests</a>
-        <a mat-list-item (click)="moveToUserSettings()"><mat-icon>settings</mat-icon>Settings</a>
-        <a mat-list-item (click)=" moveToCustomerOverviewPage()"><mat-icon>settings</mat-icon>My Customers</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/billing')"><mat-icon>payment</mat-icon>Billing</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/add-products')"><mat-icon>add_shopping_cart</mat-icon>Add
+          Products</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/user-history')"><mat-icon>history</mat-icon>History</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/my-requests')"><mat-icon>history</mat-icon>My
+          Requests</a>
+        <a mat-list-item
+          (click)="navigateAndCollapse('private/user-settings')"><mat-icon>settings</mat-icon>Settings</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/user-customer-overview')"><mat-icon>settings</mat-icon>My
+          Customers</a>
       </mat-nav-list>
 
       <mat-nav-list *ngIf="custFlg">
-        <a mat-list-item (click)="moveToUserDashboardPage()">
+        <a mat-list-item (click)="navigateAndCollapse('private/user-dashboard')">
           <mat-icon>home</mat-icon>Home</a>
-        <a mat-list-item (click)="moveToPlaceOrderPage()"><mat-icon>add_shopping_cart</mat-icon>Place Orders</a>
-        <a mat-list-item (click)="moveToCustHistoryPage()" ><mat-icon>history</mat-icon>History</a>
-        <a mat-list-item (click)="moveToCustMakePymtPage()" ><mat-icon>history</mat-icon>Make Payment</a>
-        <a mat-list-item (click)="moveToCustSettings()"><mat-icon>settings</mat-icon>Settings</a>
-        <a mat-list-item (click)="moveToCustRequestStatus()"><mat-icon>settings</mat-icon>My Requests</a>
+        <a mat-list-item
+          (click)="navigateAndCollapse('private/cust-place-order')"><mat-icon>add_shopping_cart</mat-icon>Place
+          Orders</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/cust-history')"><mat-icon>history</mat-icon>History</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/cust-make-payment')"><mat-icon
+            matBadge="{{ paymentRequestCount }}" [matBadgeHidden]="paymentRequestCount === 0" matBadgeColor="warn"
+            matBadgePosition="above after" matBadgeSize="small">
+            history
+          </mat-icon>Make Payment</a>
+        <a mat-list-item
+          (click)="navigateAndCollapse('private/cust-settings')"><mat-icon>settings</mat-icon>Settings</a>
+        <a mat-list-item (click)="navigateAndCollapse('private/cust-request-status')"><mat-icon>settings</mat-icon>My
+          Requests</a>
       </mat-nav-list>
     </div>
   </mat-sidenav>
 
   <!-- Main Content -->
+   
   <mat-sidenav-content>
-    <!-- Navbar at the top -->
     <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <!-- Right-side search and logout buttons -->
       <span class="spacer"></span>
       <div class="form-inline">
         <button mat-button (click)="userLogout()">Log out</button>
       </div>
     </mat-toolbar>
-
-    <!-- Main Content Here -->
-    <div class="content">
-      <!-- Your page content goes here -->
-      <router-outlet></router-outlet>
-    </div>
+    <div class="outlet-blur">
+        <div class="content">
+          <router-outlet></router-outlet>
+        </div>
+        </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

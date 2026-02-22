@@ -8,9 +8,9 @@ import { EncryptionService } from './encryption.service';
 })
 export class BillingService {
 
-   private productURL:string =  "http://35.192.139.201:443/services/v1/products"
-   private customerURL:string = "http://35.192.139.201:443/services/v1/customer"
-   private billingURL:string = "http://35.192.139.201:443/services/v1/billing"
+   private productURL:string =  "http://localhost:8083/services/v1/products"
+   private customerURL:string = "http://localhost:8083/services/v1/customer"
+   private billingURL:string = "http://localhost:8083/services/v1/billing"
 
   constructor(private httpClient : HttpClient,private encService:EncryptionService) { }
 
@@ -72,6 +72,17 @@ export class BillingService {
       return this.httpClient.get<any>(`${this.billingURL}/getConStDtls`,{headers});
     }
 
+    getCustGraphDetails(custEmail:any):Observable<any>{
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const params = new HttpParams()
+        .set('custEmail', custEmail);
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });       // Add productId parameter
+      return this.httpClient.get<any>(`${this.customerURL}/cust/getGraph`,{headers,params});
+    }
+
     validateCustomerByPhNo(customerPhNo:string):Observable<any>{
       const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
@@ -93,6 +104,42 @@ export class BillingService {
       const params = new HttpParams()
         .set('custEmail',customerEmail);        // Add productId parameter
       return this.httpClient.get<any>(`${this.customerURL}/cust/getCustomer`,{headers,params});
+    }
+
+    getCustMonthlyProdPriceCount(customerEmail:any):Observable<any>{
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('custEmail',customerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.customerURL}/cust/getProdCount`,{headers,params});
+    }
+
+    getCustLastTransactionList(customerEmail:any,ownerEmail:any):Observable<any>{
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('custEmail',customerEmail).set('ownerEmail',ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.customerURL}/cust/getcustLastTrans`,{headers,params});
+    }
+
+    getCustOverAllStatus(customerEmail:any,ownerEmail:any):Observable<any>{
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('custEmail',customerEmail).set('ownerEmail',ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.customerURL}/cust/getcustLastOrderDts`,{headers,params});
     }
 
     registerCustomer(customerData:any):Observable<any>{
@@ -154,6 +201,18 @@ export class BillingService {
       console.log(token);
       console.log(orderData);
       return this.httpClient.post<any>(`${this.customerURL}/cust/placeOrder`,orderData,{headers});
+    }
+
+    custConfirmOrderRequest(orderData:any):Observable<any>{
+
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/cust/confirmPymnt`,orderData,{headers});
     }
 
     ownerApproveCustOrder(orderData:any):Observable<any>{
@@ -240,6 +299,18 @@ export class BillingService {
       return this.httpClient.get<any>(`${this.customerURL}/owner/custOrderPlaced`,{headers,params});
     }
 
+    custVerifyPymntList(ownerEmail:string):Observable<any>{
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+  
+      const params = new HttpParams()
+        .set('email', ownerEmail);        // Add productId parameter
+      return this.httpClient.get<any>(`${this.billingURL}/owner/getCustVerPymtList`,{headers,params});
+    }
+
     custOrderReqList(ownerEmail:string,custEmail:string,selectedDate:string):Observable<any>{
       const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
       const headers = new HttpHeaders({
@@ -298,6 +369,30 @@ export class BillingService {
       console.log(token);
       console.log(orderData);
       return this.httpClient.post<any>(`${this.billingURL}/paidOrderReq`,orderData,{headers});
+    }
+
+    ownerCustVerifyPymnt(orderData:any):Observable<any>{
+
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/owner/verifyCustPymt`,orderData,{headers});
+    }
+
+    ownerCustNotPaidConfirm(orderData:any):Observable<any>{
+
+      const token = this.encService.decrypt(sessionStorage.getItem('jwtToken')||'');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,  // Bearer token
+        'Content-Type': 'application/json'   // Set the content type to application/json
+      });
+      console.log(token);
+      console.log(orderData);
+      return this.httpClient.post<any>(`${this.billingURL}/owner/notPaidCustPymt`,orderData,{headers});
     }
     
 

@@ -1,0 +1,14 @@
+.chart-container {
+  width: 50%;
+  max-width: 600px;   /* optional max width */
+  margin: auto;
+  height: 400px;      /* fixed height for clarity */
+}
+
+/* Responsive: mobile */
+@media (max-width: 768px) {
+  .chart-container {
+    width: 95%;       /* almost full width on mobile */
+    height: 300px;    /* adjust height for mobile */
+  }
+}

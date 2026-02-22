@@ -13,6 +13,8 @@ import { PublicRoutingModule } from './public/public-routing.module';
 import { PrivateModule } from './private/private.module';
 import { PublicModule } from './public/public.module';
 import { PrivateRoutingModule } from './private/private-routing.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 
 export function tokenGetter(){
@@ -26,6 +28,8 @@ export function tokenGetter(){
 
   ],
   imports: [
+    MatInputModule,
+    MatSelectModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

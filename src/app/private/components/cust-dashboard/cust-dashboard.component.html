@@ -1,1 +1,156 @@
-<p>cust-dashboard works!</p>
+
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>Select Month</mat-label>
+  <mat-select
+    [(ngModel)]="selectedMonCnt"
+    (selectionChange)="updateData(selectedMonCnt)">
+    <mat-option
+      *ngFor="let item of monthlyProdPriceCount"
+      [value]="item.monthValue">
+      {{ item.monthValue }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="dashboard-cards" *ngIf="monthlyPrdPrcCnt">
+
+  <mat-card class="dashboard-card price-card">
+    <mat-card-subtitle>Monthly Price</mat-card-subtitle>
+    <mat-card-content>
+      <h1>₹ {{ monthlyPrdPrcCnt.monthlyPrice }}</h1>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="dashboard-card qty-card">
+    <mat-card-subtitle>Monthly Quantity</mat-card-subtitle>
+    <mat-card-content>
+      <h1>{{ monthlyPrdPrcCnt.monthlyProductQty }}</h1>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="dashboard-card qty-card">
+    <mat-card-subtitle>Monthly Orders</mat-card-subtitle>
+    <mat-card-content>
+      <h1>{{ monthlyPrdPrcCnt.totalOrders }}</h1>
+    </mat-card-content>
+  </mat-card>
+
+</div>
+
+<mat-card class="graph-card">
+<app-cust-graph></app-cust-graph>
+</mat-card>
+
+<div class="tables-container">
+  <div class="example-container mat-elevation-z8" *ngIf="dataSource.data.length > 0">
+    <mat-table [dataSource]="dataSource">
+      <!-- Position Column -->
+      <ng-container matColumnDef="billDate">
+        <mat-header-cell *matHeaderCellDef> Bill Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.billDate}} </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="paymentDate">
+        <mat-header-cell *matHeaderCellDef> Paid Date</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.paymentDate}} </mat-cell>
+      </ng-container>
+
+      <!-- Total Amount Column -->
+      <ng-container matColumnDef="totalPymtAmt">
+        <mat-header-cell *matHeaderCellDef> Total Amount</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.totalPymtAmt}} </mat-cell>
+      </ng-container>
+
+      <!-- Paid Amount Column -->
+      <ng-container matColumnDef="custPaidAmt">
+        <mat-header-cell *matHeaderCellDef> Paid Amount </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.custPaidAmt}} </mat-cell>
+      </ng-container>
+
+      <!-- Balance Column -->
+      <ng-container matColumnDef="pymtAmountBal">
+        <mat-header-cell *matHeaderCellDef> Balance </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.pymtAmountBal}} </mat-cell>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="pymtOverAllStatus">
+        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span [ngClass]="{
+                'badge-verified': element.pymtOverAllStatus === 'BS',
+                'badge-paid': element.pymtOverAllStatus === 'BSV'
+              }">
+            {{ getStatusText(element.pymtOverAllStatus) }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayTranList"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayTranList;"></mat-row>
+    </mat-table>
+
+    <mat-paginator #paginator
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+
+  <div class="example-container mat-elevation-z8" *ngIf="dataSource2.data.length > 0">
+    <mat-table [dataSource]="dataSource2">
+      <!-- Bill Date Column -->
+      <ng-container matColumnDef="orderCustCrtdDate">
+        <mat-header-cell *matHeaderCellDef> Bill Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.orderCustCrtdDate}} </mat-cell>
+      </ng-container>
+
+      <!-- Owner Name Column -->
+      <ng-container matColumnDef="orderCustOwnerName">
+        <mat-header-cell *matHeaderCellDef> Owner Name</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.orderCustOwnerName}} </mat-cell>
+      </ng-container>
+
+      <!-- Total Amount Column -->
+      <ng-container matColumnDef="orderCustTotalPrice">
+        <mat-header-cell *matHeaderCellDef class="center-column"> Total Amount</mat-header-cell>
+        <mat-cell *matCellDef="let element" class="center-column"> {{element.orderCustTotalPrice}} </mat-cell>
+      </ng-container>
+
+      <!-- Request Status Column -->
+      <ng-container matColumnDef="orderReqStatus">
+        <mat-header-cell *matHeaderCellDef> Request Status </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+    <span [ngClass]="{
+                'badge-verified': element.orderReqStatus === 'BS',
+                'badge-verification': element.orderReqStatus === 'BSV',
+                'badge-order-approved':element.orderReqStatus === 'OPA',
+                'badge-processed':element.orderReqStatus === 'BP',
+                'badge-order-placed':element.orderReqStatus === 'OP',
+                'badge-order-rejected':element.orderReqStatus === 'OPR'
+              }">
+            {{ getStatusText(element.orderReqStatus) }}
+          </span>
+  </mat-cell>
+      </ng-container>
+
+      <!-- Toggle Details Column -->
+      <ng-container matColumnDef="orderList">
+        <mat-header-cell *matHeaderCellDef>Order Lists</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-button (click)="toggleDetails(element)">View Details</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayCustOrderList"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayCustOrderList;"></mat-row>
+    </mat-table>
+
+     <mat-paginator #secondPaginator
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</div>

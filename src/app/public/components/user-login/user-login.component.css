@@ -5,6 +5,49 @@
     padding: 0 20px; /* Added padding for mobile view */
 }
 
+.login-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url('/assets/crates_web_view.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+}
+
+/* 🔥 Dark overlay */
+.login-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none; /* adjust 0.35–0.6 */
+}
+
+/* Keep card above overlay */
+.login-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Card styling */
+.login-card {
+  width: 350px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* Mobile image */
+@media (max-width: 768px) {
+  .login-bg {
+    background-image: url('src/assets/crate_mobile_view2.png');
+  }
+}
+
 .loader-overlay {
     position: fixed;
     top: 0;
@@ -37,9 +80,18 @@ mat-card-content {
 
 .buttons {
     display: flex;
-    flex-direction: row; /* Change to row layout for both mobile and desktop */
-    justify-content: space-between; /* Space between buttons */
-    margin-top: 20px; /* Added margin for spacing */
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.buttons button:first-child {
+    margin-right: auto; /* Pushes Sign Up to left */
+}
+
+/* Remove flex: 1 */
+.signup-button,
+.login-button {
+    margin: 0;
 }
 
 .signup-button,

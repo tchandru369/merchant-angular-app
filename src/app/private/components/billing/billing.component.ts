@@ -43,7 +43,7 @@ export class BillingComponent implements OnInit {
   shopCustomer!:ShopCustomer;
   billing_add_count:number=0;
   validateCusFalse:boolean=false;
-  userEmail:string="";
+  ownerRefId:string="";
   searchProduct:string='';
   quantityProduct:string='';
   selectedProductQuantity:number=0;
@@ -81,11 +81,15 @@ export class BillingComponent implements OnInit {
        orderCustName : '',
        orderCustPhoneNo:'',
        orderCustCrtdDate:'',
-       orderCustOwnerName:'',
+       orderOwnerRefId:'',
        orderCustEmailId:'',
        orderCustType:'',
        orderCustTotalPrice:0,
        orderFinalAmtPaid:0,
+       noteToPayer:'',
+       orderCustRefId:'',
+       orderPymtRefId:'',
+       orderRefId:'',
        orderList:[]
     };
     
@@ -116,7 +120,6 @@ export class BillingComponent implements OnInit {
       custType:'',
       custPanNo:'',
       custEmailId:'',
-      custOwmerDetails:'',
       custDob:'',
       custPinCode:'',
       custState:'',
@@ -125,10 +128,10 @@ export class BillingComponent implements OnInit {
       custPhoneNo:'',
       custName:'',
       custGender:'',
-      custCountry:''
-    }
-  
-  }
+      custCountry:'',
+      custOwnerRefId:'',
+      shopCustRefId:''
+    } }
 
   ngOnInit(): void {
     this.viewProdList();
@@ -348,8 +351,8 @@ export class BillingComponent implements OnInit {
   isLinear = false;
 
   viewProdList(){
-    this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-    this.billingService.viewOwnerMilkProd(this.userEmail).subscribe((data:any) => {
+    this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+    this.billingService.viewOwnerMilkProd(this.ownerRefId).subscribe((data:any) => {
         this.milkProdList = data;
         console.log(data);
         this.updateBrands = [...new Set(this.milkProdList.map(item => item.companyName))];
@@ -404,7 +407,7 @@ export class BillingComponent implements OnInit {
      }
 
      this.productInterface.productName = this.productList1[this.prodQtyIndx].productName;
-     this.productInterface.productOwner = this.productList1[this.prodQtyIndx].productOwner;
+     this.productInterface.productOwnerRefId = this.productList1[this.prodQtyIndx].productOwnerRefId;
      this.productInterface.productPrice = this.productList1[this.prodQtyIndx].productPrice;
      this.productInterface.productQuantity = this.productList1[this.prodQtyIndx].productQuantity;
      this.productInterface.productType = this.productList1[this.prodQtyIndx].productType;
@@ -514,11 +517,11 @@ export class BillingComponent implements OnInit {
         this.shopCustomer.custPhoneNo = this.billingCustomerPhNo.value;
         this.shopCustomer.custDob = this.dataPipe.transform(this.billingCustomerDob.value, 'dd-MM-yyyy')!;
         this.shopCustomer.custCity = this.billingCustomerCity.value;
-        this.shopCustomer.custOwmerDetails =  sessionStorage.getItem('ownerEmail')|| '';
+        //this.shopCustomer.custOwmerDetails =  sessionStorage.getItem('ownerEmail')|| '';
         this.shopCustomer.custPanNo = this.billingCustomerPanNo.value;
         this.shopCustomer.custPinCode = this.billingCustomerPinCode.value;
         this.shopCustomer.custState = this.billingCustomerState.value;
-        
+        this.shopCustomer.custOwnerRefId = sessionStorage.getItem('ownerRefId')|| '';
         this.shopCustomer.custCountry = this.billingCustomerCountry.value;
         if(this.billingCustomerGender.value == 'Male'){
           this.shopCustomer.custGender = 'M';
@@ -585,8 +588,8 @@ export class BillingComponent implements OnInit {
       }
 
       getOwnerCustList(){
-        this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
-        this.billingService.viewCustOrder(this.userEmail).subscribe((data:any) => {
+        this.ownerRefId =  sessionStorage.getItem('ownerRefId')|| '';
+        this.billingService.viewCustOrder(this.ownerRefId).subscribe((data:any) => {
             this.orderReqList = data;
             console.log(data);
         })
@@ -642,16 +645,14 @@ export class BillingComponent implements OnInit {
         this.orderRequest.orderCustCrtdDate = String(curD);
         this.orderRequest.orderCustEmailId = this.billingCustomerEmail.value;
         this.orderRequest.orderCustName = this.billingCustomerName.value;
-        this.orderRequest.orderCustOwnerName = sessionStorage.getItem('ownerEmail')|| '';
+        this.orderRequest.orderOwnerRefId = sessionStorage.getItem('ownerRefId')|| '';
         this.orderRequest.orderCustPhoneNo = this.billingCustomerPhNo.value;
         this.orderRequest.orderCustTotalPrice = this.totalPrice;
+        this.orderRequest.orderCustRefId = this.shopCustomer?.shopCustRefId;
+        //this.orderRequest.orderCustRefId = 
         //this.orderRequest.orderCustType = this.billingCustomerType.value;
 
-        if(this.billingCustType.value === 'Shop'){
-          this.orderRequest.orderCustType = 'S';
-        }else if(this.billingCustType.value === 'Induvidual'){
-          this.orderRequest.orderCustType = 'I';
-        }
+        this.orderRequest.orderCustType =this.shopCustomer?.custType;
 
         for(let i=0;i<this.billingList.length;i++){
           this.orderRequest.orderList.push({orderCustProdCmp:this.billingList[i].productOwner||'',orderCustProdName:this.billingList[i].productName||'',

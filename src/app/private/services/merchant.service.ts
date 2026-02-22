@@ -8,7 +8,7 @@ import { EncryptionService } from './encryption.service';
   providedIn: 'root',
 })
 export class MerchantService {
-  private merchantURL: string = 'http://35.192.139.201:443/services/v1/merchant';
+  private merchantURL: string = 'http://localhost:8083/services/v1/merchant';
 
   constructor(
     private httpClient: HttpClient,

@@ -16,9 +16,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UserSettingsComponent implements OnInit {
  
 
-  ownerEmail: any;
+  ownerRefId: any;
   isLoading: boolean = false;
   imageSelected: boolean = false;
+  isUpiEdit:boolean = false;  
   defaultImageHandle: imageHandle = {
     // Assuming imageHandle has properties like `src`, `alt`, etc., set default values here
     file: new File([], ''), // default empty image source
@@ -41,6 +42,7 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getProfileImg();
     this.getMerchantDetails();
+    this.getCustPymntDetailsByEmail();
     if (this.imageUrl === null) {
       this.imageUrl = 'src/assets/profile_src.jpg';
     }
@@ -115,6 +117,28 @@ export class UserSettingsComponent implements OnInit {
     return this.settingForm.get('merchantAddress') as FormControl;
   }
 
+  cancelUpiDetailEditCust() {
+  this.isUpiEdit = false;
+  this.merchantUpi.reset;
+}
+editUpiDetailsCust() {
+this.isUpiEdit = true;
+this.snackbar.open(` Please Edit the Payments Details `,'close',{
+            duration: 5000,horizontalPosition:'center',verticalPosition:'top'
+           });
+}
+
+  getCustPymntDetailsByEmail(){
+         this.ownerRefId = String(sessionStorage.getItem('ownerRefId'));
+        this.settingService.getDealersPaymentDetails(this.ownerRefId).subscribe(
+          (data:any) => {
+            console.log(data);
+            this.merchantUpi.setValue(data.pymtUpiId);
+          },(error:HttpErrorResponse)=>{
+            console.log(error);
+          }
+        )
+      }
   merchantUserUpdate() {}
 
   onUpdateImg(): void {
@@ -126,7 +150,7 @@ export class UserSettingsComponent implements OnInit {
 
     const formData = new FormData();
     this.merchantImgClass.merchantImgEmail = String(
-      sessionStorage.getItem('ownerEmail')
+      sessionStorage.getItem('ownerRefId')
     );
     this.merchantImgClass.merchantImgModule = String(
       sessionStorage.getItem('ownerProfileImg')
@@ -182,7 +206,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   getProfileImg() {
-    const ownerEmail = String(sessionStorage.getItem('ownerEmail'));
+    const ownerEmail = String(sessionStorage.getItem('ownerRefId'));
     const ownerImgModule = String(sessionStorage.getItem('ownerProfileImg'));
     this.settingService.getProfileImage(ownerEmail, ownerImgModule).subscribe(
       (data: any) => {
@@ -233,9 +257,9 @@ export class UserSettingsComponent implements OnInit {
   }
 
   getMerchantDetails() {
-    this.ownerEmail = String(sessionStorage.getItem('ownerEmail'));
+    this.ownerRefId = String(sessionStorage.getItem('ownerRefId'));
     this.settingService
-      .getMerchantDetails(this.ownerEmail)
+      .getMerchantDetails(this.ownerRefId)
       .subscribe((data: any) => {
         this.setDefaultProfileValue(data);
         console.log(data);
@@ -243,8 +267,8 @@ export class UserSettingsComponent implements OnInit {
   }
 
    updateUPIDetailsOfOwner() {
-     this.ownerEmail = String(sessionStorage.getItem('ownerEmail'));
-     this.settingService.updatePaymentDetails(this.ownerEmail, this.merchantUpi.value,this.merchantPhoneNumber.value,this.merchantUserName.value).subscribe(
+     this.ownerRefId = String(sessionStorage.getItem('ownerRefId'));
+     this.settingService.updatePaymentDetails(this.ownerRefId, this.merchantUpi.value,this.merchantPhoneNumber.value,this.merchantUserName.value).subscribe(
       (data: any) => {
         console.log(data);
         this.snackbar.open(` Status : ${data.response} `, 'close', {

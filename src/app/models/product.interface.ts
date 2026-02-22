@@ -3,6 +3,6 @@ export interface productInterface{
     productType?:string;
     productPrice?:string;
     productQuantity?:string;
-    productOwner?:string;
+    productOwnerRefId?:string;
     productCustomerPrice?:string;
 }

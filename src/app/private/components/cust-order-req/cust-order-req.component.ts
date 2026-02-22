@@ -15,7 +15,7 @@ import { EditRequestDialogComponent } from '../edit-request-dialog/edit-request-
 export class CustOrderReqComponent implements OnInit {
   custPlacedList: OrderRequest[] = [];
   isLoading: boolean = false;
-  userEmail: string = '';
+  ownerRefId: string = '';
   constructor(
     private billingService: BillingService,
     private router: Router,
@@ -30,9 +30,9 @@ export class CustOrderReqComponent implements OnInit {
 
   getCustOrderPlacedList() {
     this.isLoading = true;
-    this.userEmail = sessionStorage.getItem('ownerEmail') || '';
+    this.ownerRefId = sessionStorage.getItem('ownerRefId') || '';
     this.billingService
-      .custOrderPlacedList(this.userEmail)
+      .custOrderPlacedList(this.ownerRefId)
       .subscribe((data: any) => {
         this.isLoading = false;
         this.custPlacedList = data;

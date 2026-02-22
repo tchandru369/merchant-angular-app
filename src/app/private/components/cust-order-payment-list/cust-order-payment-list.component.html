@@ -12,14 +12,18 @@
     <form [formGroup]="addForm" >
 
         <mat-form-field>
-                <input matInput type="text" placeholder="Enter Amount" formControlName="finalAmtPaid">
+                <input matInput type="number" placeholder="Enter Amount" formControlName="finalAmtPaid">
                 <mat-error *ngIf="updateFinalAmtPaid.touched && updateFinalAmtPaid.hasError('required')">Final Amount Required</mat-error>
+              </mat-form-field>
+        <mat-form-field>
+                <input matInput type="text" placeholder="Note To Payer" formControlName="noteToPayer">
+                <mat-error *ngIf="noteToPayer.touched && noteToPayer.hasError('required')">Please enter customer notes</mat-error>
               </mat-form-field>
     </form>
 
     <div *ngIf="!customer.orderFlag; else paidButtons">
   <button mat-button color="warn">DELETE</button>
-  <button mat-button color="primary" (click)="paidCustomer(customer)">PAY</button>
+  <button mat-button color="primary" (click)="paidCustomer(customer)" [disabled]="addForm.invalid">PAY</button>
 </div>
 
 <!-- Alternative buttons when flag is true -->

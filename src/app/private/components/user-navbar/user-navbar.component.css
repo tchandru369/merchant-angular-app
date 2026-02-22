@@ -3,15 +3,93 @@ nav {
   top: 0;
   z-index: 1000; /* Ensure it stays above other content */
   background-color: #fff; /* Optional: Set a background color */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add some shadow for better visibility */
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
+  /* Optional: Add some shadow for better visibility */
 }
 
-.sidenav-container {
-  height: 100vh;
+.outlet-blur {
+  min-height: calc(100vh - 64px); /* 64px is default toolbar height */
+  background-image: url('src/assets/crates_web_view.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 }
+
+/* Overlay only inside content area */
+.outlet-blur::before {
+  content: "";
+  position: absolute;   /* 🔥 change to absolute */
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+
+
+@media (max-width: 768px) {
+  .outlet-blur {
+    background-image: url('src/assets/crate_mobile_view2.png');
+  }
+}
+
+
+
+.mat-drawer-backdrop.mat-drawer-shown {
+    visibility: hidden; /* Hide the backdrop */
+    background: transparent;
+     /* Ensure it has no background */
+}
+
+/* Ensure backdrop covers full viewport */
+.sidenav-container {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Smooth fade-in/out */
+.mat-drawer-transition .mat-drawer-backdrop {
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Optional: adjust stacking if backdrop blocks navbar */
+.mat-drawer-backdrop {
+  z-index: 2;
+}
+
+.mat-sidenav {
+  position: fixed; /* Make the sidenav fixed */
+  top: 0;
+  left: 0;
+  height: 100%; /* Full height */
+  z-index: 1000; /* Ensure it overlays above other content */
+  transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.mat-sidenav.opened {
+  transform: translateX(0); /* Show the sidenav */
+}
+
+.mat-sidenav.collapsed {
+  transform: translateX(-100%); 
+  /* Hide the sidenav */
+}
+
+/* .sidenav-container {
+  height: 100vh;
+} */
 
 .sidenav {
-  width: 250px;
+  width: 250px; /* Default width for larger screens */
 }
 
 .content {
@@ -28,13 +106,11 @@ nav {
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-.form-inline input {
-  margin-right: 10px; /* Space between input and button */
-  flex: 1; /* Allow input to take available space */
-}
-
 .user {
-  text-align: center;
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Center text */
   font-weight: 800;
   margin-bottom: 5px;
 }
@@ -44,14 +120,26 @@ nav {
   height: 100px; /* Set a height for the image */
   border-radius: 50%; /* This makes the image circular */
   object-fit: cover; 
+  margin-bottom: 5px; /* Space between image and text */
+}
+
+.user-info {
+  display: flex; /* Use flexbox for user info */
+  flex-direction: column; /* Stack name and email vertically */
+  align-items: center; /* Center text horizontally */
+}
+
+.user h4, .user p {
+  margin: 0; /* Remove default margins */
 }
 
 .sidenav.collapsed {
-  width: 60px; /* Or any size you want */
+  width: 0; /* Collapsed state */
 }
 
 .sidenav.collapsed mat-icon {
-  font-size: 25px; /* Make the icons larger when collapsed */
+  font-size: 30px; /* Larger icon size for better visibility */
+  margin: 10px; /* Add margin around icons */
 }
 
 .sidenav.collapsed .user,
@@ -60,32 +148,41 @@ nav {
   display: none; /* Hide the text when collapsed */
 }
 
-/* Media Queries for Mobile Responsiveness */
+/* New styles for mobile view */
 @media (max-width: 768px) {
   .sidenav {
-    width: 200px; /* Slightly smaller width for mobile */
+    width: 250px; /* Full width on mobile */
   }
 
   .sidenav.collapsed {
-    width: 50px; /* Further collapse for mobile */
+    width: 0; /* Collapsed width */
   }
 
-  .content {
-    padding: 10px; /* Reduced padding for smaller screens */
+  .user img {
+    width: 40px;  /* Further reduce size for mobile */
+    height: 40px; /* Further reduce size for mobile */
   }
 
-  .form-inline {
-    flex-direction: column; /* Stack elements vertically */
-    align-items: flex-start; /* Align items to the start */
+  .mat-list-item {
+    padding-left: 8px; /* Adjust padding for mobile view */
   }
 
-  .form-inline input {
-    width: 100%; /* Full width input on mobile */
-    margin-bottom: 10px; /* Space between input and button */
+  .mat-icon {
+    margin-left: 0; /* Remove left margin for better alignment */
+    margin-right: 8px; /* Space between icon and text */
+    vertical-align: middle; /* Align the icon vertically with the text */
+    font-size: 24px; /* Adjust icon size for mobile */
   }
 
-  .form-inline button {
-    width: 100%; /* Full width for buttons on mobile */
-    margin-top: 5px; /* Space above buttons */
+  /* Adjust the user section to center align with the smaller image */
+  .user {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+  }
+
+  .user h4, .user p {
+    font-size: 12px; /* Reduce font size for mobile */
+    margin-left: 5px; /* Space between image and text */
   }
 }

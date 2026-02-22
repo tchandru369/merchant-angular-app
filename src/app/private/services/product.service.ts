@@ -9,7 +9,7 @@ import { EncryptionService } from './encryption.service';
 export class ProductService {
   
 
-  private baseURL:string =  "http://35.192.139.201:443/services/v1/products"
+  private baseURL:string =  "http://localhost:8083/services/v1/products"
 
   constructor(private httpClient:HttpClient,private encService:EncryptionService) { }
 

@@ -34,6 +34,12 @@
     <span *ngIf="customer.orderReqStatus === 'OPA'" class="status-badge">
       APPROVED
     </span>
+    <span *ngIf="customer.orderReqStatus === 'BS'" class="status-badge">
+      VERIFIED
+    </span>
+    <span *ngIf="customer.orderReqStatus === 'BP'" class="status-badge">
+      PROCESSED
+    </span>
     <span *ngIf="customer.orderReqStatus === 'OPR'" class="status-badge-reject">
       REJECTED
     </span>

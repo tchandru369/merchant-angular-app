@@ -46,6 +46,14 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { CustMakePaymentComponent } from './components/cust-make-payment/cust-make-payment.component';
 import { CustOrderPaymentListComponent } from './components/cust-order-payment-list/cust-order-payment-list.component';
 import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
+import { CustVerifyPymntListComponent } from './components/cust-verify-pymnt-list/cust-verify-pymnt-list.component';
+import { MessageDialogComponent } from './components/Dialogs/message-dialog/message-dialog.component';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { CustOrderDetailsDialogComponent } from './components/Dialogs/cust-order-details-dialog/cust-order-details-dialog.component';
+import { NgChartsModule } from 'ng2-charts';
+import { CustGraphComponent } from './components/Graphs/cust-graph/cust-graph.component';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MaskUpiPipe } from './pipes/mask-upi.pipe';
 
 @NgModule({
   providers: [DatePipe],
@@ -73,10 +81,19 @@ import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
     CustOverviewDetailsComponent,
     CustMakePaymentComponent,
     CustOrderPaymentListComponent,
-    QrDialogComponent
+    QrDialogComponent,
+    CustVerifyPymntListComponent,
+    MessageDialogComponent,
+    CustOrderDetailsDialogComponent,
+    CustGraphComponent,
+    MaskUpiPipe,
+    
   ],
   imports: [
+    MatBadgeModule,
+    
     CommonModule,
+    NgChartsModule,
     PrivateRoutingModule,
     QRCodeModule,
     MatCardModule,
@@ -99,7 +116,8 @@ import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
     MatToolbarModule,
     MatExpansionModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule
   ]
 })
 export class PrivateModule { }

@@ -6,26 +6,48 @@ import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { UserI } from 'src/app/models/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConStDtls } from 'src/app/models/ConSt.interface';
+import { BillingService } from 'src/app/private/services/billing.service';
+import { MerchantReg } from 'src/app/models/merchantReg.interface';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-register',
   templateUrl: './user-register.component.html',
-  styleUrls: ['./user-register.component.css']
+  styleUrls: ['./user-register.component.css'],
+  providers: [DatePipe]
 })
 export class UserRegisterComponent implements OnInit {
 
-  users:UserI;
+  
+  merchantReg:MerchantReg;
   isLoading:boolean=false;
+  genderList:string[]=['Male','Female','Others']
+    conStDtls:ConStDtls[]=[];
+    countryList:any[]=[];
+    stateList:any[]=[];
+  cityList:any[]=[];
+  selectedCountry:string='';
+  selectedState:string='';
+  selectedUpdState:string='';
   ngOnInit(): void {
+  this.viewConStList();
   }
 
-  constructor(private userService : UserService, private router:Router,private snackbar:MatSnackBar) { 
-     this.users={
-      merchantAddress:'',
-      merchantEmail :'',
-      merchantPassword:'',
-      merchantPhoneNumber:'',
-      merchantUserName:''
+  constructor(private userService : UserService, private router:Router,private snackbar:MatSnackBar,private dataPipe:DatePipe) { 
+     this.merchantReg={
+       regMerchantName:'',
+    regMerchantEmail:'',
+    regMerchantPhNo:'',
+    regMerchantPass:'',
+    regMerchantAddrs:'',
+    regMerchantDob:'',
+    regMerchantGen:'',
+    regMerchantState:'',
+    regMerchantCtry:'',
+    regMerchantCty:'',
+    regMerchantPan:'',
+    regMerchantPin:0
      }
    
   }
@@ -38,13 +60,55 @@ export class UserRegisterComponent implements OnInit {
     merchantPassword : new FormControl(null,[Validators.required]),
     merchantRePassword : new FormControl(null,[Validators.required]),
     merchantPhoneNumber : new FormControl(null,[Validators.required,Validators.minLength(10)]),
-    merchantAddress : new FormControl(null,[Validators.required])
+    merchantAddress : new FormControl(null,[Validators.required]),
+    merchantDob : new FormControl(null,[Validators.required]),
+    merchantPinCode: new FormControl(null,[Validators.required]),
+    merchantState: new FormControl(null,[Validators.required]),
+    merchantCity: new FormControl(null,[Validators.required]),
+    merchantCountry:new FormControl(null,[Validators.required]),
+    merchantGender: new FormControl(null,[Validators.required]),
+    merchantPanNo:new FormControl(null,[Validators.required])
   },{
     validators:CustomValidators.passwordMatching
   }
 );
 
- 
+get merchantCountry():FormControl{
+    return this.form.get('merchantCountry') as FormControl;
+  }
+
+  get merchantState():FormControl{
+    return this.form.get('merchantState') as FormControl;
+  }
+
+get merchantPinCode():FormControl{
+    return this.form.get('merchantPinCode') as FormControl;
+  }
+ get merchantViewGen():FormControl{
+    return this.form.get('merchantViewGen') as FormControl;
+  }
+  get merchantViewSte():FormControl{
+    return this.form.get('merchantViewSte') as FormControl;
+  }
+  get merchantViewCtry():FormControl{
+    return this.form.get('merchantViewCtry') as FormControl;
+  }
+  get merchantCity():FormControl{
+    return this.form.get('merchantCity') as FormControl;
+  }
+  get merchantName():FormControl{
+    return this.form.get('merchantName') as FormControl;
+  }
+  get merchantGender():FormControl{
+    return this.form.get('merchantGender') as FormControl;
+  }
+
+  get merchantPanNo():FormControl{
+    return this.form.get('merchantPanNo') as FormControl;
+  }
+  get merchantDob():FormControl{
+    return this.form.get('merchantDob') as FormControl;
+  }
 
   get merchantUserName():FormControl{
     return this.form.get('merchantUserName') as FormControl;
@@ -66,23 +130,50 @@ export class UserRegisterComponent implements OnInit {
     return this.form.get('merchantRePassword') as FormControl;
   }
 
+  onUpdateCountryChange() {
+    this.stateList = [
+      ...new Set(this.conStDtls
+        .filter(item => item.countryNames === this.merchantCountry.value)
+        .map(item => item.stateNames)),
+    ];
+    this.selectedUpdState = '';
+    this.cityList = [];
+  }
+
+  onUpdateStateChange() {
+    this.cityList = this.conStDtls
+      .filter(
+        item =>
+          item.countryNames === this.merchantCountry.value &&
+          item.stateNames === this.merchantState.value
+      )
+      .map(item => item.cityNames);
+  }
+
   merchantUserRegister() {
      this.isLoading = true;
     if(this.form.valid){
-      this.userService.createMerchant(
-        {
-          
-        }
-      ).pipe(
-        tap(() => this.router.navigate(['../user-login']))
-      ).subscribe();
-          this.users.merchantUserName= this.merchantUserName.value,
-        this.users.merchantEmail=this.merchantEmail.value,
-          this.users.merchantPassword=this.merchantPassword.value,
-          this.users.merchantAddress=this.merchantAddress.value,
-          this.users.merchantPhoneNumber=this.merchantPhoneNumber.value
-
-      this.userService.createMerchant(this.users).subscribe((data:any) =>{
+          this.merchantReg.regMerchantName= this.merchantUserName.value,
+        this.merchantReg.regMerchantEmail=this.merchantEmail.value,
+          this.merchantReg.regMerchantPass=this.merchantPassword.value,
+          this.merchantReg.regMerchantAddrs=this.merchantAddress.value,
+          this.merchantReg.regMerchantPhNo=this.merchantPhoneNumber.value,
+          this.merchantReg.regMerchantCty=this.merchantCity.value;
+          this.merchantReg.regMerchantCtry=this.merchantCountry.value;
+          this.merchantReg.regMerchantDob = this.dataPipe.transform(this.merchantDob.value, 'dd-MM-yyyy')!;
+          //this.merchantReg.regMerchantDob=this.merchantDob.value;
+          if(this.merchantGender.value == 'Male'){
+          this.merchantReg.regMerchantGen = 'M';
+        }else if(this.merchantGender.value == 'Female'){
+          this.merchantReg.regMerchantGen = 'F'
+        }else if(this.merchantGender.value == 'Others'){
+          this.merchantReg.regMerchantGen = 'O'}
+          //this.merchantReg.regMerchantGen=this.merchantGender.value;
+          this.merchantReg.regMerchantPan=this.merchantPanNo.value;
+          this.merchantReg.regMerchantPin=this.merchantPinCode.value;
+          this.merchantReg.regMerchantState=this.merchantState.value;
+         console.log("Output Message : ",this.merchantReg);
+      this.userService.createMerchant(this.merchantReg).subscribe((data:any) =>{
     console.log(data);
     if(data.response == "success"){
       this.isLoading = false;
@@ -114,6 +205,19 @@ export class UserRegisterComponent implements OnInit {
         }
       }
   );
+    }else{
+      this.snackbar.open(`Please enter the necessary fields`, 'close', {
+            duration: 20000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
     }
+  }
+   viewConStList(){
+    this.userService.viewConStDtls().subscribe((data:any) => {
+        this.conStDtls = data;
+        console.log(data);
+        this.countryList = [...new Set(this.conStDtls.map(item => item.countryNames))];
+    })
   }
 }

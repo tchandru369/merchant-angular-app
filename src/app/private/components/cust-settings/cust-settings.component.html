@@ -1,13 +1,106 @@
-<div class="base-container">
+<div class="formContainer">
+  <mat-card>
+    <mat-card-title class="setting_title">My Details</mat-card-title>
 
-    <div class="user">
-                    <img  [src]="imageUrl ?? 'assets/default-img.png'" alt="ProfileImg" class="profile-image">
-                    <button mat-mini-fab (click)="inputImage.click()">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-button (click)="onUpdateImg()" class="green-button" *ngIf="imageSelected">Update Image</button>
+    <mat-card-content>
 
-                </div>
-                <input #inputImage  id="merchantImg" type="file" hidden (change)="onFileChangeEvent($event)" value="selectedFile"/>
+      <div class="user">
+        <img [src]="imageUrl ?? 'assets/default-img.png'" alt="ProfileImg" class="profile-image">
+        <button mat-mini-fab (click)="inputImage.click()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-button (click)="onUpdateImg()" class="green-button" *ngIf="imageSelected">Update Image</button>
+      </div>
 
+      <input #inputImage id="merchantImg" type="file" hidden (change)="onFileChangeEvent($event)" value="selectedFile" />
+
+      <form [formGroup]="settingForm" (ngSubmit)="custUserUpdate()">
+        <div class="mat-info-row">
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Customer Name :</mat-label>
+            <input formControlName="custName" matInput [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Customer Email :</mat-label>
+            <input matInput formControlName="custEmail" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Owner Details</mat-label>
+            <input matInput formControlName="custOwnerDetails" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Phone No :</mat-label>
+            <input matInput formControlName="custPhoneNo" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Pan No :</mat-label>
+            <input matInput formControlName="custPanNo" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Date Of Birth :</mat-label>
+            <input matInput formControlName="custDob" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="custAddress" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="custState" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="custCountry" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="custCity" [readonly]="!isEditable">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mat-info-item">
+            <mat-label>Pincode</mat-label>
+            <input matInput formControlName="custPinCode" [readonly]="!isEditable">
+          </mat-form-field>
+        </div>
+
+        <div class="cust-info-buttons">
+          <button mat-button (click)="cancelEditOption()" *ngIf="isEditable">Cancel</button>
+          <button mat-button (click)="custInfoEdit()">Edit</button>
+          <button mat-button (click)="custInfoupdate()" *ngIf="isEditable">Update</button>
+        </div>
+      </form> <!-- Closing form for settingForm -->
+
+      <mat-card-title class="payment_title">Add Payment Details</mat-card-title>
+      <form [formGroup]="upiForm">
+        <mat-form-field>
+          <input matInput
+          type="text"
+          placeholder="Enter your UPI ID"
+          formControlName="merchantUpi"
+          [readonly]="!isUpiEdit"
+          [value]="isUpiEdit ? merchantUpi.value : (merchantUpi.value | maskUpi)">
+        </mat-form-field>
+      </form> <!-- Closing form for upiForm -->
+
+      <div class="upi-buttons">
+        <button mat-button (click)="cancelUpiDetailEditCust()" *ngIf="isUpiEdit">Cancel</button>
+        <button mat-button (click)="editUpiDetailsCust()">Edit</button>
+        <button mat-button (click)="updateUPIDetailsForCustomer()" *ngIf="isUpiEdit">Update</button>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="isLoading" class="loader-overlay">
+  <mat-progress-spinner mode="indeterminate" color="primary" diameter="60"></mat-progress-spinner>
 </div>

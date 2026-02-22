@@ -22,8 +22,8 @@ constructor(private billingService: BillingService) {}
 
 onCustomerSelected(customer: customerProfile) {
   this.isDetailLoading = true;
-  this.userEmail = sessionStorage.getItem('ownerEmail')|| '';
-  this.billingService.customerDetailSummary(customer.custEmail,this.userEmail).subscribe({
+  this.userEmail = sessionStorage.getItem('ownerRefId')|| '';
+  this.billingService.customerDetailSummary(customer.custRefId,this.userEmail).subscribe({
     next: (data: custSummary) => {
       this.selectedCustomer = data;
       this.isDetailLoading = false;

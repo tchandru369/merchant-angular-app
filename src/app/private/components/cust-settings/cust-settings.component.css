@@ -17,3 +17,29 @@
     object-fit: cover; 
     }
    }
+
+
+   .mat-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mat-info-item {
+  flex: 1 1 30%;
+  min-width: 200px;
+}
+
+.cust-info-buttons,
+.upi-buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 10px; /* Space between buttons */
+  margin-top: 20px; /* Space above the button group */
+}
+
+.cust-info-buttons button,
+.upi-buttons button {
+  width: 100%; /* Optional: Make buttons full width */
+}

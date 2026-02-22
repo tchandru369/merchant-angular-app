@@ -39,7 +39,7 @@ scrollRight() {
 
 getCustomerListByOwnerE(){
       this.isLoading = true;
-      this.userEmail =  sessionStorage.getItem('ownerEmail')|| '';
+      this.userEmail =  sessionStorage.getItem('ownerRefId')|| '';
       this.billingService.customerListByOwner(this.userEmail).subscribe((data:any) => {
         this.isLoading = false;
           this.customers = data;

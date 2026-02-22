@@ -4,19 +4,26 @@ import {HttpClient} from '@angular/common/http';
 import { UserI } from 'src/app/models/user.interface';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { MerchantReg } from 'src/app/models/merchantReg.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private baseURL:string =  "http://35.192.139.201:443/api/v1/auth"
+  private baseURL:string =  "http://localhost:8083/api/v1/auth"
 
   constructor(private httpClient:HttpClient, private snackbar:MatSnackBar) { 
 
   }
 
-  createMerchant(userI : UserI):Observable<UserI>{
+ viewConStDtls():Observable<any>{
+       
+             // Add productId parameter
+       return this.httpClient.get<any>(`${this.baseURL}/getConStDtls`);
+     }
+
+  createMerchant(userI : MerchantReg):Observable<UserI>{
     return this.httpClient.post<UserI>(`${this.baseURL}/merchants`,userI).pipe(
       tap((createUser:UserI) => this.snackbar.open(`User ${createUser.merchantUserName} created successfully`,'close',{
        duration: 2000,horizontalPosition:'right',verticalPosition:'top'
